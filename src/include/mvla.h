@@ -64,7 +64,7 @@
   do {                                  \
     t1gen(a, (m) + 1);                  \
     for(size_t i = 0; i < (m); i++){    \
-      t1gen((a)[i], (n));         \
+      t1gen((a)[i], (n));               \
     }                                   \
     (a)[m] = NULL;                      \
   } while (0)
@@ -72,9 +72,9 @@
   do {                                            \
     if (a != NULL) {                              \
       for (size_t i = 0; (a)[i] != NULL; i++){    \
-        t1free((a)[i]);                      \
+        t1free((a)[i]);                           \
       }                                           \
-      t1free(a);                             \
+      t1free(a);                                  \
       a = NULL;                                   \
     }                                             \
   } while (0)
