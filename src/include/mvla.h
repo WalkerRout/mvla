@@ -238,7 +238,6 @@ MVLADEF V3d v3dSin(V3d a);
 MVLADEF V3d v3dCos(V3d a);
 MVLADEF V3d v3dTan(V3d a);
 MVLADEF V3d v3dLen(V3d a);
-
 // -----------------------------------------
 
 
@@ -931,5 +930,7 @@ MVLADEF V3d v3fLen(V3d a){
   double sqr = a.x*a.x + a.y*a.y + a.z*a.z;
   return sqrt(sqr);
 }
+
+
 
 #endif
