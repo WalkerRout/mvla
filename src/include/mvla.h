@@ -49,6 +49,7 @@
 
 
 
+#ifdef INC_TENSORS
 // -----------------------------------------
 /*
 ** GENERIC VECTOR AND MATRIX DEFINITIONS
@@ -79,6 +80,7 @@
     }                                             \
   } while (0)
 // -----------------------------------------
+#endif INC_TENSORS
 
 
 
