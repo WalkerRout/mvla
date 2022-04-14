@@ -52,7 +52,7 @@
 #ifdef INC_TENSORS
 // -----------------------------------------
 /*
-** GENERIC VECTOR AND MATRIX DEFINITIONS
+** GENERIC 1D AND 2D TENSOR DEFINITIONS
 */
 #define t1gen(v, n) ((v) = alloc((n) * sizeof *(v)))
 #define t1free(v)    \
@@ -80,7 +80,7 @@
     }                                             \
   } while (0)
 // -----------------------------------------
-#endif INC_TENSORS
+#endif //INC_TENSORS
 
 
 
@@ -88,26 +88,17 @@
 /*
 ** 2D VECTOR DEFINITIONS
 */
-typedef struct {signed int   x, y} V2i;
-typedef struct {unsigned int x, y} V2u;
-typedef struct {float        x, y} V2f;
-typedef struct {double       x, y} V2d;
+typedef struct { signed int   x, y; } V2i;
+typedef struct { unsigned int x, y; } V2u;
+typedef struct { float        x, y; } V2f;
+typedef struct { double       x, y; } V2d;
 /*
 ** 3D VECTOR DEFINITIONS
 */
-typedef struct {signed int   x, y, z} V3i;
-typedef struct {unsigned int x, y, z} V3u;
-typedef struct {float        x, y, z} V3f;
-typedef struct {double       x, y, z} V3d;
-// -----------------------------------------
-
-
-
-// -----------------------------------------
-/*
-** MISCELLANEOUS STRUCTURE DEFINITIONS
-*/
-typedef struct {double x, y;} Point;
+typedef struct { signed int   x, y, z; } V3i;
+typedef struct { unsigned int x, y, z; } V3u;
+typedef struct { float        x, y, z; } V3f;
+typedef struct { double       x, y, z; } V3d;
 // -----------------------------------------
 
 
@@ -163,7 +154,7 @@ MVLADEF V2f v2fExp(V2f a);
 MVLADEF V2f v2fSin(V2f a);
 MVLADEF V2f v2fCos(V2f a);
 MVLADEF V2f v2fTan(V2f a);
-MVLADEF V2f v2fLen(V2f a);
+MVLADEF float v2fLen(V2f a);
 
 MVLADEF V2d v2d(double x, double y);
 MVLADEF V2d v2dd(double x);
@@ -180,7 +171,7 @@ MVLADEF V2d v2dExp(V2d a);
 MVLADEF V2d v2dSin(V2d a);
 MVLADEF V2d v2dCos(V2d a);
 MVLADEF V2d v2dTan(V2d a);
-MVLADEF V2d v2dLen(V2d a);
+MVLADEF double v2dLen(V2d a);
 // -----------------------------------------
 
 
@@ -222,7 +213,7 @@ MVLADEF V3f v3fExp(V3f a);
 MVLADEF V3f v3fSin(V3f a);
 MVLADEF V3f v3fCos(V3f a);
 MVLADEF V3f v3fTan(V3f a);
-MVLADEF V3f v3fLen(V3f a);
+MVLADEF float v3fLen(V3f a);
 
 MVLADEF V3d v3d(double x, double y, double z);
 MVLADEF V3d v3dd(double x);
@@ -239,7 +230,7 @@ MVLADEF V3d v3dExp(V3d a);
 MVLADEF V3d v3dSin(V3d a);
 MVLADEF V3d v3dCos(V3d a);
 MVLADEF V3d v3dTan(V3d a);
-MVLADEF V3d v3dLen(V3d a);
+MVLADEF double v3dLen(V3d a);
 // -----------------------------------------
 
 
@@ -248,7 +239,7 @@ MVLADEF V3d v3dLen(V3d a);
 /*
 ** MISCELLANEOUS FUNCTIONS
 */
-MVLADEF void *alloc(size){
+MVLADEF void *alloc(unsigned int size){
   void *mem;
   mem = malloc(size);
   if(mem == NULL){
@@ -317,7 +308,7 @@ MVLADEF V2i v2ii(signed int x){
 }
 
 MVLADEF V2i v2iAdd(V2i a, V2i b){
-  a.x += b.x
+  a.x += b.x;
   a.y += b.y;
   return a;
 }
@@ -366,7 +357,7 @@ MVLADEF V2u v2uu(unsigned int x){
 }
 
 MVLADEF V2u v2uAdd(V2u a, V2u b){
-  a.x += b.x
+  a.x += b.x;
   a.y += b.y;
   return a;
 }
@@ -415,7 +406,7 @@ MVLADEF V2f v2ff(float x){
 }
 
 MVLADEF V2f v2fAdd(V2f a, V2f b){
-  a.x += b.x
+  a.x += b.x;
   a.y += b.y;
   return a;
 }
@@ -493,9 +484,9 @@ MVLADEF V2f v2fTan(V2f a){
   return a;
 }
 
-MVLADEF V2f v2fLen(V2f a){
+MVLADEF float v2fLen(V2f a){
   float sqr = a.x*a.x + a.y*a.y;
-  return sqrtf(sqr); 
+  return sqrtf(sqr);
 }
 
 
@@ -512,7 +503,7 @@ MVLADEF V2d v2dd(double x){
 }
 
 MVLADEF V2d v2dAdd(V2d a, V2d b){
-  a.x += b.x
+  a.x += b.x;
   a.y += b.y;
   return a;
 }
@@ -590,9 +581,9 @@ MVLADEF V2d v2dTan(V2d a){
   return a;
 }
 
-MVLADEF V2d v2fLen(V2d a){
+MVLADEF double v2dLen(V2d a){
   double sqr = a.x*a.x + a.y*a.y;
-  return sqrt(sqr); 
+  return sqrt(sqr);
 }
 
 
@@ -609,12 +600,12 @@ MVLADEF V3i v3i(signed int x, signed int y, signed int z){
   return vec;
 }
 
-MVLADEF V2i v2ii(signed int x){
+MVLADEF V3i v3ii(signed int x){
   return v3i(x, x, x);
 }
 
 MVLADEF V3i v3iAdd(V3i a, V3i b){
-  a.x += b.x
+  a.x += b.x;
   a.y += b.y;
   a.z += b.z;
   return a;
@@ -670,7 +661,7 @@ MVLADEF V3u v3uu(unsigned int x){
 }
 
 MVLADEF V3u v3uAdd(V3u a, V3u b){
-  a.x += b.x
+  a.x += b.x;
   a.y += b.y;
   a.z += b.z;
   return a;
@@ -726,7 +717,7 @@ MVLADEF V3f v3ff(float x){
 }
 
 MVLADEF V3f v3fAdd(V3f a, V3f b){
-  a.x += b.x
+  a.x += b.x;
   a.y += b.y;
   a.z += b.z;
   return a;
@@ -817,9 +808,9 @@ MVLADEF V3f v3fTan(V3f a){
   return a;
 }
 
-MVLADEF V3f v3fLen(V3f a){
+MVLADEF float v3fLen(V3f a){
   float sqr = a.x*a.x + a.y*a.y + a.z*a.z;
-  return sqrtf(sqr); 
+  return sqrtf(sqr);
 }
 
 
@@ -837,7 +828,7 @@ MVLADEF V3d v3dd(double x){
 }
 
 MVLADEF V3d v3dAdd(V3d a, V3d b){
-  a.x += b.x
+  a.x += b.x;
   a.y += b.y;
   a.z += b.z;
   return a;
@@ -928,7 +919,7 @@ MVLADEF V3d v3dTan(V3d a){
   return a;
 }
 
-MVLADEF V3d v3fLen(V3d a){
+MVLADEF double v3dLen(V3d a){
   double sqr = a.x*a.x + a.y*a.y + a.z*a.z;
   return sqrt(sqr);
 }
@@ -936,3 +927,4 @@ MVLADEF V3d v3fLen(V3d a){
 
 
 #endif
+
