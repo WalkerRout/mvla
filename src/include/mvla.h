@@ -34,16 +34,22 @@
 ** PREPROCESSOR DEFINTIONS
 */
 #define V2Args(v) (v).x, (v).y
-#define V3Args(v) (v).x, (v).y, (v).z
-
 #define PV2i "V2i(%d, %d)"
 #define PV2u "V2u(%u, %u)"
 #define PV2f "V2f(%f, %f)"
 #define PV2d "V2d(%lf, %lf)"
+
+#define V3Args(v) (v).x, (v).y, (v).z
 #define PV3i "V3i(%d, %d, %d)"
 #define PV3u "V3u(%u, %u, %u)"
 #define PV3f "V3f(%f, %f, %f)"
 #define PV3d "V3d(%lf, %lf, %lf)"
+
+#define V4Args(v) (v).x, (v).y, (v).z
+#define PV4i "V4i(%d, %d, %d, %d)"
+#define PV4u "V4u(%u, %u, %u, %u)"
+#define PV4f "V4f(%f, %f, %f, %f)"
+#define PV4d "V4d(%lf, %lf, %lf, %lf)"
 
 #define MALLOC(size, type) (type*) alloc((size) * sizeof(type))
 // -----------------------------------------
@@ -84,6 +90,13 @@ typedef struct { signed int   x, y, z; } V3i;
 typedef struct { unsigned int x, y, z; } V3u;
 typedef struct { float        x, y, z; } V3f;
 typedef struct { double       x, y, z; } V3d;
+/*
+** 4D VECTOR DEFINITIONS
+*/
+typedef struct { signed int   x, y, z, w; } V4i;
+typedef struct { unsigned int x, y, z, w; } V4u;
+typedef struct { float        x, y, z, w; } V4f;
+typedef struct { double       x, y, z, w; } V4d;
 // -----------------------------------------
 
 
@@ -243,6 +256,65 @@ MVLADEF V3d v3dSin(V3d a);
 MVLADEF V3d v3dCos(V3d a);
 MVLADEF V3d v3dTan(V3d a);
 MVLADEF double v3dLen(V3d a);
+// -----------------------------------------
+
+
+
+// -----------------------------------------
+/*
+** 3D VECTOR FUNCTION PROTOTYPES
+*/
+MVLADEF V4i v4i(signed int x, signed int y, signed int z, signed int w);
+MVLADEF V4i v4ii(signed int x);
+MVLADEF V4i v4iAdd(V4i a, V4i b);
+MVLADEF V4i v4iSub(V4i a, V4i b);
+MVLADEF V4i v4iMul(V4i a, V4i b);
+MVLADEF V4i v4iDiv(V4i a, V4i b);
+MVLADEF V4i v4iMin(V4i a, V4i b);
+MVLADEF V4i v4iMax(V4i a, V4i b);
+
+MVLADEF V4u v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w);
+MVLADEF V4u v4uu(unsigned int x);
+MVLADEF V4u v4uAdd(V4u a, V4u b);
+MVLADEF V4u v4uSub(V4u a, V4u b);
+MVLADEF V4u v4uMul(V4u a, V4u b);
+MVLADEF V4u v4uDiv(V4u a, V4u b);
+MVLADEF V4u v4uMin(V4u a, V4u b);
+MVLADEF V4u v4uMax(V4u a, V4u b);
+
+MVLADEF V4f v4f(float x, float y, float z, float w);
+MVLADEF V4f v4ff(float x);
+MVLADEF V4f v4fAdd(V4f a, V4f b);
+MVLADEF V4f v4fSub(V4f a, V4f b);
+MVLADEF V4f v4fMul(V4f a, V4f b);
+MVLADEF V4f v4fDiv(V4f a, V4f b);
+MVLADEF V4f v4fMin(V4f a, V4f b);
+MVLADEF V4f v4fMax(V4f a, V4f b);
+MVLADEF V4f v4fSqrt(V4f a);
+MVLADEF V4f v4fPoww(V4f a, float exp);
+MVLADEF V4f v4fPow(V4f a, V4f exp);
+MVLADEF V4f v4fExp(V4f a);
+MVLADEF V4f v4fSin(V4f a);
+MVLADEF V4f v4fCos(V4f a);
+MVLADEF V4f v4fTan(V4f a);
+MVLADEF float v4fLen(V4f a);
+
+MVLADEF V4d v4d(double x, double y, double z, double w);
+MVLADEF V4d v4dd(double x);
+MVLADEF V4d v4dAdd(V4d a, V4d b);
+MVLADEF V4d v4dSub(V4d a, V4d b);
+MVLADEF V4d v4dMul(V4d a, V4d b);
+MVLADEF V4d v4dDiv(V4d a, V4d b);
+MVLADEF V4d v4dMin(V4d a, V4d b);
+MVLADEF V4d v4dMax(V4d a, V4d b);
+MVLADEF V4d v4dSqrt(V4d a);
+MVLADEF V4d v4dPoww(V4d a, double exp);
+MVLADEF V4d v4dPow(V4d a, V4d exp);
+MVLADEF V4d v4dExp(V4d a);
+MVLADEF V4d v4dSin(V4d a);
+MVLADEF V4d v4dCos(V4d a);
+MVLADEF V4d v4dTan(V4d a);
+MVLADEF double v4dLen(V4d a);
 // -----------------------------------------
 
 
@@ -958,6 +1030,176 @@ MVLADEF double v3dLen(V3d a){
   double sqr = a.x*a.x + a.y*a.y + a.z*a.z;
   return sqrt(sqr);
 }
+
+
+
+// -----------------------------------------
+
+
+
+MVLADEF V4i v4i(signed int x, signed int y, signed int z, signed int w){
+  V4i vec;
+  vec.x = x;
+  vec.y = y;
+  vec.z = z;
+  vec.w = w;
+  return vec;
+}
+
+MVLADEF V4i v4ii(signed int x){
+  return v4i(x, x, x, x);
+}
+
+MVLADEF V4i v4iAdd(V4i a, V4i b){
+  a.x += b.x;
+  a.y += b.y;
+  a.z += b.z;
+  a.w += b.w
+  return a;
+}
+
+MVLADEF V4i v4iSub(V4i a, V4i b){
+  a.x -= b.x;
+  a.y -= b.y;
+  a.z -= b.z;
+  a.w -= b.w;
+  return a;
+}
+
+MVLADEF V4i v4iMul(V4i a, V4i b){
+  a.x *= b.x;
+  a.y *= b.y;
+  a.z *= b.z;
+  a.w *= b.w;
+  return a;
+}
+
+MVLADEF V4i v4iDiv(V4i a, V4i b){
+  a.x /= b.x;
+  a.y /= b.y;
+  a.z /= b.z;
+  a.w /= b.w;
+  return a;
+}
+
+MVLADEF V4i v4iMin(V4i a, V4i b){
+  a.x = mini(a.x, b.x);
+  a.y = mini(a.y, b.y);
+  a.z = mini(a.z, b.z);
+  a.w = mini(a.w, b.w);
+  return a;
+}
+
+MVLADEF V4i v4iMax(V4i a, V4i b){
+  a.x = maxi(a.x, b.x);
+  a.y = maxi(a.y, b.y);
+  a.z = maxi(a.z, b.z);
+  a.w = maxi(a.w, b.w);
+  return a;
+}
+
+MVLADEF V4u v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w){
+  V4u vec;
+  vec.x = x;
+  vex.y = y;
+  vec.z = z;
+  vec.w = w;
+  return vec;
+}
+
+MVLADEF V4u v4uu(unsigned int x){
+  return v4u(x, x, x, x);
+}
+
+MVLADEF V4u v4uAdd(V4u a, V4u b){
+  a.x += b.x;
+  a.y += b.y;
+  a.z += b.z;
+  a.w += b.w;
+  return a;
+}
+
+MVLADEF V4u v4uSub(V4u a, V4u b){
+  a.x -= b.x;
+  a.y -= b.y;
+  a.z -= b.z;
+  a.w -= b.w;
+  return a;
+}
+
+MVLADEF V4u v4uMul(V4u a, V4u b){
+  a.x *= b.x;
+  a.y *= b.y;
+  a.z *= b.z;
+  a.w *= b.w;
+  return a;
+}
+
+MVLADEF V4u v4uDiv(V4u a, V4u b){
+  a.x /= b.x;
+  a.y /= b.y;
+  a.z /= b.z;
+  a.w /= b.w;
+  return a;
+}
+
+MVLADEF V4u v4uMin(V4u a, V4u b){
+  a.x = minu(a.x, b.x);
+  a.y = minu(a.y, b.y);
+  a.z = minu(a.z, b.z);
+  a.w = minu(a.w, b.w);
+  return a;
+}
+
+MVLADEF V4u v4uMax(V4u a, V4u b){
+  a.x = maxu(a.x, b.x);
+  a.y = maxu(a.y, b.y);
+  a.z = maxu(a.z, b.z);
+  a.w = maxu(a.w, b.w);
+  return a;
+}
+
+MVLADEF V4f v4f(float x, float y, float z, float w){
+  V4f vec;
+  vec.x = x;
+  vec.y = y;
+  vec.z = z;
+  vec.w = w;
+  return vec;
+}
+
+MVLADEF V4f v4ff(float x);
+MVLADEF V4f v4fAdd(V4f a, V4f b);
+MVLADEF V4f v4fSub(V4f a, V4f b);
+MVLADEF V4f v4fMul(V4f a, V4f b);
+MVLADEF V4f v4fDiv(V4f a, V4f b);
+MVLADEF V4f v4fMin(V4f a, V4f b);
+MVLADEF V4f v4fMax(V4f a, V4f b);
+MVLADEF V4f v4fSqrt(V4f a);
+MVLADEF V4f v4fPoww(V4f a, float exp);
+MVLADEF V4f v4fPow(V4f a, V4f exp);
+MVLADEF V4f v4fExp(V4f a);
+MVLADEF V4f v4fSin(V4f a);
+MVLADEF V4f v4fCos(V4f a);
+MVLADEF V4f v4fTan(V4f a);
+MVLADEF float v4fLen(V4f a);
+
+MVLADEF V4d v4d(double x, double y, double z);
+MVLADEF V4d v4dd(double x);
+MVLADEF V4d v4dAdd(V4d a, V4d b);
+MVLADEF V4d v4dSub(V4d a, V4d b);
+MVLADEF V4d v4dMul(V4d a, V4d b);
+MVLADEF V4d v4dDiv(V4d a, V4d b);
+MVLADEF V4d v4dMin(V4d a, V4d b);
+MVLADEF V4d v4dMax(V4d a, V4d b);
+MVLADEF V4d v4dSqrt(V4d a);
+MVLADEF V4d v4dPoww(V4d a, double exp);
+MVLADEF V4d v4dPow(V4d a, V4d exp);
+MVLADEF V4d v4dExp(V4d a);
+MVLADEF V4d v4dSin(V4d a);
+MVLADEF V4d v4dCos(V4d a);
+MVLADEF V4d v4dTan(V4d a);
+MVLADEF double v4dLen(V4d a);
 
 
 
