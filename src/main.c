@@ -14,7 +14,7 @@ float divideByTwo(float num){
 
 
 int main(void){
-  Mat m1 = mat(4000, 1);
+  Mat m1 = mat(4, 2);
 
   for(int i = 0; i < m1.rows; i++){
     for(int j = 0; j < m1.cols; j++){
@@ -24,8 +24,12 @@ int main(void){
 
   printMat(m1);
   printf("\n");
-  Mat m2 = matMap(m1, divideByTwo);
+  Mat m2 = matTranspose(m1);
   printMat(m2);
+
+  freeMat(&m1);
+  freeMat(&m2);
+  printMatRowsCols(m1);
 
   return 0;
 }

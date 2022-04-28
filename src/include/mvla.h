@@ -342,6 +342,7 @@ MVLADEF Vec vecMul(Vec a, Vec b);
 MVLADEF Vec vecDot(Vec a, Vec b);
 MVLADEF Vec vecDiv(Vec a, Vec b);
 MVLADEF Vec vecMap(Vec a, float (*func)(float));
+MVLADEF void freeVec(Vec *a);
 MVLADEF void printVec(const Vec a);
 MVLADEF void printVecLength(const Vec a);
 // -----------------------------------------
@@ -359,7 +360,9 @@ MVLADEF Mat matSub(Mat a, Mat b);
 MVLADEF Mat matMul(Mat a, Mat b);
 MVLADEF Mat matDot(Mat a, Mat b);
 MVLADEF Mat matDiv(Mat a, Mat b);
+MVLADEF Mat matTranspose(Mat a);
 MVLADEF Mat matMap(Mat a, float (*func)(float));
+MVLADEF void freeMat(Mat *a);
 MVLADEF void printMat(const Mat a);
 MVLADEF void printMatRowsCols(const Mat a);
 // -----------------------------------------
@@ -1566,6 +1569,11 @@ MVLADEF Vec vecMap(Vec a, float (*func)(float)){
   return b;
 }
 
+MVLADEF void freeVec(Vec *a){
+  free(a->data);
+  a->length = -1;
+}
+
 MVLADEF void printVec(const Vec a){
   for(int i = 0; i < a.length; i++) printf("%lf ", a.data[i]);
   printf("\n");
@@ -1692,6 +1700,20 @@ MVLADEF Mat matDiv(Mat a, Mat b){
   return c;
 }
 
+MVLADEF Mat matTranspose(Mat a){
+  assert(a.data);
+  
+  Mat c = mat(a.cols, a.rows);
+
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < a.cols; j++){
+      c.data[j][i] = a.data[i][j];
+    }
+  }
+
+  return c;
+}
+
 MVLADEF Mat matMap(Mat a, float (*func)(float)){
   assert(a.data);
 
@@ -1705,6 +1727,14 @@ MVLADEF Mat matMap(Mat a, float (*func)(float)){
 
   return c;
 }
+
+MVLADEF void freeMat(Mat *a){
+  for(int i = 0; i < a->rows; i++) free(a->data[i]);
+  free(a->data);
+  a->rows = -1;
+  a->cols = -1;
+}
+
 
 MVLADEF void printMat(const Mat a){
   for(int i = 0; i < a.rows; i++){
