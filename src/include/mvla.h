@@ -327,7 +327,10 @@ MVLADEF Vec vec(unsigned int length);
 MVLADEF Vec vecAdd(Vec a, Vec b);
 MVLADEF Vec vecSub(Vec a, Vec b);
 MVLADEF Vec vecMul(Vec a, Vec b);
+MVLADEF Vec vecDot(Vec a, Vec b);
 MVLADEF Vec vecDiv(Vec a, Vec b);
+MVLADEF void printVec(const Vec a);
+MVLADEF void printVecLength(const Vec a);
 // -----------------------------------------
 
 
@@ -341,7 +344,10 @@ MVLADEF Mat matt(unsigned int dim);
 MVLADEF Mat matAdd(Mat a, Mat b);
 MVLADEF Mat matSub(Mat a, Mat b);
 MVLADEF Mat matMul(Mat a, Mat b);
+MVLADEF Mat matDot(Mat a, Mat b);
 MVLADEF Mat matDiv(Mat a, Mat b);
+MVLADEF void printMat(const Mat a);
+MVLADEF void printMatRowsCols(const Mat a);
 // -----------------------------------------
 
 
@@ -373,6 +379,7 @@ MVLADEF void *alloc(unsigned int size){
 /*
 ** HEADER ONLY IMPLEMENTATION
 */
+#define MVLA_IMPLEMENTATION
 #ifdef MVLA_IMPLEMENTATION
 
 
@@ -1054,7 +1061,7 @@ MVLADEF V4i v4iAdd(V4i a, V4i b){
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
-  a.w += b.w
+  a.w += b.w;
   return a;
 }
 
@@ -1101,7 +1108,7 @@ MVLADEF V4i v4iMax(V4i a, V4i b){
 MVLADEF V4u v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w){
   V4u vec;
   vec.x = x;
-  vex.y = y;
+  vec.y = y;
   vec.z = z;
   vec.w = w;
   return vec;
@@ -1294,7 +1301,7 @@ MVLADEF V4d v4d(double x, double y, double z, double w){
 }
 
 MVLADEF V4d v4dd(double x){
-  return v4dd(x, x, x, x); 
+  return v4d(x, x, x, x); 
 }
 
 MVLADEF V4d v4dAdd(V4d a, V4d b){
@@ -1330,18 +1337,18 @@ MVLADEF V4d v4dDiv(V4d a, V4d b){
 }
 
 MVLADEF V4d v4dMin(V4d a, V4d b){
-  a.x = min(a.x, b.x);
-  a.y = min(a.y, b.y);
-  a.z = min(a.z, b.z);
-  a.w = min(a.w, b.w);
+  a.x = fmin(a.x, b.x);
+  a.y = fmin(a.y, b.y);
+  a.z = fmin(a.z, b.z);
+  a.w = fmin(a.w, b.w);
   return a;
 }
 
 MVLADEF V4d v4dMax(V4d a, V4d b){
-  a.x = max(a.x, b.x);
-  a.y = max(a.y, b.y);
-  a.z = max(a.z, b.z);
-  a.w = max(a.w, b.w);
+  a.x = fmax(a.x, b.x);
+  a.y = fmax(a.y, b.y);
+  a.z = fmax(a.z, b.z);
+  a.w = fmax(a.w, b.w);
   return a;
 }
 
@@ -1456,6 +1463,18 @@ MVLADEF Vec vecMul(Vec a, Vec b){
   return c;
 }
 
+MVLADEF Vec vecDot(Vec a, Vec b){
+  assert(a.length == b.length);
+  assert(a.data);
+  assert(b.data);
+
+  Vec c = vec(1);
+
+  for(int i = 0; i < a.length; i++) c.data[0] += a.data[i] * b.data[i];
+
+  return c;
+}
+
 MVLADEF Vec vecDiv(Vec a, Vec b){
   assert(a.length == b.length);
   assert(a.data);
@@ -1468,6 +1487,15 @@ MVLADEF Vec vecDiv(Vec a, Vec b){
     c.data[i] = (float) a.data[i] / b.data[i];
   }
   return c;
+}
+
+MVLADEF void printVec(const Vec a){
+  for(int i = 0; i < a.length; i++) printf("%lf ", a.data[i]);
+  printf("\n");
+}
+
+MVLADEF void printVecLength(const Vec a){
+  printf("Vector Length: %d\n", a.length);
 }
 
 
@@ -1549,6 +1577,26 @@ MVLADEF Mat matMul(Mat a, Mat b){
   return c;
 }
 
+MVLADEF Mat matDot(Mat a, Mat b){
+  // m * p (dot) p * n = m * n
+  assert(a.cols == b.rows);
+  assert(a.data);
+  assert(b.data);
+  assert(b.cols <= a.cols && "b.cols cannot be greater than a.cols! It will access memory outside of the allocated memory for a!");
+
+  Mat c = mat(a.rows, b.cols);
+
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < b.cols; j++){
+      for (int k = 0; k < b.cols; k++){
+        c.data[i][j] += a.data[i][k] * b.data[k][j]; // BUG! if b.cols > a.cols, it will segfault
+      }
+    }
+  }
+
+  return c;
+}
+
 MVLADEF Mat matDiv(Mat a, Mat b){
   assert(a.rows == b.rows);
   assert(a.cols == b.cols);
@@ -1565,6 +1613,19 @@ MVLADEF Mat matDiv(Mat a, Mat b){
   }
   
   return c;
+}
+
+MVLADEF void printMat(const Mat a){
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < a.cols; j++){
+      printf("%lf ", a.data[i][j]);
+    }
+    printf("\n");
+  }
+}
+
+MVLADEF void printMatRowsCols(const Mat a){
+  printf("Matrix (Rows, Columns): (%d, %d)\n", a.rows, a.cols);
 }
 
 
