@@ -107,7 +107,6 @@ typedef struct { double       x, y, z, w; } V4d;
 */
 typedef struct {
   unsigned int length;
-
   float *data;
 } Vec;
 // -----------------------------------------
@@ -121,7 +120,6 @@ typedef struct {
 typedef struct {
   unsigned int rows;
   unsigned int cols;
-
   float **data;
 } Mat;
 // -----------------------------------------
