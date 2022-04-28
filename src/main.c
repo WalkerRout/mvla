@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 
+#define MVLA_IMPLEMENTATION
 #include "include/mvla.h"
 
 
@@ -8,10 +9,11 @@
 int main(void){
   V3d v1 = v3d(12, 3, 4);
   Mat m1 = mat(1000, 10);
-  Mat m2 = mat(10, 1);
-  Mat m3 = matDot(m1, m2);
+  Vec v2 = vec(2);
 
-  printMatRowsCols(m3);
-  printMat(m3);
+  printV3d(v1);
+  printVecLength(v2);
+  printMatRowsCols(m1);
+
   return 0;
 }

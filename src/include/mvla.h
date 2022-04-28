@@ -34,22 +34,22 @@
 ** PREPROCESSOR DEFINTIONS
 */
 #define V2Args(v) (v).x, (v).y
-#define PV2i "V2i(%d, %d)"
-#define PV2u "V2u(%u, %u)"
-#define PV2f "V2f(%f, %f)"
-#define PV2d "V2d(%lf, %lf)"
+#define PV2i "V2i(%d, %d)\n"
+#define PV2u "V2u(%u, %u)\n"
+#define PV2f "V2f(%f, %f)\n"
+#define PV2d "V2d(%lf, %lf)\n"
 
 #define V3Args(v) (v).x, (v).y, (v).z
-#define PV3i "V3i(%d, %d, %d)"
-#define PV3u "V3u(%u, %u, %u)"
-#define PV3f "V3f(%f, %f, %f)"
-#define PV3d "V3d(%lf, %lf, %lf)"
+#define PV3i "V3i(%d, %d, %d)\n"
+#define PV3u "V3u(%u, %u, %u)\n"
+#define PV3f "V3f(%f, %f, %f)\n"
+#define PV3d "V3d(%lf, %lf, %lf)\n"
 
 #define V4Args(v) (v).x, (v).y, (v).z
-#define PV4i "V4i(%d, %d, %d, %d)"
-#define PV4u "V4u(%u, %u, %u, %u)"
-#define PV4f "V4f(%f, %f, %f, %f)"
-#define PV4d "V4d(%lf, %lf, %lf, %lf)"
+#define PV4i "V4i(%d, %d, %d, %d)\n"
+#define PV4u "V4u(%u, %u, %u, %u)\n"
+#define PV4f "V4f(%f, %f, %f, %f)\n"
+#define PV4d "V4d(%lf, %lf, %lf, %lf)\n"
 
 #define MALLOC(size, type) (type*) alloc((size) * sizeof(type))
 // -----------------------------------------
@@ -154,6 +154,7 @@ MVLADEF V2i v2iMul(V2i a, V2i b);
 MVLADEF V2i v2iDiv(V2i a, V2i b);
 MVLADEF V2i v2iMin(V2i a, V2i b);
 MVLADEF V2i v2iMax(V2i a, V2i b);
+MVLADEF void printV2i(V2i a);
 
 MVLADEF V2u v2u(unsigned int x, unsigned int y);
 MVLADEF V2u v2uu(unsigned int x);
@@ -163,6 +164,7 @@ MVLADEF V2u v2uMul(V2u a, V2u b);
 MVLADEF V2u v2uDiv(V2u a, V2u b);
 MVLADEF V2u v2uMin(V2u a, V2u b);
 MVLADEF V2u v2uMax(V2u a, V2u b);
+MVLADEF void printV2u(V2u a);
 
 MVLADEF V2f v2f(float x, float y);
 MVLADEF V2f v2ff(float x);
@@ -180,6 +182,7 @@ MVLADEF V2f v2fSin(V2f a);
 MVLADEF V2f v2fCos(V2f a);
 MVLADEF V2f v2fTan(V2f a);
 MVLADEF float v2fLen(V2f a);
+MVLADEF void printV2f(V2f a);
 
 MVLADEF V2d v2d(double x, double y);
 MVLADEF V2d v2dd(double x);
@@ -197,6 +200,7 @@ MVLADEF V2d v2dSin(V2d a);
 MVLADEF V2d v2dCos(V2d a);
 MVLADEF V2d v2dTan(V2d a);
 MVLADEF double v2dLen(V2d a);
+MVLADEF void printV2d(V2d a);
 // -----------------------------------------
 
 
@@ -213,6 +217,7 @@ MVLADEF V3i v3iMul(V3i a, V3i b);
 MVLADEF V3i v3iDiv(V3i a, V3i b);
 MVLADEF V3i v3iMin(V3i a, V3i b);
 MVLADEF V3i v3iMax(V3i a, V3i b);
+MVLADEF void printV3i(V3i a);
 
 MVLADEF V3u v3u(unsigned int x, unsigned int y, unsigned int z);
 MVLADEF V3u v3uu(unsigned int x);
@@ -222,6 +227,7 @@ MVLADEF V3u v3uMul(V3u a, V3u b);
 MVLADEF V3u v3uDiv(V3u a, V3u b);
 MVLADEF V3u v3uMin(V3u a, V3u b);
 MVLADEF V3u v3uMax(V3u a, V3u b);
+MVLADEF void printV3u(V3u a);
 
 MVLADEF V3f v3f(float x, float y, float z);
 MVLADEF V3f v3ff(float x);
@@ -239,6 +245,7 @@ MVLADEF V3f v3fSin(V3f a);
 MVLADEF V3f v3fCos(V3f a);
 MVLADEF V3f v3fTan(V3f a);
 MVLADEF float v3fLen(V3f a);
+MVLADEF void printV3f(V3f a);
 
 MVLADEF V3d v3d(double x, double y, double z);
 MVLADEF V3d v3dd(double x);
@@ -256,6 +263,7 @@ MVLADEF V3d v3dSin(V3d a);
 MVLADEF V3d v3dCos(V3d a);
 MVLADEF V3d v3dTan(V3d a);
 MVLADEF double v3dLen(V3d a);
+MVLADEF void printV3d(V3d a);
 // -----------------------------------------
 
 
@@ -272,6 +280,7 @@ MVLADEF V4i v4iMul(V4i a, V4i b);
 MVLADEF V4i v4iDiv(V4i a, V4i b);
 MVLADEF V4i v4iMin(V4i a, V4i b);
 MVLADEF V4i v4iMax(V4i a, V4i b);
+MVLADEF void printV4i(V4i a);
 
 MVLADEF V4u v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w);
 MVLADEF V4u v4uu(unsigned int x);
@@ -281,6 +290,7 @@ MVLADEF V4u v4uMul(V4u a, V4u b);
 MVLADEF V4u v4uDiv(V4u a, V4u b);
 MVLADEF V4u v4uMin(V4u a, V4u b);
 MVLADEF V4u v4uMax(V4u a, V4u b);
+MVLADEF void printV4u(V4u a);
 
 MVLADEF V4f v4f(float x, float y, float z, float w);
 MVLADEF V4f v4ff(float x);
@@ -298,6 +308,7 @@ MVLADEF V4f v4fSin(V4f a);
 MVLADEF V4f v4fCos(V4f a);
 MVLADEF V4f v4fTan(V4f a);
 MVLADEF float v4fLen(V4f a);
+MVLADEF void printV4f(V4f a);
 
 MVLADEF V4d v4d(double x, double y, double z, double w);
 MVLADEF V4d v4dd(double x);
@@ -315,6 +326,7 @@ MVLADEF V4d v4dSin(V4d a);
 MVLADEF V4d v4dCos(V4d a);
 MVLADEF V4d v4dTan(V4d a);
 MVLADEF double v4dLen(V4d a);
+MVLADEF void printV4d(V4d a);
 // -----------------------------------------
 
 
@@ -329,6 +341,7 @@ MVLADEF Vec vecSub(Vec a, Vec b);
 MVLADEF Vec vecMul(Vec a, Vec b);
 MVLADEF Vec vecDot(Vec a, Vec b);
 MVLADEF Vec vecDiv(Vec a, Vec b);
+MVLADEF Vec vecMap(Vec a, double (*func)(double));
 MVLADEF void printVec(const Vec a);
 MVLADEF void printVecLength(const Vec a);
 // -----------------------------------------
@@ -346,6 +359,7 @@ MVLADEF Mat matSub(Mat a, Mat b);
 MVLADEF Mat matMul(Mat a, Mat b);
 MVLADEF Mat matDot(Mat a, Mat b);
 MVLADEF Mat matDiv(Mat a, Mat b);
+MVLADEF Mat matMap(Mat a, double (*func)(double));
 MVLADEF void printMat(const Mat a);
 MVLADEF void printMatRowsCols(const Mat a);
 // -----------------------------------------
@@ -461,6 +475,10 @@ MVLADEF V2i v2iMax(V2i a, V2i b){
   return a;
 }
 
+MVLADEF void printV2i(V2i a){
+  printf("V2i(%d, %d)\n", a.x, a.y);
+}
+
 
 
 MVLADEF V2u v2u(unsigned int x, unsigned int y){
@@ -508,6 +526,10 @@ MVLADEF V2u v2uMax(V2u a, V2u b){
   a.x = maxu(a.x, b.x);
   a.y = maxu(a.y, b.y);
   return a;
+}
+
+MVLADEF void printV2u(V2u a){
+  printf("V2u(%u, %u)\n", a.x, a.y);
 }
 
 
@@ -606,6 +628,10 @@ MVLADEF float v2fLen(V2f a){
   return sqrtf(sqr);
 }
 
+MVLADEF void printV2f(V2f a){
+  printf("V2f(%f, %f)\n", a.x, a.y);
+}
+
 
 
 MVLADEF V2d v2d(double x, double y){
@@ -702,6 +728,10 @@ MVLADEF double v2dLen(V2d a){
   return sqrt(sqr);
 }
 
+MVLADEF void printV2d(V2d a){
+  printf("V2d(%lf, %lf)\n", a.x, a.y);
+}
+
 
 
 // -----------------------------------------
@@ -762,6 +792,10 @@ MVLADEF V3i v3iMax(V3i a, V3i b){
   return a;
 }
 
+MVLADEF void printV3i(V3i a){
+  printf("V3i(%d, %d, %d)\n", a.x, a.y, a.z);
+}
+
 
 
 MVLADEF V3u v3u(unsigned int x, unsigned int y, unsigned int z){
@@ -816,6 +850,10 @@ MVLADEF V3u v3uMax(V3u a, V3u b){
   a.y = maxu(a.y, b.y);
   a.z = maxu(a.z, b.z);
   return a;
+}
+
+MVLADEF void printV3u(V3u a){
+  printf("V3u(%u, %u, %u)\n", a.x, a.y, a.z);
 }
 
 
@@ -928,6 +966,10 @@ MVLADEF float v3fLen(V3f a){
   return sqrtf(sqr);
 }
 
+MVLADEF void printV3f(V3f a){
+  printf("V3f(%f, %f, %f)\n", a.x, a.y, a.z);
+}
+
 
 
 MVLADEF V3d v3d(double x, double y, double z){
@@ -1038,6 +1080,10 @@ MVLADEF double v3dLen(V3d a){
   return sqrt(sqr);
 }
 
+MVLADEF void printV3d(V3d a){
+  printf("V3d(%lf, %lf, %lf)\n", a.x, a.y, a.z);
+}
+
 
 
 // -----------------------------------------
@@ -1105,6 +1151,12 @@ MVLADEF V4i v4iMax(V4i a, V4i b){
   return a;
 }
 
+MVLADEF void printV4i(V4i a){
+  printf("V4i(%d, %d, %d, %d)\n", a.x, a.y, a.z, a.w);
+}
+
+
+
 MVLADEF V4u v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w){
   V4u vec;
   vec.x = x;
@@ -1165,6 +1217,12 @@ MVLADEF V4u v4uMax(V4u a, V4u b){
   a.w = maxu(a.w, b.w);
   return a;
 }
+
+MVLADEF void printV4u(V4u a){
+  printf("V4u(%u, %u, %u, %u)\n", a.x, a.y, a.z, a.w);
+}
+
+
 
 MVLADEF V4f v4f(float x, float y, float z, float w){
   V4f vec;
@@ -1235,7 +1293,6 @@ MVLADEF V4f v4fSqrt(V4f a){
   return a;
 }
 
-
 MVLADEF V4f v4fPoww(V4f a, float exp){
   a.x = powf(a.x, exp);
   a.y = powf(a.y, exp);
@@ -1287,6 +1344,10 @@ MVLADEF V4f v4fTan(V4f a){
 MVLADEF float v4fLen(V4f a){
   float sqr = a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
   return sqrtf(sqr);
+}
+
+MVLADEF void printV4f(V4f a){
+  printf("V4f(%f, %f, %f, %f)\n", a.x, a.y, a.z, a.w);
 }
 
 
@@ -1413,6 +1474,10 @@ MVLADEF double v4dLen(V4d a){
   return sqrt(sqr);
 }
 
+MVLADEF void printV4d(V4d a){
+  printf("V4d(%lf, %lf, %lf, %lf)\n", a.x, a.y, a.z, a.w);
+}
+
 
 
 // -----------------------------------------
@@ -1487,6 +1552,18 @@ MVLADEF Vec vecDiv(Vec a, Vec b){
     c.data[i] = (float) a.data[i] / b.data[i];
   }
   return c;
+}
+
+MVLADEF Vec vecMap(Vec a, double (*func)(double)){
+  assert(a.data);
+
+  Vec b = vec(a.length);
+
+  for(int i = 0; i < a.length; i++){
+    b.data[i] = func(a.data[i]);
+  }
+
+  return b;
 }
 
 MVLADEF void printVec(const Vec a){
@@ -1612,6 +1689,20 @@ MVLADEF Mat matDiv(Mat a, Mat b){
     }
   }
   
+  return c;
+}
+
+MVLADEF Mat matMap(Mat a, double (*func)(double)){
+  assert(a.data);
+
+  Mat c = mat(a.rows, a.cols);
+
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < a.cols; j++){
+      c.data[i][j] = func(a.data[i][j]);
+    }
+  }
+
   return c;
 }
 
