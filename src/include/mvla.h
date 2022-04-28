@@ -341,7 +341,7 @@ MVLADEF Vec vecSub(Vec a, Vec b);
 MVLADEF Vec vecMul(Vec a, Vec b);
 MVLADEF Vec vecDot(Vec a, Vec b);
 MVLADEF Vec vecDiv(Vec a, Vec b);
-MVLADEF Vec vecMap(Vec a, double (*func)(double));
+MVLADEF Vec vecMap(Vec a, float (*func)(float));
 MVLADEF void printVec(const Vec a);
 MVLADEF void printVecLength(const Vec a);
 // -----------------------------------------
@@ -359,7 +359,7 @@ MVLADEF Mat matSub(Mat a, Mat b);
 MVLADEF Mat matMul(Mat a, Mat b);
 MVLADEF Mat matDot(Mat a, Mat b);
 MVLADEF Mat matDiv(Mat a, Mat b);
-MVLADEF Mat matMap(Mat a, double (*func)(double));
+MVLADEF Mat matMap(Mat a, float (*func)(float));
 MVLADEF void printMat(const Mat a);
 MVLADEF void printMatRowsCols(const Mat a);
 // -----------------------------------------
@@ -1554,7 +1554,7 @@ MVLADEF Vec vecDiv(Vec a, Vec b){
   return c;
 }
 
-MVLADEF Vec vecMap(Vec a, double (*func)(double)){
+MVLADEF Vec vecMap(Vec a, float (*func)(float)){
   assert(a.data);
 
   Vec b = vec(a.length);
@@ -1692,7 +1692,7 @@ MVLADEF Mat matDiv(Mat a, Mat b){
   return c;
 }
 
-MVLADEF Mat matMap(Mat a, double (*func)(double)){
+MVLADEF Mat matMap(Mat a, float (*func)(float)){
   assert(a.data);
 
   Mat c = mat(a.rows, a.cols);
