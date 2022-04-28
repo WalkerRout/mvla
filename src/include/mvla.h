@@ -1541,6 +1541,11 @@ MVLADEF Vec vecDot(Vec a, Vec b){
   return c;
 }
 
+/*
+** @brief:   Maps a function of type :: Float -> Float onto each element of a matrix
+** @params:  a {Mat} - matrix to map, func (float (*ptr)(float)) - function to apply to each matrix element
+** @returns: c {Mat} - new matrix with elements equal to mapped elements of a
+*/
 MVLADEF Vec vecDiv(Vec a, Vec b){
   assert(a.length == b.length);
   assert(a.data);
@@ -1555,28 +1560,48 @@ MVLADEF Vec vecDiv(Vec a, Vec b){
   return c;
 }
 
+/*
+** @brief:   Maps a function of type :: Float -> Float onto each element of a vector
+** @params:  a {Mat} - vector to map, func {float (*ptr)(float)} - function to apply to each vector element
+** @returns: c {Mat} - new vector with elements equal to mapped elements of a
+*/
 MVLADEF Vec vecMap(Vec a, float (*func)(float)){
   assert(a.data);
 
-  Vec b = vec(a.length);
+  Vec c = vec(a.length);
 
   for(int i = 0; i < a.length; i++){
-    b.data[i] = func(a.data[i]);
+    c.data[i] = func(a.data[i]);
   }
 
-  return b;
+  return c;
 }
 
+/*
+** @brief:   Free a vector's data property and set its length to -1
+** @params:  a {Vec *} - vector to free
+** @returns: N/A
+*/
 MVLADEF void freeVec(Vec *a){
   free(a->data);
   a->length = -1;
 }
 
+/*
+** @brief:   Prints the elements of a vector
+** @params:  a {const Vec} - vector to print
+** @returns: N/A
+*/
 MVLADEF void printVec(const Vec a){
   for(int i = 0; i < a.length; i++) printf("%lf ", a.data[i]);
   printf("\n");
 }
 
+/*
+** @brief:   Prints the length of a vector
+** @params:  a {const Vec} - vector with length to print
+** @returns: N/A
+*/
 MVLADEF void printVecLength(const Vec a){
   printf("Vector Length: %d\n", a.length);
 }
@@ -1587,6 +1612,11 @@ MVLADEF void printVecLength(const Vec a){
 
 
 
+/*
+** @brief:   Create a matrix with varying row and column count
+** @params:  rows {unsigned int} - row count, cols {unsigned int} - column count
+** @returns: mat {Mat} - new matrix with size of rows*cols and initial values of 0
+*/
 MVLADEF Mat mat(unsigned int rows, unsigned int cols){
   Mat mat;
   mat.rows = rows;
@@ -1598,6 +1628,11 @@ MVLADEF Mat mat(unsigned int rows, unsigned int cols){
   return mat;
 }
 
+/*
+** @brief:   Create a matrix with equal row and column count
+** @params:  dim {unsigned int} - row/column count
+** @returns: mat {Mat} - new matrix with size dim*dim and initial values of 0
+*/
 MVLADEF Mat matt(unsigned int dim){
   Mat mat;
   mat.rows = dim;
@@ -1609,6 +1644,11 @@ MVLADEF Mat matt(unsigned int dim){
   return mat;
 }
 
+/*
+** @brief:   Adds a matrix to another
+** @params:  a {Mat} - first matrix, b {Mat} - second matrix
+** @returns: c {Mat} - new matrix equal to the i_th j_th element of a plus the i_th j_th element of b
+*/
 MVLADEF Mat matAdd(Mat a, Mat b){
   assert(a.rows == b.rows);
   assert(a.cols == b.cols);
@@ -1626,6 +1666,11 @@ MVLADEF Mat matAdd(Mat a, Mat b){
   return c;
 }
 
+/*
+** @brief:   Subtract a matrix from another
+** @params:  a {Mat} - first matrix, b {Mat} - second matrix
+** @returns: c {Mat} - new matrix equal to the i_th j_th element of a subtracting the i_th j_th element of b
+*/
 MVLADEF Mat matSub(Mat a, Mat b){
   assert(a.rows == b.rows);
   assert(a.cols == b.cols);
@@ -1643,6 +1688,11 @@ MVLADEF Mat matSub(Mat a, Mat b){
   return c;
 }
 
+/*
+** @brief:   Multiplies the elements of two matrices together
+** @params:  a {Mat} - first matrix, b {Mat} - second matrix
+** @returns: c {Mat} - new matrix with elements equal to i_th j_th element of a multiplied with the i_th j_th element of b
+*/
 MVLADEF Mat matMul(Mat a, Mat b){
   assert(a.rows == b.rows);
   assert(a.cols == b.cols);
@@ -1660,6 +1710,11 @@ MVLADEF Mat matMul(Mat a, Mat b){
   return c;
 }
 
+/*
+** @brief:   Calculates dot product (matrix product) of two matrices
+** @params:  a {Mat} - first matrix (a cols must equal b rows), b {Mat} - second matrix (b rows must equal a cols)
+** @returns: c {Mat} - new matrix equal to the matrix product of a and b
+*/
 MVLADEF Mat matDot(Mat a, Mat b){
   // m * p (dot) p * n = m * n
   assert(a.cols == b.rows);
@@ -1680,6 +1735,11 @@ MVLADEF Mat matDot(Mat a, Mat b){
   return c;
 }
 
+/*
+** @brief:   Divide the i_th j_th element of the first matrix by the i_th j_th element of the second matrix
+** @params:  a {Mat} - matrix to divide, b {Mat} - matrix to divide a by
+** @returns: c {Mat} - new matrix with equal to a divided by b
+*/
 MVLADEF Mat matDiv(Mat a, Mat b){
   assert(a.rows == b.rows);
   assert(a.cols == b.cols);
@@ -1698,6 +1758,11 @@ MVLADEF Mat matDiv(Mat a, Mat b){
   return c;
 }
 
+/*
+** @brief:   Transpose a matrix
+** @params:  a {Mat} - matrix to transpose
+** @returns: c {Mat} - new matrix equal to the transpose of a
+*/
 MVLADEF Mat matTranspose(Mat a){
   assert(a.data);
   
@@ -1712,6 +1777,11 @@ MVLADEF Mat matTranspose(Mat a){
   return c;
 }
 
+/*
+** @brief:   Maps a function of type :: Float -> Float onto each element of a matrix
+** @params:  a {Mat} - matrix to map, func {float (*ptr)(float)} - function to apply to each matrix element
+** @returns: c {Mat} - new matrix with elements equal to mapped elements of a
+*/
 MVLADEF Mat matMap(Mat a, float (*func)(float)){
   assert(a.data);
 
@@ -1726,6 +1796,11 @@ MVLADEF Mat matMap(Mat a, float (*func)(float)){
   return c;
 }
 
+/*
+** @brief:   Free a matrix's data property and set its row and column count to -1
+** @params:  a {Mat *} - matrix to free
+** @returns: N/A
+*/
 MVLADEF void freeMat(Mat *a){
   for(int i = 0; i < a->rows; i++) free(a->data[i]);
   free(a->data);
@@ -1733,7 +1808,11 @@ MVLADEF void freeMat(Mat *a){
   a->cols = -1;
 }
 
-
+/*
+** @brief:   Prints the elements of a matrix in order of rows and columns
+** @params:  a {const Mat} - matrix to print
+** @returns: N/A
+*/
 MVLADEF void printMat(const Mat a){
   for(int i = 0; i < a.rows; i++){
     for(int j = 0; j < a.cols; j++){
@@ -1743,6 +1822,11 @@ MVLADEF void printMat(const Mat a){
   }
 }
 
+/*
+** @brief:   Prints the row and column count of a matrix
+** @params:  a {const Mat} - matrix with row and column count to print
+** @returns: N/A
+*/
 MVLADEF void printMatRowsCols(const Mat a){
   printf("Matrix (Rows, Columns): (%d, %d)\n", a.rows, a.cols);
 }
