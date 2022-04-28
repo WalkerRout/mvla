@@ -378,6 +378,7 @@ MVLADEF Mat matDot(Mat a, Mat b);
 MVLADEF Mat matDiv(Mat a, Mat b);
 MVLADEF Mat matTranspose(Mat a);
 MVLADEF Mat matMap(Mat a, float (*func)(float));
+MVLADEF Mat vecToMat(Vec a);
 MVLADEF void freeMat(Mat *a);
 MVLADEF void printMat(const Mat a);
 MVLADEF void printMatRowsCols(const Mat a);
@@ -1834,6 +1835,19 @@ MVLADEF Mat matMap(Mat a, float (*func)(float)){
     }
   }
 
+  return c;
+}
+
+/*
+** @brief:   Turn a vector into a matrix (row vector into matrix)
+** @params:  a {Vec} - vector to turn into a matrix
+** @returns: c {Mat} - new matrix that represents the row vector, a
+*/
+MVLADEF Mat vecToMat(Vec a){
+  Mat c = mat(1, a.length);
+
+  for(int i = 0; i < a.length; i++) c.data[0][i] = a.data[i];
+  
   return c;
 }
 
