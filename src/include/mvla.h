@@ -961,6 +961,10 @@ MVLADEF double v3dLen(V3d a){
 
 
 
+// -----------------------------------------
+
+
+
 MVLADEF Vec vec(unsigned int length){
   Vec vec;
   vec.length = length;
@@ -974,9 +978,7 @@ MVLADEF Vec vecAdd(Vec a, Vec b){
   assert(a.data);
   assert(b.data);
 
-  Vec c;
-  c.length = a.length;
-  c.data = calloc(a.length, sizeof(float));
+  Vec c = vec(a.length);
   
   for(int i = 0; i < a.length; i++) c.data[i] = a.data[i] + b.data[i];
 
@@ -988,9 +990,7 @@ MVLADEF Vec vecSub(Vec a, Vec b){
   assert(a.data);
   assert(b.data);
 
-  Vec c;
-  c.length = a.length;
-  c.data = calloc(a.length, sizeof(float));
+  Vec c = vec(a.length);
 
   for(int i = 0; i < a.length; i++) c.data[i] = a.data[i] - b.data[i];
 
@@ -1002,9 +1002,7 @@ MVLADEF Vec vecMul(Vec a, Vec b){
   assert(a.data);
   assert(b.data);
 
-  Vec c;
-  c.length = a.length;
-  c.data = calloc(a.length, sizeof(float));
+  Vec c = vec(a.length);
 
   for(int i = 0; i < a.length; i++) c.data[i] = a.data[i] * b.data[i];
 
@@ -1016,14 +1014,16 @@ MVLADEF Vec vecDiv(Vec a, Vec b){
   assert(a.data);
   assert(b.data);
 
-  Vec c;
-  c.length = a.length;
-  c.data = calloc(a.length, sizeof(float));
+  Vec c = vec(a.length);
 
   for(int i = 0; i < a.length; i++) c.data[i] = (float) a.data[i] / b.data[i];
 
   return c;
 }
+
+
+
+// -----------------------------------------
 
 
 
@@ -1050,19 +1050,74 @@ MVLADEF Mat matt(unsigned int dim){
 }
 
 MVLADEF Mat matAdd(Mat a, Mat b){
-  return a;
+  assert(a.rows == b.rows);
+  assert(a.cols == b.cols);
+  assert(a.data);
+  assert(b.data);
+
+  Mat c = mat(a.rows, a.cols);
+
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < a.cols; j++){
+      c.data[i][j] = a.data[i][j] + b.data[i][j];
+    }
+  }
+  
+  return c;
 }
 
 MVLADEF Mat matSub(Mat a, Mat b){
-  return a;
+  assert(a.rows == b.rows);
+  assert(a.cols == b.cols);
+  assert(a.data);
+  assert(b.data);
+
+  Mat c = mat(a.rows, a.cols);
+
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < a.cols; j++){
+      c.data[i][j] = a.data[i][j] - b.data[i][j];
+    }
+  }
+  
+  return c;
 }
 
 MVLADEF Mat matMul(Mat a, Mat b){
-  return a;
+  assert(a.rows == b.rows);
+  assert(a.cols == b.cols);
+  assert(a.data);
+  assert(b.data);
+
+  Mat c = mat(a.rows, a.cols);
+
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < a.cols; j++){
+      c.data[i][j] = a.data[i][j] * b.data[i][j];
+    }
+  }
+  
+  return c;
 }
 
 MVLADEF Mat matDiv(Mat a, Mat b){
-  return a;
+  assert(a.rows == b.rows);
+  assert(a.cols == b.cols);
+  assert(a.data);
+  assert(b.data);
+
+  Mat c = mat(a.rows, a.cols);
+
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < a.cols; j++){
+      if(b.data[i][j] == 0) continue;
+      c.data[i][j] = (float) a.data[i][j] / b.data[i][j];
+    }
+  }
+  
+  return c;
 }
+
+
 
 #endif
