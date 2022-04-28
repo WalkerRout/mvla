@@ -1016,8 +1016,10 @@ MVLADEF Vec vecDiv(Vec a, Vec b){
 
   Vec c = vec(a.length);
 
-  for(int i = 0; i < a.length; i++) c.data[i] = (float) a.data[i] / b.data[i];
-
+  for(int i = 0; i < a.length; i++){
+    if(b.data[i] == 0) continue;
+    c.data[i] = (float) a.data[i] / b.data[i];
+  }
   return c;
 }
 
