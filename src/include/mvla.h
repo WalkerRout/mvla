@@ -13,6 +13,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 // -----------------------------------------
 
 
@@ -49,38 +50,22 @@
 
 
 
-#ifdef INC_TENSORS
 // -----------------------------------------
 /*
-** GENERIC 1D AND 2D TENSOR DEFINITIONS
+** USEFUL CONSTANT DEFINTIONS
 */
-#define t1gen(v, n) ((v) = alloc((n) * sizeof *(v)))
-#define t1free(v)    \
-  do {               \
-    free(v);         \
-    v = NULL;        \
-  } while (0)
-
-#define t2gen(a, m, n)                  \
-  do {                                  \
-    t1gen(a, (m) + 1);                  \
-    for(size_t i = 0; i < (m); i++){    \
-      t1gen((a)[i], (n));               \
-    }                                   \
-    (a)[m] = NULL;                      \
-  } while (0)
-#define t2free(a)                                 \
-  do {                                            \
-    if (a != NULL) {                              \
-      for (size_t i = 0; (a)[i] != NULL; i++){    \
-        t1free((a)[i]);                           \
-      }                                           \
-      t1free(a);                                  \
-      a = NULL;                                   \
-    }                                             \
-  } while (0)
+#define C_E      2.71828182845
+#define C_PI     3.14159265359
+#define C_2PI    6.28318530718
+#define C_4PI    12.5663706144
+#define C_HALFPI 1.57079632679
+#define C_SQRTPI 1.77245385091
+#define C_SQRT2  1.41421356237
+#define C_LN2    0.69314718056
+#define C_LN10   2.30258509299
+#define C_LNPI   1.14472988585
+#define C_LOGE   0.4342944819
 // -----------------------------------------
-#endif //INC_TENSORS
 
 
 
@@ -99,6 +84,33 @@ typedef struct { signed int   x, y, z; } V3i;
 typedef struct { unsigned int x, y, z; } V3u;
 typedef struct { float        x, y, z; } V3f;
 typedef struct { double       x, y, z; } V3d;
+// -----------------------------------------
+
+
+
+// -----------------------------------------
+/*
+** UNSPECIFIED VECTOR DEFINITIONS
+*/
+typedef struct {
+  unsigned int length;
+
+  float *data;
+} Vec;
+// -----------------------------------------
+
+
+
+// -----------------------------------------
+/*
+** UNSPECIFIED MATRIX DEFINITIONS
+*/
+typedef struct {
+  unsigned int rows;
+  unsigned int cols;
+
+  float **data;
+} Mat;
 // -----------------------------------------
 
 
@@ -231,6 +243,33 @@ MVLADEF V3d v3dSin(V3d a);
 MVLADEF V3d v3dCos(V3d a);
 MVLADEF V3d v3dTan(V3d a);
 MVLADEF double v3dLen(V3d a);
+// -----------------------------------------
+
+
+
+// -----------------------------------------
+/*
+** UNSPECIFIED VECTOR FUNCTION PROTOTYPES
+*/
+MVLADEF Vec vec(unsigned int length);
+MVLADEF Vec vecAdd(Vec a, Vec b);
+MVLADEF Vec vecSub(Vec a, Vec b);
+MVLADEF Vec vecMul(Vec a, Vec b);
+MVLADEF Vec vecDiv(Vec a, Vec b);
+// -----------------------------------------
+
+
+
+// -----------------------------------------
+/*
+** UNSPECIFIED MATRIX FUNCTION PROTOTYPES
+*/
+MVLADEF Mat mat(unsigned int rows, unsigned int cols);
+MVLADEF Mat matt(unsigned int dim);
+MVLADEF Mat matAdd(Mat a, Mat b);
+MVLADEF Mat matSub(Mat a, Mat b);
+MVLADEF Mat matMul(Mat a, Mat b);
+MVLADEF Mat matDiv(Mat a, Mat b);
 // -----------------------------------------
 
 
@@ -460,9 +499,8 @@ MVLADEF V2f v2fPow(V2f a, V2f exp){
 }
 
 MVLADEF V2f v2fExp(V2f a){
-  const float E = 2.718281;
-  a.x = powf(E, a.x);
-  a.y = powf(E, a.y);
+  a.x = powf(C_E, a.x);
+  a.y = powf(C_E, a.y);
   return a;
 }
 
@@ -557,9 +595,8 @@ MVLADEF V2d v2dPow(V2d a, V2d exp){
 }
 
 MVLADEF V2d v2dExp(V2d a){
-  const double E = 2.718281828;
-  a.x = pow(E, a.x);
-  a.y = pow(E, a.y);
+  a.x = pow(C_E, a.x);
+  a.y = pow(C_E, a.y);
   return a;
 }
 
@@ -780,10 +817,9 @@ MVLADEF V3f v3fPow(V3f a, V3f exp){
 }
 
 MVLADEF V3f v3fExp(V3f a){
-  const float E = 2.718281;
-  a.x = powf(E, a.x);
-  a.y = powf(E, a.y);
-  a.z = powf(E, a.z);
+  a.x = powf(C_E, a.x);
+  a.y = powf(C_E, a.y);
+  a.z = powf(C_E, a.z);
   return a;
 }
 
@@ -891,10 +927,9 @@ MVLADEF V3d v3dPow(V3d a, V3d exp){
 }
 
 MVLADEF V3d v3dExp(V3d a){
-  const double E = 2.718281828;
-  a.x = pow(E, a.x);
-  a.y = pow(E, a.y);
-  a.z = pow(E, a.z);
+  a.x = pow(C_E, a.x);
+  a.y = pow(C_E, a.y);
+  a.z = pow(C_E, a.z);
   return a;
 }
 
@@ -926,5 +961,108 @@ MVLADEF double v3dLen(V3d a){
 
 
 
-#endif
+MVLADEF Vec vec(unsigned int length){
+  Vec vec;
+  vec.length = length;
+  vec.data = calloc(length, sizeof(float));
 
+  return vec;
+}
+
+MVLADEF Vec vecAdd(Vec a, Vec b){
+  assert(a.length == b.length);
+  assert(a.data);
+  assert(b.data);
+
+  Vec c;
+  c.length = a.length;
+  c.data = calloc(a.length, sizeof(float));
+  
+  for(int i = 0; i < a.length; i++) c.data[i] = a.data[i] + b.data[i];
+
+  return c;
+}
+
+MVLADEF Vec vecSub(Vec a, Vec b){
+  assert(a.length == b.length);
+  assert(a.data);
+  assert(b.data);
+
+  Vec c;
+  c.length = a.length;
+  c.data = calloc(a.length, sizeof(float));
+
+  for(int i = 0; i < a.length; i++) c.data[i] = a.data[i] - b.data[i];
+
+  return c;
+}
+
+MVLADEF Vec vecMul(Vec a, Vec b){
+  assert(a.length == b.length);
+  assert(a.data);
+  assert(b.data);
+
+  Vec c;
+  c.length = a.length;
+  c.data = calloc(a.length, sizeof(float));
+
+  for(int i = 0; i < a.length; i++) c.data[i] = a.data[i] * b.data[i];
+
+  return c;
+}
+
+MVLADEF Vec vecDiv(Vec a, Vec b){
+  assert(a.length == b.length);
+  assert(a.data);
+  assert(b.data);
+
+  Vec c;
+  c.length = a.length;
+  c.data = calloc(a.length, sizeof(float));
+
+  for(int i = 0; i < a.length; i++) c.data[i] = (float) a.data[i] / b.data[i];
+
+  return c;
+}
+
+
+
+MVLADEF Mat mat(unsigned int rows, unsigned int cols){
+  Mat mat;
+  mat.rows = rows;
+  mat.cols = cols;
+
+  mat.data = calloc(rows, sizeof(float *));
+  for(int i = 0; i < rows; i++) mat.data[i] = calloc(cols, sizeof(float));
+
+  return mat;
+}
+
+MVLADEF Mat matt(unsigned int dim){
+  Mat mat;
+  mat.rows = dim;
+  mat.cols = dim;
+
+  mat.data = calloc(dim, sizeof(float *));
+  for(int i = 0; i < dim; i++) mat.data[i] = calloc(dim, sizeof(float));
+
+  return mat;
+}
+
+MVLADEF Mat matAdd(Mat a, Mat b){
+  return a;
+}
+
+MVLADEF Mat matSub(Mat a, Mat b){
+  return a;
+}
+
+MVLADEF Mat matMul(Mat a, Mat b){
+  return a;
+}
+
+MVLADEF Mat matDiv(Mat a, Mat b){
+  return a;
+}
+
+#endif
