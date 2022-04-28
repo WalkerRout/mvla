@@ -1,10 +1,28 @@
-
-
 /*
-** FUNCTION PROTOTYPES
+** @author:       Walker Rout
+**
+** @contact:      walkerrout04@gmail.com
+**
+** @date_written: March 16th, 2022
+**
+** @description:  This library implements matrices and different types of vectors
+**                for use in Machine Learning / Computer Graphics projects.
+**
+** @license:      MIT
 */
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+
+
 #ifndef MVLA_H
 #define MVLA_H
+
+
 
 // -----------------------------------------
 /*
@@ -394,7 +412,6 @@ MVLADEF void *alloc(unsigned int size){
 /*
 ** HEADER ONLY IMPLEMENTATION
 */
-#define MVLA_IMPLEMENTATION
 #ifdef MVLA_IMPLEMENTATION
 
 
@@ -1484,7 +1501,11 @@ MVLADEF void printV4d(V4d a){
 // -----------------------------------------
 
 
-
+/*
+** @brief:   Create a vector with a specified length
+** @params:  length {unsigned int} - length of vector
+** @returns: vec {Vec} - new vec with specified length and initial values of 0
+*/
 MVLADEF Vec vec(unsigned int length){
   Vec vec;
   vec.length = length;
@@ -1493,6 +1514,11 @@ MVLADEF Vec vec(unsigned int length){
   return vec;
 }
 
+/*
+** @brief:   Adds a vector to another
+** @params:  a {Vec} - first vector, b {Vec} - second vector
+** @returns: c {Vec} - new vector equal to the i_th element of a plus the i_th element of b
+*/
 MVLADEF Vec vecAdd(Vec a, Vec b){
   assert(a.length == b.length);
   assert(a.data);
@@ -1505,6 +1531,11 @@ MVLADEF Vec vecAdd(Vec a, Vec b){
   return c;
 }
 
+/*
+** @brief:   Subtract a vector from another
+** @params:  a {Vec} - first vector, b {Vec} - second vector
+** @returns: c {Vec} - new vector equal to the i_th element of a minus the i_th element of b
+*/
 MVLADEF Vec vecSub(Vec a, Vec b){
   assert(a.length == b.length);
   assert(a.data);
@@ -1517,6 +1548,11 @@ MVLADEF Vec vecSub(Vec a, Vec b){
   return c;
 }
 
+/*
+** @brief:   Multiplies the elements of two vectors together
+** @params:  a {Vec} - first vector, b {Vec} - second vector
+** @returns: c {Vec} - new vector with elements equal to i_th element of a multiplied with the i_th element of b
+*/
 MVLADEF Vec vecMul(Vec a, Vec b){
   assert(a.length == b.length);
   assert(a.data);
@@ -1529,6 +1565,11 @@ MVLADEF Vec vecMul(Vec a, Vec b){
   return c;
 }
 
+/*
+** @brief:   Calculates dot product of two vectors
+** @params:  a {Vec} - first vector (a length must equal b length), b {Vec} - second vector (b length must equal a length)
+** @returns: c {Vec} - new vector equal to the vector product of a and b (length of 1)
+*/
 MVLADEF Vec vecDot(Vec a, Vec b){
   assert(a.length == b.length);
   assert(a.data);
@@ -1542,9 +1583,9 @@ MVLADEF Vec vecDot(Vec a, Vec b){
 }
 
 /*
-** @brief:   Maps a function of type :: Float -> Float onto each element of a matrix
-** @params:  a {Mat} - matrix to map, func (float (*ptr)(float)) - function to apply to each matrix element
-** @returns: c {Mat} - new matrix with elements equal to mapped elements of a
+** @brief:   Divide the i_th element of the first vector by the i_th element of the second vector
+** @params:  a {Vec} - vector to divide, b {Vec} - vector to divide a by
+** @returns: c {Vec} - new vector with elements equal to a divided by b
 */
 MVLADEF Vec vecDiv(Vec a, Vec b){
   assert(a.length == b.length);
@@ -1562,8 +1603,8 @@ MVLADEF Vec vecDiv(Vec a, Vec b){
 
 /*
 ** @brief:   Maps a function of type :: Float -> Float onto each element of a vector
-** @params:  a {Mat} - vector to map, func {float (*ptr)(float)} - function to apply to each vector element
-** @returns: c {Mat} - new vector with elements equal to mapped elements of a
+** @params:  a {Vec} - vector to map, func {float (*ptr)(float)} - function to apply to each vector element
+** @returns: c {Vec} - new vector with elements equal to mapped elements of a
 */
 MVLADEF Vec vecMap(Vec a, float (*func)(float)){
   assert(a.data);
@@ -1738,7 +1779,7 @@ MVLADEF Mat matDot(Mat a, Mat b){
 /*
 ** @brief:   Divide the i_th j_th element of the first matrix by the i_th j_th element of the second matrix
 ** @params:  a {Mat} - matrix to divide, b {Mat} - matrix to divide a by
-** @returns: c {Mat} - new matrix with equal to a divided by b
+** @returns: c {Mat} - new matrix with elements equal to a divided by b
 */
 MVLADEF Mat matDiv(Mat a, Mat b){
   assert(a.rows == b.rows);
@@ -1833,4 +1874,20 @@ MVLADEF void printMatRowsCols(const Mat a){
 
 
 
-#endif
+#endif // MVLA_IMPLEMENTATION
+
+
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+
+
+
+/*
+** TODO:
+** - implement scalar operations for matrices and vectors
+** - implement quality-of-life functions in a separate block/file and remove PV__ macros
+** - fix matrix product bug where b.cols must be greater than a.cols
+** - comment all V__ functions
+*/
