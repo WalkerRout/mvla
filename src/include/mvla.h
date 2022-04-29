@@ -1664,6 +1664,11 @@ MVLADEF Vec matToVec(Mat a){
   return c;
 }
 
+/*
+** @brief:   Turn a float * into a vector
+** @params:  a {float *} - float * to turn into a vector, length {unsigned int} - length of the vector
+** @returns: c {Vec} - new vector that represents the float *, a
+*/
 MVLADEF Vec fPtrToVec(float *a, unsigned int length){
   assert(a);
 
