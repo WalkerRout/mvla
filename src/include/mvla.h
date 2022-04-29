@@ -361,7 +361,8 @@ MVLADEF Vec vecMull(Vec a, float b);
 MVLADEF Vec vecDot(Vec a, Vec b);
 MVLADEF Vec vecDiv(Vec a, Vec b);
 MVLADEF Vec vecMap(Vec a, float (*func)(float));
-MVLADEF Vec matToVec(Mat a);
+MVLADEF Vec matRowToVec(Mat a, int row);
+MVLADEF Vec matColToVec(Mat a, int col);
 MVLADEF Vec fPtrToVec(float *a, unsigned int length);
 MVLADEF float vecLength(const Vec a);
 MVLADEF void vecFillRand(Vec *a);
@@ -1650,17 +1651,36 @@ MVLADEF Vec vecMap(Vec a, float (*func)(float)){
 }
 
 /*
-** @brief:   Turn a matrix into a vector (single row matrix into row vector)
-** @params:  a {Mat} - matrix to turn into a vector
-** @returns: c {Vec} - new vector that represents the single row matrix, a
+** @brief:   Turn a row of a matrix into a vector
+** @params:  a {Mat} - matrix to turn into a vector, row {int} - row of matrix to turn into vector
+** @returns: c {Vec} - new vector that represents a single row of the matrix, a
 */
-MVLADEF Vec matToVec(Mat a){
-  assert(a.rows == 1);
+MVLADEF Vec matRowToVec(Mat a, int row){
+  assert(a.data);
+  assert(a.rows > row);
 
   Vec c = vec(a.cols);
 
-  for(int i = 0; i < a.cols; i++) c.data[i] = a.data[0][i];
+  for(int i = 0; i < a.cols; i++) c.data[i] = a.data[row][i];
 
+  return c;
+}
+
+/*
+** @brief:   Turn a column of a matrix into a vector
+** @params:  a {Mat} - matrix to turn into a vector, col {int} - the column of the matrix to turn into vector
+** @returns: c {Vec} - new vector that represents a single column of the matrix, a
+*/
+MVLADEF Vec matColToVec(Mat a, int col){
+  assert(a.data);
+  assert(a.cols > col);
+  
+  Vec c = vec(a.rows);
+
+  for(int i = 0; i < a.rows; i++){
+    c.data[i] = a.data[i][col];
+  }
+  
   return c;
 }
 
