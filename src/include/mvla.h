@@ -85,10 +85,11 @@ extern "C" {
 #define C_HALFPI 1.57079632679
 #define C_SQRTPI 1.77245385091
 #define C_SQRT2  1.41421356237
+#define C_SQRT3  1.73205080757
 #define C_LN2    0.69314718056
 #define C_LN10   2.30258509299
 #define C_LNPI   1.14472988585
-#define C_LOGE   0.4342944819
+#define C_LOGE   0.43429448190
 // -----------------------------------------
 
 
