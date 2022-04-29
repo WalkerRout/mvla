@@ -23,7 +23,6 @@ extern "C" {
 #define MVLA_H
 
 
-
 // -----------------------------------------
 /*
 ** INCLUDES
@@ -410,7 +409,6 @@ MVLADEF void *alloc(unsigned int size){
   return mem;
 }
 // -----------------------------------------
-
 
 
 #endif // MVLA_H
@@ -2002,7 +2000,6 @@ MVLADEF void printMat(const Mat a){
 MVLADEF void printMatRowsCols(const Mat a){
   printf("Matrix (Rows, Columns): (%d, %d)\n", a.rows, a.cols);
 }
-
 
 
 #endif // MVLA_IMPLEMENTATION
