@@ -148,6 +148,8 @@ typedef struct {
 /*
 ** MATH FUNCTION PROTOTYPES
 */
+MVLADEF float randF();
+MVLADEF double randD();
 MVLADEF float lerpf(float a, float b, float t);
 MVLADEF double lerp(double a, double b, double t);
 MVLADEF signed int mini(signed int a, signed int b);
@@ -418,7 +420,14 @@ MVLADEF void *alloc(unsigned int size){
 */
 #ifdef MVLA_IMPLEMENTATION
 
-
+  
+MVLADEF float randF(){
+  return ((float) rand()) / ((float) RAND_MAX);
+}
+    
+MVLADEF double randD(){
+  return ((double) rand()) / ((double) RAND_MAX); 
+}
 
 MVLADEF float lerpf(float a, float b, float t){
   return a + ((b - a) * t);
