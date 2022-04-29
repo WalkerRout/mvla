@@ -355,9 +355,11 @@ MVLADEF Vec vec(unsigned int length);
 MVLADEF Vec vecAdd(Vec a, Vec b);
 MVLADEF Vec vecSub(Vec a, Vec b);
 MVLADEF Vec vecMul(Vec a, Vec b);
+MVLADEF Vec vecMull(Vec a, float b);
 MVLADEF Vec vecDot(Vec a, Vec b);
 MVLADEF Vec vecDiv(Vec a, Vec b);
 MVLADEF Vec vecMap(Vec a, float (*func)(float));
+MVLADEF Vec matToVec(Mat a);
 MVLADEF void freeVec(Vec *a);
 MVLADEF void printVec(const Vec a);
 MVLADEF void printVecLength(const Vec a);
@@ -374,6 +376,7 @@ MVLADEF Mat matt(unsigned int dim);
 MVLADEF Mat matAdd(Mat a, Mat b);
 MVLADEF Mat matSub(Mat a, Mat b);
 MVLADEF Mat matMul(Mat a, Mat b);
+MVLADEF Mat matMull(Mat a, float b);
 MVLADEF Mat matDot(Mat a, Mat b);
 MVLADEF Mat matDiv(Mat a, Mat b);
 MVLADEF Mat matTranspose(Mat a);
@@ -1567,6 +1570,21 @@ MVLADEF Vec vecMul(Vec a, Vec b){
 }
 
 /*
+** @brief:   Multiplies a vector with a scalar
+** @params:  a {Vec} - vector to multiply, b {float} - scalar to multiply the vector by
+** @returns: c {Vec} - new vector equal to a's elements multiplied by b
+*/
+MVLADEF Vec vecMull(Vec a, float b){
+  assert(a.data);
+  
+  Vec c = vec(a.length);
+  
+  for(int i = 0; i < a.length; i++) c.data[i] = a.data[i] * b;
+
+  return c;
+}
+
+/*
 ** @brief:   Calculates dot product of two vectors
 ** @params:  a {Vec} - first vector (a length must equal b length), b {Vec} - second vector (b length must equal a length)
 ** @returns: c {Vec} - new vector equal to the vector product of a and b (length of 1)
@@ -1615,6 +1633,21 @@ MVLADEF Vec vecMap(Vec a, float (*func)(float)){
   for(int i = 0; i < a.length; i++){
     c.data[i] = func(a.data[i]);
   }
+
+  return c;
+}
+
+/*
+** @brief:   Turn a matrix into a vector (single row matrix into row vector)
+** @params:  a {Mat} - matrix to turn into a vector
+** @returns: c {Vec} - new vector that represents the single row matrix, a
+*/
+MVLADEF Vec matToVec(Mat a){
+  assert(a.rows == 1);
+
+  Vec c = vec(a.cols);
+
+  for(int i = 0; i < a.cols; i++) c.data[i] = a.data[0][i];
 
   return c;
 }
@@ -1749,6 +1782,25 @@ MVLADEF Mat matMul(Mat a, Mat b){
     }
   }
   
+  return c;
+}
+
+/*
+** @brief:   Multiplies a matrix with a scalar
+** @params:  a {Mat} - matrix to multiply, b {float} - scalar to multiply the matrix by
+** @returns: c {Mat} - new matrix equal to a's elements multiplied by b
+*/
+MVLADEF Mat matMull(Mat a, float b){
+  assert(a.data);
+  
+  Mat c = mat(a.rows, a.cols);
+  
+  for(int i = 0; i < a.rows; i++){
+    for(int j = 0; j < a.cols; j++){
+      c.data[i][j] = a.data[i][j] * b;
+    }
+  }
+
   return c;
 }
 
