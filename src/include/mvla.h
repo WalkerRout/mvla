@@ -380,6 +380,7 @@ MVLADEF void printVecLength(const Vec a);
 */
 MVLADEF Mat mat(unsigned int rows, unsigned int cols);
 MVLADEF Mat matt(unsigned int dim);
+MVLADEF Mat matId(unsigned int dim);
 MVLADEF Mat matAdd(Mat a, Mat b);
 MVLADEF Mat matSub(Mat a, Mat b);
 MVLADEF Mat matMul(Mat a, Mat b);
@@ -1789,6 +1790,21 @@ MVLADEF Mat matt(unsigned int dim){
 
   mat.data = calloc(dim, sizeof(float *));
   for(int i = 0; i < dim; i++) mat.data[i] = calloc(dim, sizeof(float));
+
+  return mat;
+}
+
+/*
+** @brief:   Create an identity matrix
+** @params:  dim {unsigned int} - row/column count
+** @returns: mat {Mat} - new identity matrix with size dim*dim
+*/
+MVLADEF Mat matId(unsigned int dim){
+  assert(dim > 0);
+
+  Mat mat = matt(dim);
+
+  for(int i = 0; i < dim; i++) mat.data[i][i] = 1.0;
 
   return mat;
 }
