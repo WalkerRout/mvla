@@ -364,6 +364,7 @@ MVLADEF Vec vecDiv(Vec a, Vec b);
 MVLADEF Vec vecMap(Vec a, float (*func)(float));
 MVLADEF Vec matToVec(Mat a);
 MVLADEF Vec fPtrToVec(float *a, unsigned int length);
+MVLADEF float vecLength(const Vec a);
 MVLADEF void vecFillRand(Vec *a);
 MVLADEF void freeVec(Vec *a);
 MVLADEF void printVec(const Vec a);
@@ -1676,6 +1677,21 @@ MVLADEF Vec fPtrToVec(float *a, unsigned int length){
 }
 
 /*
+** @brief:   Get the length of a vector (square root of all elements squared and summed)
+** @params:  a {const Vec} - vector to find the length of
+** @returns: length {float} - the length of the vector
+*/
+MVLADEF float vecLength(const Vec a){
+  assert(a.data);
+  
+  float length = 0.0;
+  
+  for(int i = 0; i < a.length; i++) length += a.data[i]*a.data[i];
+  
+  return sqrtf(length);
+}
+
+/*
 ** @brief:   Fill a vector with random numbers between 0 and 1
 ** @params:  a {Vec *} - vector to fill with random numbers
 ** @returns: N/A
@@ -1711,7 +1727,7 @@ MVLADEF void printVec(const Vec a){
 ** @params:  a {const Vec} - vector with length to print
 ** @returns: N/A
 */
-MVLADEF void printVecLength(const Vec a){
+MVLADEF void printVecEleCount(const Vec a){
   printf("Vector Length: %d\n", a.length);
 }
 
