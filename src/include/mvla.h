@@ -29,8 +29,9 @@ extern "C" {
 ** INCLUDES
 */
 #include <math.h>
-#include <stdlib.h>
+#include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 // -----------------------------------------
 
@@ -362,6 +363,7 @@ MVLADEF Vec vecDot(Vec a, Vec b);
 MVLADEF Vec vecDiv(Vec a, Vec b);
 MVLADEF Vec vecMap(Vec a, float (*func)(float));
 MVLADEF Vec matToVec(Mat a);
+MVLADEF void vecFillRand(Vec *a);
 MVLADEF void freeVec(Vec *a);
 MVLADEF void printVec(const Vec a);
 MVLADEF void printVecLength(const Vec a);
@@ -384,6 +386,7 @@ MVLADEF Mat matDiv(Mat a, Mat b);
 MVLADEF Mat matTranspose(Mat a);
 MVLADEF Mat matMap(Mat a, float (*func)(float));
 MVLADEF Mat vecToMat(Vec a);
+MVLADEF void matFillRand(Mat *a);
 MVLADEF void freeMat(Mat *a);
 MVLADEF void printMat(const Mat a);
 MVLADEF void printMatRowsCols(const Mat a);
@@ -422,11 +425,11 @@ MVLADEF void *alloc(unsigned int size){
 
   
 MVLADEF float randF(){
-  return ((float) rand()) / ((float) RAND_MAX);
+  return ((float) rand()) / ((float) RAND_MAX); // initialize srand first: srand(time(NULL))
 }
-    
+
 MVLADEF double randD(){
-  return ((double) rand()) / ((double) RAND_MAX); 
+  return ((double) rand()) / ((double) RAND_MAX); // initialize srand first: srand(time(NULL))
 }
 
 MVLADEF float lerpf(float a, float b, float t){
@@ -1662,6 +1665,17 @@ MVLADEF Vec matToVec(Mat a){
 }
 
 /*
+** @brief:   Fill a vector with random numbers between 0 and 1
+** @params:  a {Vec *} - vector to fill with random numbers
+** @returns: N/A
+*/
+MVLADEF void vecFillRand(Vec *a){
+  assert(a->data);
+
+  for(int i = 0; i < a->length; i++) a->data[i] = randF();
+}
+
+/*
 ** @brief:   Free a vector's data property and set its length to -1
 ** @params:  a {Vec *} - vector to free
 ** @returns: N/A
@@ -1910,6 +1924,21 @@ MVLADEF Mat vecToMat(Vec a){
   for(int i = 0; i < a.length; i++) c.data[0][i] = a.data[i];
   
   return c;
+}
+
+/*
+** @brief:   Fill a matrix with random numbers between 0 and 1
+** @params:  a {Mat *} - matrix to fill with random numbers
+** @returns: N/A
+*/
+MVLADEF void matFillRand(Mat *a){
+  assert(a->data);
+
+  for(int i = 0; i < a->rows; i++){
+    for(int j = 0; j < a->cols; j++){
+      a->data[i][j] = randF();
+    }
+  }
 }
 
 /*
