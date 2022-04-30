@@ -2056,7 +2056,6 @@ MVLADEF void printMatRowsCols(const Mat a){
 
 /*
 ** TODO:
-** - implement scalar operations for matrices and vectors
 ** - implement quality-of-life functions in a separate block/file and remove PV__ macros
 ** - fix matrix product bug where b.cols must be greater than a.cols
 ** - comment all V__ functions
