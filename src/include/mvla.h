@@ -2062,4 +2062,6 @@ MVLADEF void printMatRowsCols(const Mat a){
 ** - fix matrix product bug where b.cols must be greater than a.cols
 ** - comment all V__ functions
 ** - add assert() for >=1 length, row, and column counts
+** - add a function to map a function on the vectors (rows/cols) of a matrix (for use with softmax)
+**
 */
