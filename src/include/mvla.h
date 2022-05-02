@@ -1,5 +1,5 @@
 /*
-** @title: MVLA (Matrix Vector Linear Algebra)
+** @title:        MVLA (Matrix Vector Linear Algebra)
 **
 ** @author:       Walker Rout
 **
