@@ -54,22 +54,8 @@ extern "C" {
 ** PREPROCESSOR DEFINTIONS
 */
 #define V2Args(v) (v).x, (v).y
-#define PV2i "V2i(%d, %d)\n"
-#define PV2u "V2u(%u, %u)\n"
-#define PV2f "V2f(%f, %f)\n"
-#define PV2d "V2d(%lf, %lf)\n"
-
 #define V3Args(v) (v).x, (v).y, (v).z
-#define PV3i "V3i(%d, %d, %d)\n"
-#define PV3u "V3u(%u, %u, %u)\n"
-#define PV3f "V3f(%f, %f, %f)\n"
-#define PV3d "V3d(%lf, %lf, %lf)\n"
-
-#define V4Args(v) (v).x, (v).y, (v).z
-#define PV4i "V4i(%d, %d, %d, %d)\n"
-#define PV4u "V4u(%u, %u, %u, %u)\n"
-#define PV4f "V4f(%f, %f, %f, %f)\n"
-#define PV4d "V4d(%lf, %lf, %lf, %lf)\n"
+#define V4Args(v) (v).x, (v).y, (v).z, (v).w
 
 #define MALLOC(size, type) (type*) alloc((size) * sizeof(type))
 // -----------------------------------------
