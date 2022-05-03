@@ -460,27 +460,27 @@ MVLADEF signed int mini(signed int a, signed int b){
 }
 
 /*
-** @brief:   Find the smaller of two integers
+** @brief:   Find the larger of two integers
 ** @params:  a {signed int} - first number, b {signed int} - second number
-** @returns: {signed int} - the smaller between a and b
+** @returns: {signed int} - the larger between a and b
 */
 MVLADEF signed int maxi(signed int a, signed int b){
   return (a < b) ? b : a;
 }
 
 /*
-** @brief:   Find the smaller of two integers
-** @params:  a {signed int} - first number, b {signed int} - second number
-** @returns: {signed int} - the smaller between a and b
+** @brief:   Find the smaller of two unsigned integers
+** @params:  a {unsigned int} - first number, b {unsigned int} - second number
+** @returns: {unsigned int} - the smaller between a and b
 */
 MVLADEF unsigned int minu(unsigned int a, unsigned int b){
   return (a < b) ? a : b;
 }
 
 /*
-** @brief:   Find the smaller of two integers
-** @params:  a {signed int} - first number, b {signed int} - second number
-** @returns: {signed int} - the smaller between a and b
+** @brief:   Find the larger of two unsigned integers
+** @params:  a {unsigned int} - first number, b {unsigned int} - second number
+** @returns: {unsigned int} - the larger between a and b
 */
 MVLADEF unsigned int maxu(unsigned int a, unsigned int b){
   return (a < b) ? b : a;
@@ -492,6 +492,11 @@ MVLADEF unsigned int maxu(unsigned int a, unsigned int b){
 
 
 
+/*
+** @brief:   Create a 2D integer vector with differing x and y components
+** @params:  x {signed int} - x component, y {signed int} - y component
+** @returns: vec {V2i} - new 2D integer vector
+*/
 MVLADEF V2i v2i(signed int x, signed int y){
   V2i vec;
   vec.x = x;
@@ -499,52 +504,97 @@ MVLADEF V2i v2i(signed int x, signed int y){
   return vec;
 }
 
+/*
+** @brief:   Create a 2D integer vector with the same x and y components
+** @params:  x {signed int} - all components
+** @returns: vec {V2i} - new 2D integer vector
+*/
 MVLADEF V2i v2ii(signed int x){
   return v2i(x, x);
 }
 
+/*
+** @brief:   Add two 2D integer vectors
+** @params:  a {V2i} - first vector, b {V2i} - second vector
+** @returns: a {V2i} - sum of a and b
+*/
 MVLADEF V2i v2iAdd(V2i a, V2i b){
   a.x += b.x;
   a.y += b.y;
   return a;
 }
 
+/*
+** @brief:   Subtract two 2D integer vectors
+** @params:  a {V2i} - first vector, b {V2i} - second vector
+** @returns: a {V2i} - difference between a and b
+*/
 MVLADEF V2i v2iSub(V2i a, V2i b){
   a.x -= b.x;
   a.y -= b.y;
   return a;
 }
 
+/*
+** @brief:   Multiply two 2D integer vectors
+** @params:  a {V2i} - first vector, b {V2i} - second vector
+** @returns: a {V2i} - product of a and b
+*/
 MVLADEF V2i v2iMul(V2i a, V2i b){
   a.x *= b.x;
   a.y *= b.y;
   return a;
 }
 
+/*
+** @brief:   Divide two 2D integer vectors
+** @params:  a {V2i} - first vector, b {V2i} - second vector
+** @returns: a {V2i} - quotient of a and b
+*/
 MVLADEF V2i v2iDiv(V2i a, V2i b){
   a.x /= b.x;
   a.y /= b.y;
   return a;
 }
 
+/*
+** @brief:   Find the minimum of two 2D integer vectors
+** @params:  a {V2i} - first vector, b {V2i} - second vector
+** @returns: a {V2i} - minimum of a and b
+*/
 MVLADEF V2i v2iMin(V2i a, V2i b){
   a.x = mini(a.x, b.x);
   a.y = mini(a.y, b.y);
   return a;
 }
 
+/*
+** @brief:   Find the maximum of two 2D integer vectors
+** @params:  a {V2i} - first vector, b {V2i} - second vector
+** @returns: a {V2i} - maximum of a and b
+*/
 MVLADEF V2i v2iMax(V2i a, V2i b){
   a.x = maxi(a.x, b.x);
   a.y = maxi(a.y, b.y);
   return a;
 }
 
+/*
+** @brief:   Print a 2D integer vector
+** @params:  a {V2i} - vector to print
+** @returns: N/A
+*/
 MVLADEF void printV2i(V2i a){
   printf("V2i(%d, %d)\n", a.x, a.y);
 }
 
 
 
+/*
+** @brief:   Create a 2D unsigned integer vector with differing x and y components
+** @params:  x {unsigned int} - x component, y {unsigned int} - y component
+** @returns: vec {V2u} - new 2D unsigned integer vector
+*/
 MVLADEF V2u v2u(unsigned int x, unsigned int y){
   V2u vec;
   vec.x = x;
@@ -552,46 +602,87 @@ MVLADEF V2u v2u(unsigned int x, unsigned int y){
   return vec;
 }
 
+
+/*
+** @brief:   Create a 2D unsigned integer vector with the same x and y components
+** @params:  x {unsigned int} - all components
+** @returns: vec {V2u} - new 2D unsigned integer vector
+*/
 MVLADEF V2u v2uu(unsigned int x){
   return v2u(x, x);
 }
 
+/*
+** @brief:   Add two 2D unsigned integer vectors
+** @params:  a {V2u} - first vector, b {V2u} - second vector
+** @returns: a {V2u} - sum of a and b
+*/
 MVLADEF V2u v2uAdd(V2u a, V2u b){
   a.x += b.x;
   a.y += b.y;
   return a;
 }
 
+/*
+** @brief:   Subtract two 2D unsigned integer vectors
+** @params:  a {V2u} - first vector, b {V2u} - second vector
+** @returns: a {V2u} - difference between a and b
+*/
 MVLADEF V2u v2uSub(V2u a, V2u b){
   a.x -= b.x;
   a.y -= b.y;
   return a;
 }
 
+/*
+** @brief:   Multiply two 2D unsigned integer vectors
+** @params:  a {V2u} - first vector, b {V2u} - second vector
+** @returns: a {V2u} - product of a and b
+*/
 MVLADEF V2u v2uMul(V2u a, V2u b){
   a.x *= b.x;
   a.y *= b.y;
   return a;
 }
 
+/*
+** @brief:   Divide two 2D unsigned integer vectors
+** @params:  a {V2u} - first vector, b {V2u} - second vector
+** @returns: a {V2u} - quotient of a and b
+*/
 MVLADEF V2u v2uDiv(V2u a, V2u b){
   a.x /= b.x;
   a.y /= b.y;
   return a;
 }
 
+/*
+** @brief:   Find the minimum of two 2D unsigned integer vectors
+** @params:  a {V2u} - first vector, b {V2u} - second vector
+** @returns: a {V2u} - minimum of a and b
+*/
 MVLADEF V2u v2uMin(V2u a, V2u b){
   a.x = minu(a.x, b.x);
   a.y = minu(a.y, b.y);
   return a;
 }
 
+/*
+** @brief:   Find the maximum of two 2D unsigned integer vectors
+** @params:  a {V2u} - first vector, b {V2u} - second vector
+** @returns: a {V2u} - maximum of a and b
+*/
 MVLADEF V2u v2uMax(V2u a, V2u b){
   a.x = maxu(a.x, b.x);
   a.y = maxu(a.y, b.y);
   return a;
 }
 
+/*
+** @brief:   Print a 2D unsigned integer vector
+** @params:  a {V2u} - vector to print
+** @returns: N/A
+*/
 MVLADEF void printV2u(V2u a){
   printf("V2u(%u, %u)\n", a.x, a.y);
 }
@@ -2087,7 +2178,9 @@ MVLADEF void printMatRowsCols(const Mat a){
 ** - implement quality-of-life functions in a separate block/file and remove PV__ macros
 ** - fix matrix product bug where b.cols must be greater than a.cols
 ** - comment all V__ functions
+** - add dot product function for all V__
 ** - add assert() for >=1 length, row, and column counts
 ** - add a function to map a function on the vectors (rows/cols) of a matrix (for use with softmax)
 **
 */
+
