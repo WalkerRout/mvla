@@ -414,35 +414,74 @@ MVLADEF void *alloc(unsigned int size){
 */
 #ifdef MVLA_IMPLEMENTATION
 
-  
+/*
+** @brief:   Generate a random float between 0 and 1
+** @params:  N/A
+** @returns: N/A
+*/
 MVLADEF float randF(){
   return ((float) rand()) / ((float) RAND_MAX); // initialize srand first: srand(time(NULL))
 }
 
+/*
+** @brief:   Generate a random double between 0 and 1 
+** @params:  N/A
+** @returns: N/A
+*/
 MVLADEF double randD(){
   return ((double) rand()) / ((double) RAND_MAX); // initialize srand first: srand(time(NULL))
 }
 
+/*
+** @brief:   Linearly interpolate between two floats
+** @params:  a {float} - lower bound, b {float} - upper bound, c {float} - value to interpolate
+** @returns: N/A
+*/
 MVLADEF float lerpf(float a, float b, float t){
   return a + ((b - a) * t);
 }
 
+/*
+** @brief:   Linearly interpolate between two doubles
+** @params:  a {double} - lower bound, b {double} - upper bound, c {double} - value to interpolate
+** @returns: N/A
+*/
 MVLADEF double lerp(double a, double b, double t){
   return a + ((b - a) * t);
 }
 
+/*
+** @brief:   Find the smaller of two integers
+** @params:  a {signed int} - first number, b {signed int} - second number
+** @returns: {signed int} - the smaller between a and b
+*/
 MVLADEF signed int mini(signed int a, signed int b){
   return (a < b) ? a : b;
 }
 
+/*
+** @brief:   Find the smaller of two integers
+** @params:  a {signed int} - first number, b {signed int} - second number
+** @returns: {signed int} - the smaller between a and b
+*/
 MVLADEF signed int maxi(signed int a, signed int b){
   return (a < b) ? b : a;
 }
 
+/*
+** @brief:   Find the smaller of two integers
+** @params:  a {signed int} - first number, b {signed int} - second number
+** @returns: {signed int} - the smaller between a and b
+*/
 MVLADEF unsigned int minu(unsigned int a, unsigned int b){
   return (a < b) ? a : b;
 }
 
+/*
+** @brief:   Find the smaller of two integers
+** @params:  a {signed int} - first number, b {signed int} - second number
+** @returns: {signed int} - the smaller between a and b
+*/
 MVLADEF unsigned int maxu(unsigned int a, unsigned int b){
   return (a < b) ? b : a;
 }
