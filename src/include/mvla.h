@@ -32,6 +32,7 @@ extern "C" {
 #include <math.h>
 #include <time.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <assert.h>
 // -----------------------------------------
@@ -343,6 +344,7 @@ MVLADEF void printV4d(V4d a);
 ** UNSPECIFIED VECTOR FUNCTION PROTOTYPES
 */
 MVLADEF Vec vec(unsigned int length);
+MVLADEF Vec vecClone(Vec a);
 MVLADEF Vec vecAdd(Vec a, Vec b);
 MVLADEF Vec vecSub(Vec a, Vec b);
 MVLADEF Vec vecMul(Vec a, Vec b);
@@ -369,6 +371,7 @@ MVLADEF void printVecLength(const Vec a);
 MVLADEF Mat mat(unsigned int rows, unsigned int cols);
 MVLADEF Mat matt(unsigned int dim);
 MVLADEF Mat matId(unsigned int dim);
+MVLADEF Mat matClone(Mat a);
 MVLADEF Mat matAdd(Mat a, Mat b);
 MVLADEF Mat matSub(Mat a, Mat b);
 MVLADEF Mat matMul(Mat a, Mat b);
@@ -1653,6 +1656,21 @@ MVLADEF Vec vec(unsigned int length){
 }
 
 /*
+** @brief:   Create a clone of a vector
+** @params:  a {Vec} - vector to clone
+** @returns: c {Vec} - cloned vector
+*/
+MVLADEF Vec vecClone(Vec a){
+  assert(a.data);
+
+  Vec c = vec(a.length);
+  printf("%d\n", a.length);
+  memcpy(c.data, a.data, a.length * sizeof(float));
+
+  return c;
+}
+
+/*
 ** @brief:   Adds a vector to another
 ** @params:  a {Vec} - first vector, b {Vec} - second vector
 ** @returns: c {Vec} - new vector equal to the i_th element of a plus the i_th element of b
@@ -1926,6 +1944,23 @@ MVLADEF Mat matId(unsigned int dim){
   for(int i = 0; i < dim; i++) mat.data[i][i] = 1.0;
 
   return mat;
+}
+
+/*
+** @brief:   Create a clone of a matrix
+** @params:  a {Mat} - matrix to clone
+** @returns: c {Mat} - cloned matrix
+*/
+MVLADEF Mat matClone(Mat a){
+  assert(a.data);
+
+  Mat c = mat(a.rows, a.cols);
+
+  for(int i = 0; i < c.rows; i++){
+    memcpy(c.data[i], a.data[i], a.cols * sizeof(float));
+  }
+
+  return c;
 }
 
 /*
