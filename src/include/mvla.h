@@ -345,6 +345,7 @@ MVLADEF void printV4d(V4d a);
 */
 MVLADEF Vec vec(unsigned int length);
 MVLADEF Vec vecClone(Vec a);
+MVLADEF void vecCopyData(Vec *dest, Vec *src);
 MVLADEF Vec vecAdd(Vec a, Vec b);
 MVLADEF Vec vecSub(Vec a, Vec b);
 MVLADEF Vec vecMul(Vec a, Vec b);
@@ -372,6 +373,7 @@ MVLADEF Mat mat(unsigned int rows, unsigned int cols);
 MVLADEF Mat matt(unsigned int dim);
 MVLADEF Mat matId(unsigned int dim);
 MVLADEF Mat matClone(Mat a);
+MVLADEF void matCopyData(Mat *dest, Mat *src);
 MVLADEF Mat matAdd(Mat a, Mat b);
 MVLADEF Mat matSub(Mat a, Mat b);
 MVLADEF Mat matMul(Mat a, Mat b);
@@ -1671,6 +1673,19 @@ MVLADEF Vec vecClone(Vec a){
 }
 
 /*
+** @brief:   Copy data from one vector to another with matching length
+** @params:  dest {Vec *} - the destination vector, src {Vec *} - the source vector
+** @returns: N/A
+*/
+MVLADEF void vecCopyData(Vec *dest, Vec *src){
+  assert(src->data);
+  assert(dest->data);
+  assert(dest->length == src->length);
+
+  memcpy(dest->data, src->data, src->length * sizeof(float));
+}
+
+/*
 ** @brief:   Adds a vector to another
 ** @params:  a {Vec} - first vector, b {Vec} - second vector
 ** @returns: c {Vec} - new vector equal to the i_th element of a plus the i_th element of b
@@ -1871,6 +1886,7 @@ MVLADEF void vecFillRand(Vec *a){
 */
 MVLADEF void freeVec(Vec *a){
   free(a->data);
+  a->data = NULL;
   a->length = -1;
 }
 
@@ -1961,6 +1977,22 @@ MVLADEF Mat matClone(Mat a){
   }
 
   return c;
+}
+
+/*
+** @brief:   Copy data from one matrix to another with matching dimensions
+** @params:  dest {Mat *} - the destination matrix, src {Mat *} - the source matrix
+** @returns: N/A
+*/
+MVLADEF void matCopyData(Mat *dest, Mat *src){
+  assert(src->data);
+  assert(dest->data);
+  assert(dest->rows == src->rows);
+  assert(dest->cols == src->cols);
+  
+  for(int i = 0; i < src->rows; i++){
+    memcpy(dest->data[i], src->data[i], src->cols * sizeof(float));
+  }
 }
 
 /*
@@ -2170,6 +2202,7 @@ MVLADEF void matFillRand(Mat *a){
 MVLADEF void freeMat(Mat *a){
   for(int i = 0; i < a->rows; i++) free(a->data[i]);
   free(a->data);
+  a->data = NULL; // avoid double free
   a->rows = -1;
   a->cols = -1;
 }

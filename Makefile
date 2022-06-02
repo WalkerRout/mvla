@@ -7,11 +7,14 @@ LIBS = -lm
 all: build run
 
 build:
-	$(CC) $(OBJS) $(CFLAGS) $(LIBS) -o $(OBJ)
+	@$(CC) $(OBJS) $(CFLAGS) $(LIBS) -o $(OBJ)
 
 run:
-	./$(OBJ)
+	@./$(OBJ)
+
+debug:
+	@valgrind -s ./$(OBJ)
 
 clean:
-	rm ./$(OBJ)
-	echo "Cleaned!"
+	@rm ./$(OBJ)
+	@echo "Cleaned!"
