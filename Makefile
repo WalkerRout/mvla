@@ -1,6 +1,6 @@
 CC = gcc
 OBJS = src/*.c 
-OBJ = bin/la
+OBJ = bin/mvla
 CFLAGS = 
 LIBS = -lm
 
