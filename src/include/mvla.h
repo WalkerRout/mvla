@@ -2090,13 +2090,12 @@ MVLADEF Mat matDot(Mat a, Mat b){
   assert(a.cols == b.rows);
   assert(a.data);
   assert(b.data);
-  assert(b.cols <= a.cols && "b.cols cannot be greater than a.cols! It will access memory outside of the allocated memory for a!");
 
   Mat c = mat(a.rows, b.cols);
 
   for(int i = 0; i < a.rows; i++){
     for(int j = 0; j < b.cols; j++){
-      for (int k = 0; k < b.cols; k++){
+      for (int k = 0; k < b.rows; k++){
         c.data[i][j] += a.data[i][k] * b.data[k][j]; // BUG! if b.cols > a.cols, it will segfault
       }
     }
