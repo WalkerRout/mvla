@@ -382,6 +382,7 @@ MVLADEF Mat matDot(Mat a, Mat b);
 MVLADEF Mat matDiv(Mat a, Mat b);
 MVLADEF Mat matTranspose(Mat a);
 MVLADEF Mat matMap(Mat a, float (*func)(float));
+//MVLADEF Mat matAt(Mat a, unsigned int i, unsigned int j);
 MVLADEF Mat vecToMat(Vec a);
 MVLADEF void matFillRand(Mat *a);
 MVLADEF void freeMat(Mat *a);
@@ -2248,6 +2249,7 @@ MVLADEF void printMatRowsCols(const Mat a){
 ** - add dot product function for all V__
 ** - add assert() for >=1 length, row, and column counts
 ** - add a function to map a function on the vectors (rows/cols) of a matrix (for use with softmax)
-**
+** - add matAt and vecAt functions for accessing elements
+** 
 */
 
