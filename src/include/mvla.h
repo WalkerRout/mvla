@@ -1884,6 +1884,18 @@ MVLADEF float vecLength(const Vec a){
 }
 
 /*
+** @brief:   Resize a vector
+** @params:  a {Vec *} - vector to resize, newLength {unsigned int} - the new length of the vector
+** @returns: N/A
+*/
+MVLADEF void vecResize(Vec *a, unsigned int newLength){
+  assert(a->data);
+  
+  a->length = newLength;
+  a->data = realloc(a->data, newLength * sizeof(float));
+}
+
+/*
 ** @brief:   Fill a vector with random numbers between 0 and 1
 ** @params:  a {Vec *} - vector to fill with random numbers
 ** @returns: N/A
@@ -2204,9 +2216,41 @@ MVLADEF float matAt(const Mat a, unsigned int row, unsigned int col){
   return a.data[row][col];
 }
 
+
+/*
+** @brief:   Get the dimensions of a matrix
+** @params:  a {const Mat} - matrix with dimensions
+** @returns: {V2u} - 2D unsigned int vector with x and y as row and column, respectively
+*/
 MVLADEF V2u matDims(const Mat a){
   return (V2u) { .x = a.rows, .y = a.cols };
 }
+  
+/*
+** @brief:   Resize a matrix
+** @params:  a {Mat *} - matrix to resize, newRows {unsigned int} - the new rows of the matrix, newCols {unsigned int} - the new cols of the matrix
+** @returns: N/A
+*/
+MVLADEF void matResize(Mat *a, unsigned int newRows, unsigned int newCols){
+  assert(a->data);
+  
+  // if the new row count is less, must free the rows that are about to be chopped off
+  if(newRows < a.rows){
+    for(int i = newRows; i < a.rows; i++){
+      free(a->data[i]);
+    }
+  }
+  
+  a->rows = newRows;
+  a->cols = newCols;
+  
+  a->data = realloc(a->data, newRows * sizeof(float *));
+  
+  for(int i = 0; i < newRows; i++){
+     a->data[i] = realloc(a->data[i], newCols * sizeof(float));
+  }
+}
+
   
 /*
 ** @brief:   Fill a matrix with random numbers between 0 and 1
