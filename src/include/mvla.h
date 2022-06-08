@@ -356,7 +356,7 @@ MVLADEF Vec vecMap(Vec a, float (*func)(float));
 MVLADEF Vec matRowToVec(Mat a, int row);
 MVLADEF Vec matColToVec(Mat a, int col);
 MVLADEF Vec fPtrToVec(float *a, unsigned int length);
-MVLADEF float vecAt(Vec a, unsigned int index);
+MVLADEF float vecAt(const Vec a, unsigned int index);
 MVLADEF float vecLength(const Vec a);
 MVLADEF void vecResize(Vec *a, unsigned int newLength); // *
 MVLADEF void vecFillRand(Vec *a);
@@ -385,8 +385,8 @@ MVLADEF Mat matDiv(Mat a, Mat b);
 MVLADEF Mat matTranspose(Mat a);
 MVLADEF Mat matMap(Mat a, float (*func)(float));
 MVLADEF Mat vecToMat(Vec a);
-MVLADEF float matAt(Mat a, unsigned int row, unsigned int col);
-MVLADEF V2u matDims(const Mat a); // *
+MVLADEF float matAt(const Mat a, unsigned int row, unsigned int col);
+MVLADEF V2u matDims(const Mat a);
 MVLADEF void matResize(Mat *a, unsigned int newRows, unsigned int newCols); // *
 MVLADEF void matFillRand(Mat *a);
 MVLADEF void freeMat(Mat *a);
@@ -2202,6 +2202,10 @@ MVLADEF float matAt(const Mat a, unsigned int row, unsigned int col){
   assert(row < a.rows);
   assert(col < a.cols);
   return a.data[row][col];
+}
+
+MVLADEF V2u matDims(const Mat a){
+  return (V2u) { .x = a.rows, .y = a.cols };
 }
   
 /*
