@@ -356,7 +356,9 @@ MVLADEF Vec vecMap(Vec a, float (*func)(float));
 MVLADEF Vec matRowToVec(Mat a, int row);
 MVLADEF Vec matColToVec(Mat a, int col);
 MVLADEF Vec fPtrToVec(float *a, unsigned int length);
+MVLADEF float vecAt(Vec a, unsigned int index);
 MVLADEF float vecLength(const Vec a);
+MVLADEF void vecResize(Vec *a, unsigned int newLength); // *
 MVLADEF void vecFillRand(Vec *a);
 MVLADEF void freeVec(Vec *a);
 MVLADEF void printVec(const Vec a);
@@ -382,8 +384,10 @@ MVLADEF Mat matDot(Mat a, Mat b);
 MVLADEF Mat matDiv(Mat a, Mat b);
 MVLADEF Mat matTranspose(Mat a);
 MVLADEF Mat matMap(Mat a, float (*func)(float));
-//MVLADEF Mat matAt(Mat a, unsigned int i, unsigned int j);
 MVLADEF Mat vecToMat(Vec a);
+MVLADEF float matAt(Mat a, unsigned int row, unsigned int col);
+MVLADEF V2u matDims(const Mat a); // *
+MVLADEF void matResize(Mat *a, unsigned int newRows, unsigned int newCols); // *
 MVLADEF void matFillRand(Mat *a);
 MVLADEF void freeMat(Mat *a);
 MVLADEF void printMat(const Mat a);
@@ -1855,6 +1859,16 @@ MVLADEF Vec fPtrToVec(float *a, unsigned int length){
 }
 
 /*
+** @brief:   Get the element at a specific index in a vector
+** @params:  a {const Vec} - vector with data, index {unsigned int} - the index of the requested data
+** @returns: {float} - data at the specified index
+*/
+MVLADEF float vecAt(const Vec a, unsigned int index){ 
+  assert(index < a.length);
+  return a.data[index];
+}
+
+/*
 ** @brief:   Get the length of a vector (square root of all elements squared and summed)
 ** @params:  a {const Vec} - vector to find the length of
 ** @returns: length {float} - the length of the vector
@@ -2179,6 +2193,17 @@ MVLADEF Mat vecToMat(Vec a){
   return c;
 }
 
+/*
+** @brief:   Get the element at a specific index in a matrix
+** @params:  a {const Mat} - matrix with data, row {unsigned int} - the row index, col {unsigned int} - the col index
+** @returns: {float} - data at the specified row and column
+*/
+MVLADEF float matAt(const Mat a, unsigned int row, unsigned int col){ 
+  assert(row < a.rows);
+  assert(col < a.cols);
+  return a.data[row][col];
+}
+  
 /*
 ** @brief:   Fill a matrix with random numbers between 0 and 1
 ** @params:  a {Mat *} - matrix to fill with random numbers
