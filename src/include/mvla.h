@@ -1975,6 +1975,19 @@ MVLADEF Mat matt(unsigned int dim){
 }
 
 /*
+** @brief:   Create a completely empty matrix (NOT RECOMMENDED)
+** @params:  N/A
+** @returns: c {Mat} - new empty matrix 0x0 -> NULL
+*/
+MVLADEF Mat matNull(){
+  Mat c;
+  c.rows = 0;
+  c.cols = 0;
+  c.data = NULL;
+  return c;
+}
+
+/*
 ** @brief:   Create an identity matrix
 ** @params:  dim {unsigned int} - row/column count
 ** @returns: mat {Mat} - new identity matrix with size dim*dim
@@ -2235,8 +2248,8 @@ MVLADEF void matResize(Mat *a, unsigned int newRows, unsigned int newCols){
   assert(a->data);
   
   // if the new row count is less, must free the rows that are about to be chopped off
-  if(newRows < a.rows){
-    for(int i = newRows; i < a.rows; i++){
+  if(newRows < a->rows){
+    for(int i = newRows; i < a->rows; i++){
       free(a->data[i]);
     }
   }
