@@ -2365,6 +2365,7 @@ MVLADEF void printMatRowsCols(const Mat a){
 
 /*
 ** TODO:
+** - make all matrix and vector data fields constant (double **const data instead of double **data)
 ** - rewrite all matrix and vector functions as macros ***
 ** - implement quality-of-life functions in a separate block/file and remove PV__ macros
 ** - fix matrix product bug where b.cols must be greater than a.cols
