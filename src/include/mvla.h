@@ -7,7 +7,7 @@
 **
 ** @date_written: March 16th, 2022
 **
-** @description:  This library implements matrices and different types of vectors
+** @description:  This library implements n-dimensional matrices and different types of vectors
 **                for use in Machine Learning / Computer Graphics projects.
 **
 ** @license:      MIT
@@ -365,6 +365,21 @@ MVLADEF void printVec(const Vec a);
 MVLADEF void printVecLength(const Vec a);
 // -----------------------------------------
 
+// -----------------------------------------
+/*
+** UNSPECIFIED VECTOR MACROS
+*/
+#define VEC_OP(v1, op, v2, v3)                 \
+do {                                           \
+  assert(v1.length == v2.length);              \
+  assert(!v3.data);                            \
+  v3 = vec(v1.length);                         \
+  for(int i = 0; i < v1.length; i++){          \
+    v3.data[i] = v1.data[i] op v2.data[i];     \
+  }                                            \
+} while(0)
+// -----------------------------------------
+
 
 
 // -----------------------------------------
@@ -373,6 +388,7 @@ MVLADEF void printVecLength(const Vec a);
 */
 MVLADEF Mat mat(unsigned int rows, unsigned int cols);
 MVLADEF Mat matt(unsigned int dim);
+MVLADEF Mat matNull(void);
 MVLADEF Mat matId(unsigned int dim);
 MVLADEF Mat matClone(Mat a);
 MVLADEF void matCopyData(Mat *dest, Mat *src);
@@ -392,6 +408,24 @@ MVLADEF void matFillRand(Mat *a);
 MVLADEF void freeMat(Mat *a);
 MVLADEF void printMat(const Mat a);
 MVLADEF void printMatRowsCols(const Mat a);
+// -----------------------------------------
+
+// -----------------------------------------
+/*
+** UNSPECIFIED MATRIX MACROS
+*/
+#define MAT_OP(m1, op, m2, m3)                          \
+do {                                                    \
+  assert(m1.rows == m2.rows);                           \
+  assert(m1.cols == m2.cols);                           \
+  assert(!m3.data);                                     \
+  m3 = mat(m1.rows, m1.cols);                           \
+  for(int i = 0; i < m1.rows; i++){                     \
+    for(int j = 0; j < m1.cols; j++){                   \
+      m3.data[i][j] = m1.data[i][j] op m2.data[i][j];   \
+    }                                                   \
+  }                                                     \
+} while(0)
 // -----------------------------------------
 
 
@@ -1981,9 +2015,11 @@ MVLADEF Mat matt(unsigned int dim){
 */
 MVLADEF Mat matNull(){
   Mat c;
+  
   c.rows = 0;
   c.cols = 0;
   c.data = NULL;
+  
   return c;
 }
 
@@ -2329,6 +2365,7 @@ MVLADEF void printMatRowsCols(const Mat a){
 
 /*
 ** TODO:
+** - rewrite all matrix and vector functions as macros ***
 ** - implement quality-of-life functions in a separate block/file and remove PV__ macros
 ** - fix matrix product bug where b.cols must be greater than a.cols
 ** - comment all V__ functions
@@ -2336,6 +2373,5 @@ MVLADEF void printMatRowsCols(const Mat a){
 ** - add assert() for >=1 length, row, and column counts
 ** - add a function to map a function on the vectors (rows/cols) of a matrix (for use with softmax)
 ** - add matAt and vecAt functions for accessing elements
-** 
 */
 
