@@ -112,7 +112,7 @@ typedef struct {
 typedef struct {
   unsigned int rows;
   unsigned int cols;
-  float **data;
+  float *data; // rows * cols
 } Mat;
 // -----------------------------------------
 
