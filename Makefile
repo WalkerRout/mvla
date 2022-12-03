@@ -1,7 +1,7 @@
 CC = gcc
 OBJS = src/*.c 
 OBJ = bin/mvla
-CFLAGS = 
+CFLAGS = -O3
 LIBS = -lm
 
 all: run

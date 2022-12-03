@@ -1838,7 +1838,7 @@ MVLADEF void vec_fill_rand(Vec *a) {
   assert(a->data);
 
   for (int i = 0; i < a->length; ++i)
-    a->data[i] = randF();
+    a->data[i] = rand_f();
 }
 
 /*

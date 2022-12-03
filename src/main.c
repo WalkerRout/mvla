@@ -2,7 +2,7 @@
 #include <time.h>
 
 #define MVLA_IMPLEMENTATION
-#include "mvla.h"
+#include "../mvla.h"
 #undef  MVLA_IMPLEMENTATION
 
 int main(void) {
