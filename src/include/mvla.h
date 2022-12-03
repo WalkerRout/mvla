@@ -354,7 +354,7 @@ MVLADEF Vec vec_div(Vec a, Vec b);
 MVLADEF Vec vec_map(Vec a, float (*func)(float));
 MVLADEF Vec vec_from_mat_row(Mat a, int row);
 MVLADEF Vec vec_from_mat_col(Mat a, int col);
-MVLADEF Vec v_from_f_ptr(float *a, unsigned int length);
+MVLADEF Vec vec_from_f_ptr(float *a, unsigned int length);
 MVLADEF float vec_length(const Vec a);
 MVLADEF void vec_resize(Vec *a, unsigned int newLength); // *
 MVLADEF void vec_fill_rand(Vec *a);
@@ -1788,7 +1788,7 @@ MVLADEF Vec vec_from_mat_col(Mat a, int col) {
 *- length of the vector
 ** @returns: c {Vec} - new vector that represents the float *, a
 */
-MVLADEF Vec v_from_f_ptr(float *a, unsigned int length) {
+MVLADEF Vec vec_from_f_ptr(float *a, unsigned int length) {
   assert(a);
 
   Vec c = vec(length);
