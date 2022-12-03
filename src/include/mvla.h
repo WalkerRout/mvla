@@ -49,8 +49,6 @@ extern "C" {
 #define V2Args(v) (v).x, (v).y
 #define V3Args(v) (v).x, (v).y, (v).z
 #define V4Args(v) (v).x, (v).y, (v).z, (v).w
-
-#define MALLOC(size, type) (type*) alloc((size) * sizeof(type))
 // -----------------------------------------
 
 // -----------------------------------------
@@ -347,6 +345,8 @@ MVLADEF Mat mat(unsigned int rows, unsigned int cols);
 MVLADEF Mat matt(unsigned int dim);
 MVLADEF Mat matNull(void);
 MVLADEF Mat matId(unsigned int dim);
+MVLADEF float matGet(Mat a, unsigned int i, unsigned int j);
+MVLADEF float *matGetPtr(Mat *a, unsigned int i, unsigned int j);
 MVLADEF Mat matClone(Mat a);
 MVLADEF void matCopyData(Mat *dest, Mat *src);
 MVLADEF Mat matAdd(Mat a, Mat b);
@@ -365,21 +365,6 @@ MVLADEF void matFillRand(Mat *a);
 MVLADEF void freeMat(Mat *a);
 MVLADEF void printMat(const Mat a);
 MVLADEF void printMatRowsCols(const Mat a);
-// -----------------------------------------
-
-// -----------------------------------------
-/*
-** MISCELLANEOUS FUNCTIONS
-*/
-MVLADEF void *alloc(unsigned int size){
-  void *mem;
-  mem = malloc(size);
-  if(mem == NULL){
-    printf("Out of memory!\n");
-    exit(1);
-  }
-  return mem;
-}
 // -----------------------------------------
 
 #endif // MVLA_H
@@ -1588,7 +1573,8 @@ MVLADEF Vec vec(unsigned int length){
   Vec vec;
   vec.length = length;
   vec.data = calloc(length, sizeof(float));
-
+  
+  assert(vec.data);
   return vec;
 }
 
@@ -1878,8 +1864,7 @@ MVLADEF Mat mat(unsigned int rows, unsigned int cols){
   mat.rows = rows;
   mat.cols = cols;
 
-  mat.data = calloc(rows, sizeof(float *));
-  for(int i = 0; i < rows; i++) mat.data[i] = calloc(cols, sizeof(float));
+  mat.data = calloc(rows * cols, sizeof(float));
 
   return mat;
 }
@@ -1894,8 +1879,7 @@ MVLADEF Mat matt(unsigned int dim){
   mat.rows = dim;
   mat.cols = dim;
 
-  mat.data = calloc(dim, sizeof(float *));
-  for(int i = 0; i < dim; i++) mat.data[i] = calloc(dim, sizeof(float));
+  mat.data = calloc(dim * dim, sizeof(float));
 
   return mat;
 }
@@ -1925,11 +1909,31 @@ MVLADEF Mat matId(unsigned int dim){
 
   Mat mat = matt(dim);
 
-  for(int i = 0; i < dim; i++) mat.data[i][i] = 1.0;
+  for(int i = 0; i < dim; i++) mat.data[i * mat.cols + i] = 1.0;
 
   return mat;
 }
-
+  
+/*
+** @brief:   Get the element out of a matrix
+** @params:  a {Mat} - a matrix, i {unsigned int} - a row index, j {unsigned int} - a column index
+** @returns: {float} - the element at [i][j] in a standard 2d matrix
+*/
+MVLADEF float matGet(Mat a, unsigned int i, unsigned int j) {
+  assert(a.data);
+  return a.data[i * a.cols + j]; 
+}
+  
+/*
+** @brief:   Get the pointer to an element out of a matrix
+** @params:  a {Mat *} - a matrix (pointer for brevity), i {unsigned int} - a row index, j {unsigned int} - a column index
+** @returns: {float *} - the pointer to an element at [i][j] in a standard 2d matrix
+*/
+MVLADEF float *matGetPtr(Mat *a, unsigned int i, unsigned int j) {
+  assert(a->data);
+  return &a->data[i * a.cols + j];
+}
+  
 /*
 ** @brief:   Create a clone of a matrix
 ** @params:  a {Mat} - matrix to clone
@@ -1939,10 +1943,8 @@ MVLADEF Mat matClone(Mat a){
   assert(a.data);
 
   Mat c = mat(a.rows, a.cols);
-
-  for(int i = 0; i < c.rows; i++){
-    memcpy(c.data[i], a.data[i], a.cols * sizeof(float));
-  }
+  
+  memcpy(c.data, a.data, a.rows * a.cols * sizeof(float));
 
   return c;
 }
@@ -1958,9 +1960,7 @@ MVLADEF void matCopyData(Mat *dest, Mat *src){
   assert(dest->rows == src->rows);
   assert(dest->cols == src->cols);
   
-  for(int i = 0; i < src->rows; i++){
-    memcpy(dest->data[i], src->data[i], src->cols * sizeof(float));
-  }
+  memcpy(dest->data, a->data, a->rows * a->cols * sizeof(float));
 }
 
 /*
@@ -1978,7 +1978,7 @@ MVLADEF Mat matAdd(Mat a, Mat b){
 
   for(int i = 0; i < a.rows; i++){
     for(int j = 0; j < a.cols; j++){
-      c.data[i][j] = a.data[i][j] + b.data[i][j];
+      *matGetPtr(c, i, j) = matGet(a, i, j) + matGet(b, i, j);
     }
   }
   
