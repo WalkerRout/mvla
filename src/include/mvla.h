@@ -1,3 +1,4 @@
+
 /*
 ** @title:        MVLA (Matrix Vector Linear Algebra)
 **
@@ -13,17 +14,12 @@
 ** @license:      MIT
 */
 
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-
-
 #ifndef MVLA_H
 #define MVLA_H
-
 
 // -----------------------------------------
 /*
@@ -37,8 +33,6 @@ extern "C" {
 #include <assert.h>
 // -----------------------------------------
 
-
-
 // -----------------------------------------
 /*
 ** ACCESS MODIFIER DEFINES
@@ -47,8 +41,6 @@ extern "C" {
 #define MVLADEF static inline
 #endif // MVLADEF
 // -----------------------------------------
-
-
 
 // -----------------------------------------
 /*
@@ -60,8 +52,6 @@ extern "C" {
 
 #define MALLOC(size, type) (type*) alloc((size) * sizeof(type))
 // -----------------------------------------
-
-
 
 // -----------------------------------------
 /*
@@ -80,8 +70,6 @@ extern "C" {
 #define C_LNPI   1.14472988585
 #define C_LOGE   0.43429448190
 // -----------------------------------------
-
-
 
 // -----------------------------------------
 /*
@@ -107,8 +95,6 @@ typedef struct { float        x, y, z, w; } V4f;
 typedef struct { double       x, y, z, w; } V4d;
 // -----------------------------------------
 
-
-
 // -----------------------------------------
 /*
 ** UNSPECIFIED VECTOR DEFINITIONS
@@ -118,8 +104,6 @@ typedef struct {
   float *data;
 } Vec;
 // -----------------------------------------
-
-
 
 // -----------------------------------------
 /*
@@ -131,8 +115,6 @@ typedef struct {
   float **data;
 } Mat;
 // -----------------------------------------
-
-
 
 // -----------------------------------------
 /*
@@ -147,8 +129,6 @@ MVLADEF signed int maxi(signed int a, signed int b);
 MVLADEF unsigned int minu(unsigned int a, unsigned int b);
 MVLADEF unsigned int maxu(unsigned int a, unsigned int b);
 // -----------------------------------------
-
-
 
 // -----------------------------------------
 /*
@@ -211,8 +191,6 @@ MVLADEF double v2dLen(V2d a);
 MVLADEF void printV2d(V2d a);
 // -----------------------------------------
 
-
-
 // -----------------------------------------
 /*
 ** 3D VECTOR FUNCTION PROTOTYPES
@@ -273,8 +251,6 @@ MVLADEF V3d v3dTan(V3d a);
 MVLADEF double v3dLen(V3d a);
 MVLADEF void printV3d(V3d a);
 // -----------------------------------------
-
-
 
 // -----------------------------------------
 /*
@@ -337,8 +313,6 @@ MVLADEF double v4dLen(V4d a);
 MVLADEF void printV4d(V4d a);
 // -----------------------------------------
 
-
-
 // -----------------------------------------
 /*
 ** UNSPECIFIED VECTOR FUNCTION PROTOTYPES
@@ -364,23 +338,6 @@ MVLADEF void freeVec(Vec *a);
 MVLADEF void printVec(const Vec a);
 MVLADEF void printVecLength(const Vec a);
 // -----------------------------------------
-
-// -----------------------------------------
-/*
-** UNSPECIFIED VECTOR MACROS
-*/
-#define VEC_OP(v1, op, v2, v3)                 \
-do {                                           \
-  assert(v1.length == v2.length);              \
-  assert(!v3.data);                            \
-  v3 = vec(v1.length);                         \
-  for(int i = 0; i < v1.length; i++){          \
-    v3.data[i] = v1.data[i] op v2.data[i];     \
-  }                                            \
-} while(0)
-// -----------------------------------------
-
-
 
 // -----------------------------------------
 /*
@@ -412,26 +369,6 @@ MVLADEF void printMatRowsCols(const Mat a);
 
 // -----------------------------------------
 /*
-** UNSPECIFIED MATRIX MACROS
-*/
-#define MAT_OP(m1, op, m2, m3)                          \
-do {                                                    \
-  assert(m1.rows == m2.rows);                           \
-  assert(m1.cols == m2.cols);                           \
-  assert(!m3.data);                                     \
-  m3 = mat(m1.rows, m1.cols);                           \
-  for(int i = 0; i < m1.rows; i++){                     \
-    for(int j = 0; j < m1.cols; j++){                   \
-      m3.data[i][j] = m1.data[i][j] op m2.data[i][j];   \
-    }                                                   \
-  }                                                     \
-} while(0)
-// -----------------------------------------
-
-
-
-// -----------------------------------------
-/*
 ** MISCELLANEOUS FUNCTIONS
 */
 MVLADEF void *alloc(unsigned int size){
@@ -445,13 +382,7 @@ MVLADEF void *alloc(unsigned int size){
 }
 // -----------------------------------------
 
-
 #endif // MVLA_H
-
-
-
-
-
 
 /*
 ** HEADER ONLY IMPLEMENTATION
@@ -530,11 +461,7 @@ MVLADEF unsigned int maxu(unsigned int a, unsigned int b){
   return (a < b) ? b : a;
 }
 
-
-
 // -----------------------------------------
-
-
 
 /*
 ** @brief:   Create a 2D integer vector with differing x and y components
@@ -632,8 +559,6 @@ MVLADEF void printV2i(V2i a){
   printf("V2i(%d, %d)\n", a.x, a.y);
 }
 
-
-
 /*
 ** @brief:   Create a 2D unsigned integer vector with differing x and y components
 ** @params:  x {unsigned int} - x component, y {unsigned int} - y component
@@ -645,7 +570,6 @@ MVLADEF V2u v2u(unsigned int x, unsigned int y){
   vec.y = y;
   return vec;
 }
-
 
 /*
 ** @brief:   Create a 2D unsigned integer vector with the same x and y components
@@ -730,8 +654,6 @@ MVLADEF V2u v2uMax(V2u a, V2u b){
 MVLADEF void printV2u(V2u a){
   printf("V2u(%u, %u)\n", a.x, a.y);
 }
-
-
 
 MVLADEF V2f v2f(float x, float y){
   V2f vec;
@@ -831,8 +753,6 @@ MVLADEF void printV2f(V2f a){
   printf("V2f(%f, %f)\n", a.x, a.y);
 }
 
-
-
 MVLADEF V2d v2d(double x, double y){
   V2d vec;
   vec.x = x;
@@ -931,11 +851,7 @@ MVLADEF void printV2d(V2d a){
   printf("V2d(%lf, %lf)\n", a.x, a.y);
 }
 
-
-
 // -----------------------------------------
-
-
 
 MVLADEF V3i v3i(signed int x, signed int y, signed int z){
   V3i vec;
@@ -995,8 +911,6 @@ MVLADEF void printV3i(V3i a){
   printf("V3i(%d, %d, %d)\n", a.x, a.y, a.z);
 }
 
-
-
 MVLADEF V3u v3u(unsigned int x, unsigned int y, unsigned int z){
   V3u vec;
   vec.x = x;
@@ -1054,8 +968,6 @@ MVLADEF V3u v3uMax(V3u a, V3u b){
 MVLADEF void printV3u(V3u a){
   printf("V3u(%u, %u, %u)\n", a.x, a.y, a.z);
 }
-
-
 
 MVLADEF V3f v3f(float x, float y, float z){
   V3f vec;
@@ -1169,8 +1081,6 @@ MVLADEF void printV3f(V3f a){
   printf("V3f(%f, %f, %f)\n", a.x, a.y, a.z);
 }
 
-
-
 MVLADEF V3d v3d(double x, double y, double z){
   V3d vec;
   vec.x = x;
@@ -1283,11 +1193,7 @@ MVLADEF void printV3d(V3d a){
   printf("V3d(%lf, %lf, %lf)\n", a.x, a.y, a.z);
 }
 
-
-
 // -----------------------------------------
-
-
 
 MVLADEF V4i v4i(signed int x, signed int y, signed int z, signed int w){
   V4i vec;
@@ -1354,8 +1260,6 @@ MVLADEF void printV4i(V4i a){
   printf("V4i(%d, %d, %d, %d)\n", a.x, a.y, a.z, a.w);
 }
 
-
-
 MVLADEF V4u v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w){
   V4u vec;
   vec.x = x;
@@ -1420,8 +1324,6 @@ MVLADEF V4u v4uMax(V4u a, V4u b){
 MVLADEF void printV4u(V4u a){
   printf("V4u(%u, %u, %u, %u)\n", a.x, a.y, a.z, a.w);
 }
-
-
 
 MVLADEF V4f v4f(float x, float y, float z, float w){
   V4f vec;
@@ -1549,8 +1451,6 @@ MVLADEF void printV4f(V4f a){
   printf("V4f(%f, %f, %f, %f)\n", a.x, a.y, a.z, a.w);
 }
 
-
-
 MVLADEF V4d v4d(double x, double y, double z, double w){
   V4d vec;
   vec.x = x;
@@ -1677,11 +1577,7 @@ MVLADEF void printV4d(V4d a){
   printf("V4d(%lf, %lf, %lf, %lf)\n", a.x, a.y, a.z, a.w);
 }
 
-
-
 // -----------------------------------------
-
-
 
 /*
 ** @brief:   Create a vector with a specified length
@@ -1970,11 +1866,7 @@ MVLADEF void printVecEleCount(const Vec a){
   printf("Vector Length: %d\n", a.length);
 }
 
-
-
 // -----------------------------------------
-
-
 
 /*
 ** @brief:   Create a matrix with varying row and column count
@@ -2352,16 +2244,11 @@ MVLADEF void printMatRowsCols(const Mat a){
   printf("Matrix (Rows, Columns): (%d, %d)\n", a.rows, a.cols);
 }
 
-
 #endif // MVLA_IMPLEMENTATION
-
-
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-
-
 
 /*
 ** TODO:
@@ -2375,4 +2262,3 @@ MVLADEF void printMatRowsCols(const Mat a){
 ** - add a function to map a function on the vectors (rows/cols) of a matrix (for use with softmax)
 ** - add matAt and vecAt functions for accessing elements
 */
-
