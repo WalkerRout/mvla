@@ -8,9 +8,8 @@
 **
 ** @date_written: March 16th, 2022
 **
-** @description:  This library implements n-dimensional matrices and different
-*types of vectors
-**                for use in Machine Learning / Computer Graphics projects.
+** @description:  This library implements matrices and vectors for use in
+**                scripts and mathematical computations
 **
 ** @license:      MIT
 */
