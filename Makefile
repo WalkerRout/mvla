@@ -4,12 +4,12 @@ OBJ = bin/mvla
 CFLAGS = 
 LIBS = -lm
 
-all: build run
+all: run
 
 build:
 	@$(CC) $(OBJS) $(CFLAGS) $(LIBS) -o $(OBJ)
 
-run:
+run: build
 	@./$(OBJ)
 
 debug:
