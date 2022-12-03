@@ -2239,10 +2239,7 @@ MVLADEF void mat_print_rows_cols(const Mat a) {
 ** - implement quality-of-life functions in a separate block/file and remove
 *PV__ macros
 ** - fix matrix product bug where b.cols must be greater than a.cols
-** - comment all V__ functions
-** - add dot product function for all V__
 ** - add assert() for >=1 length, row, and column counts
-** - add a function to map a function on the vectors (rows/cols) of a matrix
-*(for use with softmax)
-** - add matAt and vec_get functions for accessing elements
+** - add a function to map a function on the vectors (rows/cols) of a matrix -> for use with softmax
+** - add fat pointe vectors ontop of the normal Vec type (https://github.com/WalkerRout/fvector)
 */
