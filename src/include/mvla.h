@@ -1,6 +1,6 @@
 
 /*
-** @title:        MVLA (Matrix Vector Linear Algebra)
+** @title:        MVLA (Matrix-Vector Linear Algebra)
 **
 ** @author:       Walker Rout
 **
@@ -143,8 +143,8 @@ typedef struct {
 /*
 ** MATH FUNCTION PROTOTYPES
 */
-MVLADEF float randF();
-MVLADEF double randD();
+MVLADEF float rand_f();
+MVLADEF double rand_d();
 MVLADEF float lerpf(float a, float b, float t);
 MVLADEF double lerp(double a, double b, double t);
 MVLADEF signed int mini(signed int a, signed int b);
@@ -403,7 +403,7 @@ MVLADEF void mat_print_rows_cols(const Mat a);
 ** @params:  N/A
 ** @returns: N/A
 */
-MVLADEF float randF() {
+MVLADEF float rand_f() {
   return ((float)rand()) /
          ((float)RAND_MAX); // initialize srand first: srand(time(NULL))
 }
@@ -413,7 +413,7 @@ MVLADEF float randF() {
 ** @params:  N/A
 ** @returns: N/A
 */
-MVLADEF double randD() {
+MVLADEF double rand_d() {
   return ((double)rand()) /
          ((double)RAND_MAX); // initialize srand first: srand(time(NULL))
 }
