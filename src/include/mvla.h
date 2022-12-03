@@ -2187,7 +2187,7 @@ MVLADEF void mat_fill_rand(Mat *a) {
 
   for (int i = 0; i < a->rows; ++i)
     for (int j = 0; j < a->cols; ++j)
-      *mat_get_ptr(a, i, j) = randF();
+      *mat_get_ptr(a, i, j) = rand_f();
 }
 
 /*
