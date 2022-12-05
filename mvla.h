@@ -125,6 +125,15 @@ typedef struct {
   unsigned int length;
   float *data;
 } Vec;
+
+typedef struct _FVecData {
+  unsigned int element_size; // size of each element
+  unsigned int capacity;     // number of elements that can fit
+  unsigned int bytes_alloc;  // element_size * capacity
+  unsigned int length;       // element count in the vector
+  //void *extra_data;        // an optional pointer to any extra data to be carried with the vector
+  unsigned char buffer[];
+} FVecData;
 // -----------------------------------------
 
 // -----------------------------------------
@@ -142,6 +151,7 @@ typedef struct {
 /*
 ** MATH FUNCTION PROTOTYPES
 */
+MVLADEF unsigned int pot(unsigned int x);
 MVLADEF float rand_f();
 MVLADEF double rand_d();
 MVLADEF float lerpf(float a, float b, float t);
@@ -360,6 +370,15 @@ MVLADEF void vec_fill_rand(Vec *a);
 MVLADEF void vec_free(Vec *a);
 MVLADEF void vec_print(const Vec a);
 MVLADEF void vec_print_length(const Vec a);
+
+MVLADEF void *fvec(unsigned int element_size);
+MVLADEF void *fvecci(unsigned int element_size, unsigned int initial_size);
+MVLADEF FVecData *fvec_get_data(void *vector);
+//MVLADEF int fvec_has_space(FVecData *v_data);
+//MVLADEF void fvec_expand(FVecData **v_data);
+MVLADEF void *fvec_push(void **vector);
+MVLADEF void fvec_free(void **vector);
+MVLADEF void fvec_print(void *vector, void(*print_fn)(void *));
 // -----------------------------------------
 
 // -----------------------------------------
@@ -398,6 +417,32 @@ MVLADEF void mat_print_rows_cols(const Mat a);
 #ifdef MVLA_IMPLEMENTATION
 
 /*
+** @brief:   Produce the nearest highest power of two
+** @params:  x {unsigned int} - initial value
+** @returns: {unsigned int} - power of two closest to and greater than initial value
+*/
+MVLADEF unsigned int pot(unsigned int x) {
+  // from here (great read): https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+  
+  // move all bits down while or'ing them in order to fill all
+  // lower bits with 1's, effectively making x 1 less than a
+  // power of 2
+  // ie.. 43 after x |= x >> 1 -> 0000000000111111 (63)
+  // this step continues, with no other bits changing, until a 1 is
+  // added at the end
+  
+  x--; // decrement x (flip lowest bit)
+  x |= x >> 1;
+  x |= x >> 2;
+  x |= x >> 4;
+  x |= x >> 8;
+  x |= x >> 16;
+  x++; // round up to power of 2
+  
+  return x;
+}
+
+/*
 ** @brief:   Generate a random float between 0 and 1
 ** @params:  N/A
 ** @returns: N/A
@@ -419,16 +464,14 @@ MVLADEF double rand_d() {
 
 /*
 ** @brief:   Linearly interpolate between two floats
-** @params:  a {float} - lower bound, b {float} - upper bound, c {float} - value
-*to interpolate
+** @params:  a {float} - lower bound, b {float} - upper bound, c {float} - value to interpolate
 ** @returns: N/A
 */
 MVLADEF float lerpf(float a, float b, float t) { return a + ((b - a) * t); }
 
 /*
 ** @brief:   Linearly interpolate between two doubles
-** @params:  a {double} - lower bound, b {double} - upper bound, c {double} -
-*value to interpolate
+** @params:  a {double} - lower bound, b {double} - upper bound, c {double} - value to interpolate
 ** @returns: N/A
 */
 MVLADEF double lerp(double a, double b, double t) { return a + ((b - a) * t); }
@@ -560,8 +603,7 @@ MVLADEF V2i v2i_max(V2i a, V2i b) {
 MVLADEF void v2i_print(V2i a) { printf("V2i(%d, %d)\n", a.x, a.y); }
 
 /*
-** @brief:   Create a 2D unsigned integer vector with differing x and y
-*components
+** @brief:   Create a 2D unsigned integer vector with differing x and y components
 ** @params:  x {unsigned int} - x component, y {unsigned int} - y component
 ** @returns: vec {V2u} - new 2D unsigned integer vector
 */
@@ -573,8 +615,7 @@ MVLADEF V2u v2u(unsigned int x, unsigned int y) {
 }
 
 /*
-** @brief:   Create a 2D unsigned integer vector with the same x and y
-*components
+** @brief:   Create a 2D unsigned integer vector with the same x and y components
 ** @params:  x {unsigned int} - all components
 ** @returns: vec {V2u} - new 2D unsigned integer vector
 */
@@ -1562,8 +1603,7 @@ MVLADEF Vec vec(unsigned int length) {
 
 /*
 ** @brief:   Get the element at a specific index in a vector
-** @params:  a {const Vec} - vector with data, index {unsigned int} - the index
-*of the requested data
+** @params:  a {const Vec} - vector with data, index {unsigned int} - the index of the requested data
 ** @returns: {float} - data at the specified index
 */
 MVLADEF float vec_get(const Vec a, unsigned int index) {
@@ -1573,8 +1613,7 @@ MVLADEF float vec_get(const Vec a, unsigned int index) {
 
 /*
 ** @brief:   Get the pointer to an element out of a vector
-** @params:  a {Vec *} - a vector (pointer for brevity), index {unsigned int} -
-*element index
+** @params:  a {Vec *} - a vector (pointer for brevity), index {unsigned int} - element index
 ** @returns: {float *} - the pointer to the index'th element of the vector
 */
 MVLADEF float *vec_get_ptr(const Vec *a, unsigned int index) {
@@ -1599,8 +1638,7 @@ MVLADEF Vec vec_clone(Vec a) {
 
 /*
 ** @brief:   Copy data from one vector to another with matching length
-** @params:  dest {Vec *} - the destination vector, src {Vec *} - the source
-*vector
+** @params:  dest {Vec *} - the destination vector, src {Vec *} - the source vector
 ** @returns: N/A
 */
 MVLADEF void vec_copy_data(Vec *dest, Vec *src) {
@@ -1614,8 +1652,7 @@ MVLADEF void vec_copy_data(Vec *dest, Vec *src) {
 /*
 ** @brief:   Adds a vector to another
 ** @params:  a {Vec} - first vector, b {Vec} - second vector
-** @returns: c {Vec} - new vector equal to the i_th element of a plus the i_th
-*element of b
+** @returns: c {Vec} - new vector equal to the i_th element of a plus the i_th element of b
 */
 MVLADEF Vec vec_add(Vec a, Vec b) {
   assert(a.length == b.length);
@@ -1633,8 +1670,7 @@ MVLADEF Vec vec_add(Vec a, Vec b) {
 /*
 ** @brief:   Subtract a vector from another
 ** @params:  a {Vec} - first vector, b {Vec} - second vector
-** @returns: c {Vec} - new vector equal to the i_th element of a minus the i_th
-*element of b
+** @returns: c {Vec} - new vector equal to the i_th element of a minus the i_th element of b
 */
 MVLADEF Vec vec_sub(Vec a, Vec b) {
   assert(a.length == b.length);
@@ -1652,8 +1688,7 @@ MVLADEF Vec vec_sub(Vec a, Vec b) {
 /*
 ** @brief:   Multiplies the elements of two vectors together
 ** @params:  a {Vec} - first vector, b {Vec} - second vector
-** @returns: c {Vec} - new vector with elements equal to i_th element of a
-*multiplied with the i_th element of b
+** @returns: c {Vec} - new vector with elements equal to i_th element of a multiplied with the i_th element of b
 */
 MVLADEF Vec vec_mul(Vec a, Vec b) {
   assert(a.length == b.length);
@@ -1670,8 +1705,7 @@ MVLADEF Vec vec_mul(Vec a, Vec b) {
 
 /*
 ** @brief:   Multiplies a vector with a scalar
-** @params:  a {Vec} - vector to multiply, b {float} - scalar to multiply the
-*vector by
+** @params:  a {Vec} - vector to multiply, b {float} - scalar to multiply the vector by
 ** @returns: c {Vec} - new vector equal to a's elements multiplied by b
 */
 MVLADEF Vec vec_mull(Vec a, float b) {
@@ -1687,10 +1721,8 @@ MVLADEF Vec vec_mull(Vec a, float b) {
 
 /*
 ** @brief:   Calculates dot product of two vectors
-** @params:  a {Vec} - first vector (a length must equal b length), b {Vec} -
-*second vector (b length must equal a length)
-** @returns: c {Vec} - new vector equal to the vector product of a and b (length
-*of 1)
+** @params:  a {Vec} - first vector (a length must equal b length), b {Vec} - second vector (b length must equal a length)
+** @returns: c {Vec} - new vector equal to the vector product of a and b (length of 1)
 */
 MVLADEF Vec vec_dot(Vec a, Vec b) {
   assert(a.length == b.length);
@@ -1706,8 +1738,7 @@ MVLADEF Vec vec_dot(Vec a, Vec b) {
 }
 
 /*
-** @brief:   Divide the i_th element of the first vector by the i_th element of
-*the second vector
+** @brief:   Divide the i_th element of the first vector by the i_th element of the second vector
 ** @params:  a {Vec} - vector to divide, b {Vec} - vector to divide a by
 ** @returns: c {Vec} - new vector with elements equal to a divided by b
 */
@@ -1727,10 +1758,8 @@ MVLADEF Vec vec_div(Vec a, Vec b) {
 }
 
 /*
-** @brief:   Maps a function of type :: Float -> Float onto each element of a
-*vector
-** @params:  a {Vec} - vector to map, func {float (*ptr)(float)} - function to
-*apply to each vector element
+** @brief:   Maps a function of type :: Float -> Float onto each element of a vector
+** @params:  a {Vec} - vector to map, func {float (*ptr)(float)} - function to apply to each vector element
 ** @returns: c {Vec} - new vector with elements equal to mapped elements of a
 */
 MVLADEF Vec vec_map(Vec a, float (*func)(float)) {
@@ -1746,8 +1775,7 @@ MVLADEF Vec vec_map(Vec a, float (*func)(float)) {
 
 /*
 ** @brief:   Turn a row of a matrix into a vector
-** @params:  a {Mat} - matrix to turn into a vector, row {int} - row of matrix
-*to turn into vector
+** @params:  a {Mat} - matrix to turn into a vector, row {int} - row of matrix to turn into vector
 ** @returns: c {Vec} - new vector that represents a single row of the matrix, a
 */
 MVLADEF Vec vec_from_mat_row(Mat a, int row) {
@@ -1764,10 +1792,8 @@ MVLADEF Vec vec_from_mat_row(Mat a, int row) {
 
 /*
 ** @brief:   Turn a column of a matrix into a vector
-** @params:  a {Mat} - matrix to turn into a vector, col {int} - the column of
-*the matrix to turn into vector
-** @returns: c {Vec} - new vector that represents a single column of the matrix,
-*a
+** @params:  a {Mat} - matrix to turn into a vector, col {int} - the column of the matrix to turn into vector
+** @returns: c {Vec} - new vector that represents a single column of the matrix, a
 */
 MVLADEF Vec vec_from_mat_col(Mat a, int col) {
   assert(a.data);
@@ -1783,8 +1809,7 @@ MVLADEF Vec vec_from_mat_col(Mat a, int col) {
 
 /*
 ** @brief:   Turn a float * into a vector
-** @params:  a {float *} - float * to turn into a vector, length {unsigned int}
-*- length of the vector
+** @params:  a {float *} - float * to turn into a vector, length {unsigned int} - length of the vector
 ** @returns: c {Vec} - new vector that represents the float *, a
 */
 MVLADEF Vec vec_from_f_ptr(float *a, unsigned int length) {
@@ -1799,8 +1824,7 @@ MVLADEF Vec vec_from_f_ptr(float *a, unsigned int length) {
 }
 
 /*
-** @brief:   Get the length of a vector (square root of all elements squared and
-*summed)
+** @brief:   Get the length of a vector (square root of all elements squared and summed)
 ** @params:  a {const Vec} - vector to find the length of
 ** @returns: length {float} - the length of the vector
 */
@@ -1817,8 +1841,7 @@ MVLADEF float vec_length(const Vec a) {
 
 /*
 ** @brief:   Resize a vector
-** @params:  a {Vec *} - vector to resize, newLength {unsigned int} - the new
-*length of the vector
+** @params:  a {Vec *} - vector to resize, newLength {unsigned int} - the new length of the vector
 ** @returns: N/A
 */
 MVLADEF void vec_resize(Vec *a, unsigned int newLength) {
@@ -1871,13 +1894,141 @@ MVLADEF void vec_print_length(const Vec a) {
   printf("Vector Length: %d\n", a.length);
 }
 
+/*
+** @brief:   Create a fat pointer vector able to contain elements of size element_size
+** @params:  element_size {unsigned int} - size of each element in the vector
+** @returns: {void *} - pointer to buffer of vector
+*/
+MVLADEF void *fvec(unsigned int element_size) {
+  FVecData* v = calloc(1, sizeof(FVecData));
+  v->element_size = element_size;
+  v->capacity = 0;
+  v->length = 0;
+  v->bytes_alloc = v->capacity * element_size; // also 0
+
+  return &v->buffer;
+}
+
+/*
+** @brief:   Create a fat pointer vector able to contain elements of size element_size, with initial allocation of initial_size
+** @params:  element_size {unsigned int} - size of each element in the vector, initial_size {unsigned int} - number of initial allocated slots for elements in the vector
+** @returns: {void *} - pointer to buffer of vector
+*/
+MVLADEF void *fvecci(unsigned int element_size, unsigned int initial_size) {
+  initial_size = pot(initial_size);
+  
+  FVecData* v = calloc(1, sizeof(FVecData) + initial_size * element_size);
+  v->element_size = element_size;
+  v->capacity = initial_size; // create a capacity rounded up to a multiple of 2 from initial_size
+  v->length = 0;
+  v->bytes_alloc = v->capacity * element_size; // also 0
+  
+  return &v->buffer;
+}
+
+/*
+** @WARNING: !!! TAKE PRECAUTIONS THAT VECTOR POINTS TO VALID DATA !!!
+**
+** @brief:   Get the data behind a vector fat pointer
+** @params:  vector {void *} - fat pointer pointing to a buffer to underlying data
+** @returns: vec {Vec} - new vec with specified length and initial values of 0
+*/
+MVLADEF FVecData *fvec_get_data(void *vector) {
+  // total hack for pointer arithmetic
+  // cast vector to FVecData*, then index back by 1
+  // as the pointer being indexed is of type FVecData,
+  // it decrements back to the address of the start of the structure
+  return &((FVecData *)vector)[-1];
+}
+
+/*
+** @brief:   Check if a vector has space for another element
+** @params:  v_data {FVecData *} - vector to check
+** @returns: {int} - a boolean value representing whether or not the vector has space
+*/
+MVLADEF int fvec_has_space(FVecData *v_data) {
+  //assert(v_data->bytes_alloc == (v_data->capacity * v_data->element_size));
+  return (v_data->bytes_alloc - (v_data->length * v_data->element_size)) > 0;
+}
+
+/*
+** @brief:   Expand a vector's allocation
+** @params:  v_data {FVecData **} - the vector to expand
+** @returns: N/A
+*/
+MVLADEF void fvec_expand(FVecData **v_data) {
+  assert((*v_data)->capacity >= (*v_data)->length);
+  assert((*v_data)->bytes_alloc == ((*v_data)->capacity * (*v_data)->element_size));
+
+  int old_bytes = sizeof(**v_data) + (*v_data)->bytes_alloc;
+  
+  if((*v_data)->bytes_alloc == 0) {
+    (*v_data)->capacity = 2;
+    (*v_data)->bytes_alloc = (*v_data)->capacity * (*v_data)->element_size;
+  } else {
+    (*v_data)->capacity *= 2;
+    (*v_data)->bytes_alloc = (*v_data)->capacity * (*v_data)->element_size;
+  }
+
+  //fprintf(stderr, "Reallocating from %d bytes to %d bytes!\n", old_bytes, sizeof(**v_data) + (*v_data)->bytes_alloc);
+
+  *v_data = realloc(*v_data, sizeof(FVecData) + (*v_data)->bytes_alloc);
+}
+
+/*
+** @brief:   Create a vector with a specified length
+** @params:  length {unsigned int} - length of vector
+** @returns: vec {Vec} - new vec with specified length and initial values of 0
+*/
+MVLADEF void *fvec_push(void **vector) {
+  FVecData *v_data = fvec_get_data(*vector);
+  
+  if(!fvec_has_space(v_data)) {
+    fvec_expand(&v_data);
+  }
+
+  v_data->length += 1;
+  if(!fvec_has_space(v_data)) {
+    fvec_expand(&v_data);
+  }
+
+  // make sure to increment the length
+  *vector = &v_data->buffer;
+  // return a void pointer to the next available slot in the vector (0 indexed, sub1)
+  void *res = *vector + v_data->element_size * (v_data->length-1);
+  
+  return res;
+}
+
+/*
+** @brief:   Free a fat pointer vector (also sets pointer to NULL)
+** @params:  vector {void **} - reference to vector to free
+** @returns: N/A 
+*/
+MVLADEF void fvec_free(void **vector) {
+  FVecData *v_data = fvec_get_data(*vector);
+  free(v_data);
+  *vector = NULL;
+}
+
+/*
+** @brief:   Print a fat pointer vector
+** @params:  vector {void *} - vector to print, print_fn {void(*)(void *)} - function pointer to user function for printing elements (no newline expected)
+** @returns: N/A
+*/
+MVLADEF void fvec_print(void *vector, void(*print_fn)(void *)) {
+  FVecData *v_data = fvec_get_data(vector);
+  for(int i = 0; i < v_data->length; ++i)
+    print_fn(vector + i * v_data->element_size); // vector still valid -> no reallocations yet
+  printf("\n");
+}
+
 // -----------------------------------------
 
 /*
 ** @brief:   Create a matrix with varying row and column count
 ** @params:  rows {unsigned int} - row count, cols {unsigned int} - column count
-** @returns: mat {Mat} - new matrix with size of rows*cols and initial values of
-*0
+** @returns: mat {Mat} - new matrix with size of rows*cols and initial values of 0
 */
 MVLADEF Mat mat(unsigned int rows, unsigned int cols) {
   Mat mat;
@@ -1937,8 +2088,7 @@ MVLADEF Mat mat_id(unsigned int dim) {
 
 /*
 ** @brief:   Get the element out of a matrix
-** @params:  a {Mat} - a matrix, i {unsigned int} - a row index, j {unsigned
-*int} - a column index
+** @params:  a {Mat} - a matrix, i {unsigned int} - a row index, j {unsigned int} - a column index
 ** @returns: {float} - the element at [i][j] in a standard 2d matrix
 */
 MVLADEF float mat_get(Mat a, unsigned int i, unsigned int j) {
@@ -1948,10 +2098,8 @@ MVLADEF float mat_get(Mat a, unsigned int i, unsigned int j) {
 
 /*
 ** @brief:   Get the pointer to an element out of a matrix
-** @params:  a {Mat *} - a matrix (pointer for brevity), i {unsigned int} - a
-*row index, j {unsigned int} - a column index
-** @returns: {float *} - the pointer to an element at [i][j] in a standard 2d
-*matrix
+** @params:  a {Mat *} - a matrix (pointer for brevity), i {unsigned int} - a row index, j {unsigned int} - a column index
+** @returns: {float *} - the pointer to an element at [i][j] in a standard 2d matrix
 */
 MVLADEF float *mat_get_ptr(Mat *a, unsigned int i, unsigned int j) {
   assert(a->data);
@@ -1975,8 +2123,7 @@ MVLADEF Mat mat_clone(Mat a) {
 
 /*
 ** @brief:   Copy data from one matrix to another with matching dimensions
-** @params:  dest {Mat *} - the destination matrix, src {Mat *} - the source
-*matrix
+** @params:  dest {Mat *} - the destination matrix, src {Mat *} - the source matrix
 ** @returns: N/A
 */
 MVLADEF void mat_copy_data(Mat *dest, Mat *src) {
@@ -1991,8 +2138,7 @@ MVLADEF void mat_copy_data(Mat *dest, Mat *src) {
 /*
 ** @brief:   Adds a matrix to another
 ** @params:  a {Mat} - first matrix, b {Mat} - second matrix
-** @returns: c {Mat} - new matrix equal to the i_th j_th element of a plus the
-*i_th j_th element of b
+** @returns: c {Mat} - new matrix equal to the i_th j_th element of a plus the i_th j_th element of b
 */
 MVLADEF Mat mat_add(Mat a, Mat b) {
   assert(a.rows == b.rows);
@@ -2012,8 +2158,7 @@ MVLADEF Mat mat_add(Mat a, Mat b) {
 /*
 ** @brief:   Subtract a matrix from another
 ** @params:  a {Mat} - first matrix, b {Mat} - second matrix
-** @returns: c {Mat} - new matrix equal to the i_th j_th element of a
-*subtracting the i_th j_th element of b
+** @returns: c {Mat} - new matrix equal to the i_th j_th element of a subtracting the i_th j_th element of b
 */
 MVLADEF Mat mat_sub(Mat a, Mat b) {
   assert(a.rows == b.rows);
@@ -2033,8 +2178,7 @@ MVLADEF Mat mat_sub(Mat a, Mat b) {
 /*
 ** @brief:   Multiplies the elements of two matrices together
 ** @params:  a {Mat} - first matrix, b {Mat} - second matrix
-** @returns: c {Mat} - new matrix with elements equal to i_th j_th element of a
-*multiplied with the i_th j_th element of b
+** @returns: c {Mat} - new matrix with elements equal to i_th j_th element of a multiplied with the i_th j_th element of b
 */
 MVLADEF Mat mat_mul(Mat a, Mat b) {
   assert(a.rows == b.rows);
@@ -2053,8 +2197,7 @@ MVLADEF Mat mat_mul(Mat a, Mat b) {
 
 /*
 ** @brief:   Multiplies a matrix with a scalar
-** @params:  a {Mat} - matrix to multiply, b {float} - scalar to multiply the
-*matrix by
+** @params:  a {Mat} - matrix to multiply, b {float} - scalar to multiply the matrix by
 ** @returns: c {Mat} - new matrix equal to a's elements multiplied by b
 */
 MVLADEF Mat mat_mull(Mat a, float b) {
@@ -2071,8 +2214,7 @@ MVLADEF Mat mat_mull(Mat a, float b) {
 
 /*
 ** @brief:   Calculates dot product (matrix product) of two matrices
-** @params:  a {Mat} - first matrix (a cols must equal b rows), b {Mat} - second
-*matrix (b rows must equal a cols)
+** @params:  a {Mat} - first matrix (a cols must equal b rows), b {Mat} - second matrix (b rows must equal a cols)
 ** @returns: c {Mat} - new matrix equal to the matrix product of a and b
 */
 MVLADEF Mat mat_dot(Mat a, Mat b) {
@@ -2094,8 +2236,7 @@ MVLADEF Mat mat_dot(Mat a, Mat b) {
 }
 
 /*
-** @brief:   Divide the i_th j_th element of the first matrix by the i_th j_th
-*element of the second matrix
+** @brief:   Divide the i_th j_th element of the first matrix by the i_th j_th element of the second matrix
 ** @params:  a {Mat} - matrix to divide, b {Mat} - matrix to divide a by
 ** @returns: c {Mat} - new matrix with elements equal to a divided by b
 */
@@ -2136,10 +2277,8 @@ MVLADEF Mat mat_transpose(Mat a) {
 }
 
 /*
-** @brief:   Maps a function of type :: Float -> Float onto each element of a
-*matrix
-** @params:  a {Mat} - matrix to map, func {float (*ptr)(float)} - function to
-*apply to each matrix element
+** @brief:   Maps a function of type :: Float -> Float onto each element of a matrix
+** @params:  a {Mat} - matrix to map, func {float (*ptr)(float)} - function to apply to each matrix element
 ** @returns: c {Mat} - new matrix with elements equal to mapped elements of a
 */
 MVLADEF Mat mat_map(Mat a, float (*func)(float)) {
@@ -2171,8 +2310,7 @@ MVLADEF Mat mat_from_vec(Vec a) {
 /*
 ** @brief:   Get the dimensions of a matrix
 ** @params:  a {const Mat} - matrix with dimensions
-** @returns: {V2u} - 2D unsigned int vector with x and y as row and column,
-*respectively
+** @returns: {V2u} - 2D unsigned int vector with x and y as row and column, respectively
 */
 MVLADEF V2u mat_dims(const Mat a) { return (V2u){.x = a.rows, .y = a.cols}; }
 
@@ -2190,8 +2328,7 @@ MVLADEF void mat_fill_rand(Mat *a) {
 }
 
 /*
-** @brief:   Free a matrix's data property and set its row and column count to
-*-1
+** @brief:   Free a matrix's data property and set its row and column count to -1
 ** @params:  a {Mat *} - matrix to free
 ** @returns: N/A
 */
@@ -2232,13 +2369,19 @@ MVLADEF void mat_print_rows_cols(const Mat a) {
 
 /*
 ** TODO:
-** - make all matrix and vector data fields constant (double **const data
-*instead of double **data)
+** - make all matrix and vector data fields constant (double **const data instead of double **data)
 ** - rewrite all matrix and vector functions as macros ***
-** - implement quality-of-life functions in a separate block/file and remove
-*PV__ macros
+** - implement quality-of-life functions in a separate block/file and remove PV__ macros
 ** - fix matrix product bug where b.cols must be greater than a.cols
 ** - add assert() for >=1 length, row, and column counts
 ** - add a function to map a function on the vectors (rows/cols) of a matrix -> for use with softmax
-** - add fat pointe vectors ontop of the normal Vec type (https://github.com/WalkerRout/fvector)
+**
+** - vector_pop_front(); -> return a copy of the value before mallocing and vector+sizeof(element) it in memcpy
+** - vector_pop_back();  -> return a copy of the value before length-1 in memcpy
+** - vector_remove(int index); -> delete the given index from the vector
+** - vector_clear(void *default_value) -> create a default value and pass its address to set everything to it
+** - vector_shrink_to(unsigned int new_length) -> drop all elements after new_length (easy with realloc)
+** - ... more I can't think of right now
+**
+** - Implement a way to choose an allocator (ie... preprocessor defines to pick a malloc definition)
 */
