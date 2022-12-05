@@ -377,8 +377,11 @@ MVLADEF FVecData *fvec_get_data(void *vector);
 //MVLADEF int fvec_has_space(FVecData *v_data);
 //MVLADEF void fvec_expand(FVecData **v_data);
 MVLADEF void *fvec_push(void **vector);
+MVLADEF void fvec_pop_back(void **vector);
+MVLADEF void fvec_map(void *vector, void(*func)(void*));
+MVLADEF unsigned int fvec_length(void *vector);
 MVLADEF void fvec_free(void **vector);
-MVLADEF void fvec_print(void *vector, void(*print_fn)(void *));
+MVLADEF void fvec_print(void *vector, void(*print_func)(void*));
 // -----------------------------------------
 
 // -----------------------------------------
@@ -1931,14 +1934,30 @@ MVLADEF void *fvecci(unsigned int element_size, unsigned int initial_size) {
 **
 ** @brief:   Get the data behind a vector fat pointer
 ** @params:  vector {void *} - fat pointer pointing to a buffer to underlying data
-** @returns: vec {Vec} - new vec with specified length and initial values of 0
+** @returns: {FVecData *} - data behind the fat pointer vector
 */
 MVLADEF FVecData *fvec_get_data(void *vector) {
+  assert(vector);
   // total hack for pointer arithmetic
   // cast vector to FVecData*, then index back by 1
   // as the pointer being indexed is of type FVecData,
   // it decrements back to the address of the start of the structure
   return &((FVecData *)vector)[-1];
+}
+
+/*
+** @brief:   Clone a fat pointer vector
+** @params:  vector {void *} - fat pointer vector to clone
+** @returns: new_vector {void *} - new fat pointer vector pointing to separate memory
+*/
+MVLADEF void *fvec_clone(void *vector) {
+  assert(vector);
+  FVecData *v_data = fvec_get_data(vector);
+  void *new_vector = fvecci(v_data->element_size, v_data->length);
+  
+  memcpy(new_vector, vector, v_data->element_size * v_data->length);
+  
+  return new_vector;
 }
 
 /*
@@ -1976,11 +1995,12 @@ MVLADEF void fvec_expand(FVecData **v_data) {
 }
 
 /*
-** @brief:   Create a vector with a specified length
-** @params:  length {unsigned int} - length of vector
-** @returns: vec {Vec} - new vec with specified length and initial values of 0
+** @brief:   Push a value into the vector
+** @params:  vector {void **} - fat pointer vector to push into
+** @returns: res {void *} - pointer to new address at the end of the vector
 */
 MVLADEF void *fvec_push(void **vector) {
+  assert(vector);
   FVecData *v_data = fvec_get_data(*vector);
   
   if(!fvec_has_space(v_data)) {
@@ -2001,6 +2021,43 @@ MVLADEF void *fvec_push(void **vector) {
 }
 
 /*
+** @brief:   Remove the last element from a fat pointer vector, shrinking allocation if the length is a power of 2
+** @params:  vector {void **} - fat pointer vector to remove an element from
+** @returns: N/A
+*/
+MVLADEF void fvec_pop_back(void **vector) {
+  assert(vector);
+  FVecData *v_data = fvec_get_data(*vector);
+  assert(v_data->length > 0 && "Cannot pop an empty vector!");
+  
+  v_data->length -= 1;
+  
+  // if its a power of 2...
+  if(ceil(log2(v_data->length)) == floor(log2(v_data->length))) {
+    // know length is a power of two, capacity remains consistent
+    v_data->capacity = v_data->length;
+    v_data->bytes_alloc = v_data->element_size * v_data->length;
+    // shrink allocation
+    v_data = realloc(v_data, sizeof(FVecData) + v_data->bytes_alloc);
+  }
+
+  *vector = &v_data->buffer;
+}
+
+/*
+** @brief:   Maps a function of type :: Void -> Void* onto each element of a fat pointer vector
+** @params:  vector {void *} - fat pointer vector to map, func {void (*)(void*)} - function to apply to each vector element
+** @returns: N/A
+*/
+MVLADEF void fvec_map(void *vector, void (*func)(void*)) {
+  assert(vector);
+  FVecData *v_data = fvec_get_data(vector);
+  
+  for(int i = 0; i < v_data->length; ++i)
+    func(vector + i * v_data->element_size); // vector still valid -> no reallocations yet
+}
+
+/*
 ** @brief:   Free a fat pointer vector (also sets pointer to NULL)
 ** @params:  vector {void **} - reference to vector to free
 ** @returns: N/A 
@@ -2012,14 +2069,25 @@ MVLADEF void fvec_free(void **vector) {
 }
 
 /*
+** @brief:   Get the length of a fat pointer vector
+** @params:  vector {void *} - target for length
+** @returns: {unsigned int} - length of the vector
+*/
+MVLADEF unsigned int fvec_length(void *vector) {
+  FVecData *v_data = fvec_get_data(vector);
+  return v_data->length;
+}
+
+/*
 ** @brief:   Print a fat pointer vector
-** @params:  vector {void *} - vector to print, print_fn {void(*)(void *)} - function pointer to user function for printing elements (no newline expected)
+** @params:  vector {void *} - vector to print, print_func {void(*)(void*)} - function pointer to user function for printing elements (no newline expected)
 ** @returns: N/A
 */
-MVLADEF void fvec_print(void *vector, void(*print_fn)(void *)) {
+MVLADEF void fvec_print(void *vector, void(*print_func)(void*)) {
+  assert(vector);
   FVecData *v_data = fvec_get_data(vector);
   for(int i = 0; i < v_data->length; ++i)
-    print_fn(vector + i * v_data->element_size); // vector still valid -> no reallocations yet
+    print_func(vector + i * v_data->element_size); // vector still valid -> no reallocations yet
   printf("\n");
 }
 
@@ -2278,7 +2346,7 @@ MVLADEF Mat mat_transpose(Mat a) {
 
 /*
 ** @brief:   Maps a function of type :: Float -> Float onto each element of a matrix
-** @params:  a {Mat} - matrix to map, func {float (*ptr)(float)} - function to apply to each matrix element
+** @params:  a {Mat} - matrix to map, func {float (*)(float)} - function to apply to each matrix element
 ** @returns: c {Mat} - new matrix with elements equal to mapped elements of a
 */
 MVLADEF Mat mat_map(Mat a, float (*func)(float)) {
@@ -2376,11 +2444,10 @@ MVLADEF void mat_print_rows_cols(const Mat a) {
 ** - add assert() for >=1 length, row, and column counts
 ** - add a function to map a function on the vectors (rows/cols) of a matrix -> for use with softmax
 **
-** - vector_pop_front(); -> return a copy of the value before mallocing and vector+sizeof(element) it in memcpy
-** - vector_pop_back();  -> return a copy of the value before length-1 in memcpy
-** - vector_remove(int index); -> delete the given index from the vector
-** - vector_clear(void *default_value) -> create a default value and pass its address to set everything to it
-** - vector_shrink_to(unsigned int new_length) -> drop all elements after new_length (easy with realloc)
+** - fvec_pop_front(); -> malloc and vector+sizeof(element) it in memcpy
+** - fvec_remove(int index); -> delete the given index from the vector
+** - fvec_clear(void *default_value) -> create a default value and pass its address to set everything to it
+** - fvec_shrink_to(unsigned int new_length) -> drop all elements after new_length (easy with realloc)
 ** - ... more I can't think of right now
 **
 ** - Implement a way to choose an allocator (ie... preprocessor defines to pick a malloc definition)
