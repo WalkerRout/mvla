@@ -1,15 +1,15 @@
 CC = gcc
-OBJS = src/*.c 
 OBJ = bin/mvla
-CFLAGS = -O3
+OBJS = tests/*.c
+CFLAGS = -O1 -g -Wall -Wextra -Wpedantic -Werror
 LIBS = -lm
 
-all: run
+all: test
 
 build:
 	@$(CC) $(OBJS) $(CFLAGS) $(LIBS) -o $(OBJ)
 
-run: build
+test: build
 	@./$(OBJ)
 
 debug:
