@@ -32,6 +32,7 @@ extern "C" {
 /*
 ** INCLUDES
 */
+
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
@@ -44,6 +45,7 @@ extern "C" {
 /*
 ** ACCESS MODIFIER DEFINES
 */
+
 #ifndef MVLADEF
 #define MVLADEF static inline
 #endif // MVLADEF
@@ -53,6 +55,7 @@ extern "C" {
 /*
 ** PREPROCESSOR DEFINTIONS
 */
+
 #define V2Args(v) (v).x, (v).y
 #define V3Args(v) (v).x, (v).y, (v).z
 #define V4Args(v) (v).x, (v).y, (v).z, (v).w
@@ -62,6 +65,7 @@ extern "C" {
 /*
 ** USEFUL CONSTANT DEFINTIONS
 */
+
 #define MVLA_E 2.71828182845
 #define MVLA_PI 3.14159265359
 #define MVLA_2PI 6.28318530718
@@ -621,7 +625,6 @@ MVLADEF void v2d_print(v2d_t a);
 
 // -----------------------------------------
 
-// -----------------------------------------
 /*
 ** 3D VECTOR FUNCTION PROTOTYPES
 */
@@ -1037,7 +1040,6 @@ MVLADEF void v3d_print(v3d_t a);
 
 // -----------------------------------------
 
-// -----------------------------------------
 /*
 ** 4D VECTOR FUNCTION PROTOTYPES
 */
