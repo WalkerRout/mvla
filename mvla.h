@@ -1463,18 +1463,20 @@ MVLADEF void v4d_print(v4d_t a);
 /*
 ** HEADER ONLY IMPLEMENTATION
 */
+
 #ifdef MVLA_IMPLEMENTATION
 
 // -----------------------------------------
 
 MVLADEF float randf() {
+  // assume we have seeded srand first to use rand
   return ((float) rand()) /
-         ((float) RAND_MAX); // initialize srand first: srand(time(NULL))
+         ((float) RAND_MAX);
 }
 
 MVLADEF double randd() {
   return ((double) rand()) /
-         ((double) RAND_MAX); // initialize srand first: srand(time(NULL))
+         ((double) RAND_MAX);
 }
 
 MVLADEF float lerpf(float a, float b, float t) {
