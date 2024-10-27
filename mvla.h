@@ -2525,6 +2525,8 @@ MVLADEF void v4d_print(v4d_t a) {
   printf("v4d_t(%lf, %lf, %lf, %lf)\n", V4Args(a));
 }
 
+// -----------------------------------------
+
 #endif // MVLA_IMPLEMENTATION
 
 #ifdef __cplusplus
