@@ -47,7 +47,11 @@ extern "C" {
 */
 
 #ifndef MVLADEF
-#define MVLADEF static inline
+#define MVLADEF extern
+#endif // MVLADEF
+
+#ifndef MVLAIMPL
+#define MVLAIMPL inline
 #endif // MVLADEF
 
 // -----------------------------------------
@@ -56,9 +60,9 @@ extern "C" {
 ** PREPROCESSOR DEFINTIONS
 */
 
-#define V2Args(v) (v).x, (v).y
-#define V3Args(v) (v).x, (v).y, (v).z
-#define V4Args(v) (v).x, (v).y, (v).z, (v).w
+#define V2_ARGS(v) (v).x, (v).y
+#define V3_ARGS(v) (v).x, (v).y, (v).z
+#define V4_ARGS(v) (v).x, (v).y, (v).z, (v).w
 
 // -----------------------------------------
 
@@ -66,18 +70,18 @@ extern "C" {
 ** USEFUL CONSTANT DEFINTIONS
 */
 
-#define MVLA_E 2.71828182845
-#define MVLA_PI 3.14159265359
-#define MVLA_2PI 6.28318530718
-#define MVLA_4PI 12.5663706144
+#define MVLA_E      2.71828182845
+#define MVLA_PI     3.14159265359
+#define MVLA_2PI    6.28318530718
+#define MVLA_4PI    12.5663706144
 #define MVLA_HALFPI 1.57079632679
 #define MVLA_SQRTPI 1.77245385091
-#define MVLA_SQRT2 1.41421356237
-#define MVLA_SQRT3 1.73205080757
-#define MVLA_LN2 0.69314718056
-#define MVLA_LN10 2.30258509299
-#define MVLA_LNPI 1.14472988585
-#define MVLA_LOGE 0.43429448190
+#define MVLA_SQRT2  1.41421356237
+#define MVLA_SQRT3  1.73205080757
+#define MVLA_LN2    0.69314718056
+#define MVLA_LN10   2.30258509299
+#define MVLA_LNPI   1.14472988585
+#define MVLA_LOGE   0.43429448190
 
 // -----------------------------------------
 
@@ -1468,344 +1472,344 @@ MVLADEF void v4d_print(v4d_t a);
 
 // -----------------------------------------
 
-MVLADEF float randf() {
+MVLAIMPL float randf() {
   // assume we have seeded srand first to use rand
   return ((float) rand()) /
          ((float) RAND_MAX);
 }
 
-MVLADEF double randd() {
+MVLAIMPL double randd() {
   return ((double) rand()) /
          ((double) RAND_MAX);
 }
 
-MVLADEF float lerpf(float a, float b, float t) {
+MVLAIMPL float lerpf(float a, float b, float t) {
   return a + ((b - a) * t);
 }
 
-MVLADEF double lerpd(double a, double b, double t) {
+MVLAIMPL double lerpd(double a, double b, double t) {
   return a + ((b - a) * t);
 }
 
-MVLADEF signed int mini(signed int a, signed int b) {
+MVLAIMPL signed int mini(signed int a, signed int b) {
   return (a < b) ? a : b;
 }
 
-MVLADEF signed int maxi(signed int a, signed int b) {
+MVLAIMPL signed int maxi(signed int a, signed int b) {
   return (a < b) ? b : a;
 }
 
-MVLADEF unsigned int minu(unsigned int a, unsigned int b) {
+MVLAIMPL unsigned int minu(unsigned int a, unsigned int b) {
   return (a < b) ? a : b;
 }
 
-MVLADEF unsigned int maxu(unsigned int a, unsigned int b) {
+MVLAIMPL unsigned int maxu(unsigned int a, unsigned int b) {
   return (a < b) ? b : a;
 }
 
 // -----------------------------------------
 
-MVLADEF v2i_t v2i(signed int x, signed int y) {
+MVLAIMPL v2i_t v2i(signed int x, signed int y) {
   v2i_t vec;
   vec.x = x;
   vec.y = y;
   return vec;
 }
 
-MVLADEF v2i_t v2ii(signed int x) { 
+MVLAIMPL v2i_t v2ii(signed int x) { 
   return v2i(x, x); 
 }
 
-MVLADEF v2i_t v2i_add(v2i_t a, v2i_t b) {
+MVLAIMPL v2i_t v2i_add(v2i_t a, v2i_t b) {
   a.x += b.x;
   a.y += b.y;
   return a;
 }
 
-MVLADEF v2i_t v2i_sub(v2i_t a, v2i_t b) {
+MVLAIMPL v2i_t v2i_sub(v2i_t a, v2i_t b) {
   a.x -= b.x;
   a.y -= b.y;
   return a;
 }
 
-MVLADEF v2i_t v2i_mul(v2i_t a, v2i_t b) {
+MVLAIMPL v2i_t v2i_mul(v2i_t a, v2i_t b) {
   a.x *= b.x;
   a.y *= b.y;
   return a;
 }
 
-MVLADEF v2i_t v2i_div(v2i_t a, v2i_t b) {
+MVLAIMPL v2i_t v2i_div(v2i_t a, v2i_t b) {
   a.x /= b.x;
   a.y /= b.y;
   return a;
 }
 
-MVLADEF v2i_t v2i_min(v2i_t a, v2i_t b) {
+MVLAIMPL v2i_t v2i_min(v2i_t a, v2i_t b) {
   a.x = mini(a.x, b.x);
   a.y = mini(a.y, b.y);
   return a;
 }
 
-MVLADEF v2i_t v2i_max(v2i_t a, v2i_t b) {
+MVLAIMPL v2i_t v2i_max(v2i_t a, v2i_t b) {
   a.x = maxi(a.x, b.x);
   a.y = maxi(a.y, b.y);
   return a;
 }
 
-MVLADEF void v2i_print(v2i_t a) {
-  printf("v2i_t(%d, %d)\n", V2Args(a));
+MVLAIMPL void v2i_print(v2i_t a) {
+  printf("v2i_t(%d, %d)\n", V2_ARGS(a));
 }
 
-MVLADEF v2u_t v2u(unsigned int x, unsigned int y) {
+MVLAIMPL v2u_t v2u(unsigned int x, unsigned int y) {
   v2u_t vec;
   vec.x = x;
   vec.y = y;
   return vec;
 }
 
-MVLADEF v2u_t v2uu(unsigned int x) { 
+MVLAIMPL v2u_t v2uu(unsigned int x) { 
   return v2u(x, x); 
 }
 
-MVLADEF v2u_t v2u_add(v2u_t a, v2u_t b) {
+MVLAIMPL v2u_t v2u_add(v2u_t a, v2u_t b) {
   a.x += b.x;
   a.y += b.y;
   return a;
 }
 
-MVLADEF v2u_t v2u_sub(v2u_t a, v2u_t b) {
+MVLAIMPL v2u_t v2u_sub(v2u_t a, v2u_t b) {
   a.x -= b.x;
   a.y -= b.y;
   return a;
 }
 
-MVLADEF v2u_t v2u_mul(v2u_t a, v2u_t b) {
+MVLAIMPL v2u_t v2u_mul(v2u_t a, v2u_t b) {
   a.x *= b.x;
   a.y *= b.y;
   return a;
 }
 
-MVLADEF v2u_t v2u_div(v2u_t a, v2u_t b) {
+MVLAIMPL v2u_t v2u_div(v2u_t a, v2u_t b) {
   a.x /= b.x;
   a.y /= b.y;
   return a;
 }
 
-MVLADEF v2u_t v2u_min(v2u_t a, v2u_t b) {
+MVLAIMPL v2u_t v2u_min(v2u_t a, v2u_t b) {
   a.x = minu(a.x, b.x);
   a.y = minu(a.y, b.y);
   return a;
 }
 
-MVLADEF v2u_t v2u_max(v2u_t a, v2u_t b) {
+MVLAIMPL v2u_t v2u_max(v2u_t a, v2u_t b) {
   a.x = maxu(a.x, b.x);
   a.y = maxu(a.y, b.y);
   return a;
 }
 
-MVLADEF void v2u_print(v2u_t a) {
-  printf("v2u_t(%u, %u)\n", V2Args(a));
+MVLAIMPL void v2u_print(v2u_t a) {
+  printf("v2u_t(%u, %u)\n", V2_ARGS(a));
 }
 
-MVLADEF v2f_t v2f(float x, float y) {
+MVLAIMPL v2f_t v2f(float x, float y) {
   v2f_t vec;
   vec.x = x;
   vec.y = y;
   return vec;
 }
 
-MVLADEF v2f_t v2ff(float x) { 
+MVLAIMPL v2f_t v2ff(float x) { 
   return v2f(x, x); 
 }
 
-MVLADEF v2f_t v2f_add(v2f_t a, v2f_t b) {
+MVLAIMPL v2f_t v2f_add(v2f_t a, v2f_t b) {
   a.x += b.x;
   a.y += b.y;
   return a;
 }
 
-MVLADEF v2f_t v2f_sub(v2f_t a, v2f_t b) {
+MVLAIMPL v2f_t v2f_sub(v2f_t a, v2f_t b) {
   a.x -= b.x;
   a.y -= b.y;
   return a;
 }
 
-MVLADEF v2f_t v2f_mul(v2f_t a, v2f_t b) {
+MVLAIMPL v2f_t v2f_mul(v2f_t a, v2f_t b) {
   a.x *= b.x;
   a.y *= b.y;
   return a;
 }
 
-MVLADEF v2f_t v2f_div(v2f_t a, v2f_t b) {
+MVLAIMPL v2f_t v2f_div(v2f_t a, v2f_t b) {
   a.x /= b.x;
   a.y /= b.y;
   return a;
 }
 
-MVLADEF v2f_t v2f_min(v2f_t a, v2f_t b) {
+MVLAIMPL v2f_t v2f_min(v2f_t a, v2f_t b) {
   a.x = fminf(a.x, b.x);
   a.y = fminf(a.y, b.y);
   return a;
 }
 
-MVLADEF v2f_t v2f_max(v2f_t a, v2f_t b) {
+MVLAIMPL v2f_t v2f_max(v2f_t a, v2f_t b) {
   a.x = fmaxf(a.x, b.x);
   a.y = fmaxf(a.y, b.y);
   return a;
 }
 
-MVLADEF v2f_t v2f_sqrt(v2f_t a) {
+MVLAIMPL v2f_t v2f_sqrt(v2f_t a) {
   a.x = sqrtf(a.x);
   a.y = sqrtf(a.y);
   return a;
 }
 
-MVLADEF v2f_t v2f_poww(v2f_t a, float exp) {
+MVLAIMPL v2f_t v2f_poww(v2f_t a, float exp) {
   a.x = powf(a.x, exp);
   a.y = powf(a.y, exp);
   return a;
 }
 
-MVLADEF v2f_t v2f_pow(v2f_t a, v2f_t exp) {
+MVLAIMPL v2f_t v2f_pow(v2f_t a, v2f_t exp) {
   a.x = powf(a.x, exp.x);
   a.y = powf(a.y, exp.y);
   return a;
 }
 
-MVLADEF v2f_t v2f_exp(v2f_t a) {
+MVLAIMPL v2f_t v2f_exp(v2f_t a) {
   a.x = powf(MVLA_E, a.x);
   a.y = powf(MVLA_E, a.y);
   return a;
 }
 
-MVLADEF v2f_t v2f_sin(v2f_t a) {
+MVLAIMPL v2f_t v2f_sin(v2f_t a) {
   a.x = sinf(a.x);
   a.y = sinf(a.y);
   return a;
 }
 
-MVLADEF v2f_t v2f_cos(v2f_t a) {
+MVLAIMPL v2f_t v2f_cos(v2f_t a) {
   a.x = cosf(a.x);
   a.y = cosf(a.y);
   return a;
 }
 
-MVLADEF v2f_t v2f_tan(v2f_t a) {
+MVLAIMPL v2f_t v2f_tan(v2f_t a) {
   a.x = tanf(a.x);
   a.y = tanf(a.y);
   return a;
 }
 
-MVLADEF float v2f_len(v2f_t a) {
+MVLAIMPL float v2f_len(v2f_t a) {
   float sqr = a.x * a.x + a.y * a.y;
   return sqrtf(sqr);
 }
 
-MVLADEF void v2f_print(v2f_t a) {
-  printf("v2f_t(%f, %f)\n", V2Args(a));
+MVLAIMPL void v2f_print(v2f_t a) {
+  printf("v2f_t(%f, %f)\n", V2_ARGS(a));
 }
 
-MVLADEF v2d_t v2d(double x, double y) {
+MVLAIMPL v2d_t v2d(double x, double y) {
   v2d_t vec;
   vec.x = x;
   vec.y = y;
   return vec;
 }
 
-MVLADEF v2d_t v2dd(double x) {
+MVLAIMPL v2d_t v2dd(double x) {
   return v2d(x, x);
 }
 
-MVLADEF v2d_t v2d_add(v2d_t a, v2d_t b) {
+MVLAIMPL v2d_t v2d_add(v2d_t a, v2d_t b) {
   a.x += b.x;
   a.y += b.y;
   return a;
 }
 
-MVLADEF v2d_t v2d_sub(v2d_t a, v2d_t b) {
+MVLAIMPL v2d_t v2d_sub(v2d_t a, v2d_t b) {
   a.x -= b.x;
   a.y -= b.y;
   return a;
 }
 
-MVLADEF v2d_t v2d_mul(v2d_t a, v2d_t b) {
+MVLAIMPL v2d_t v2d_mul(v2d_t a, v2d_t b) {
   a.x *= b.x;
   a.y *= b.y;
   return a;
 }
 
-MVLADEF v2d_t v2d_div(v2d_t a, v2d_t b) {
+MVLAIMPL v2d_t v2d_div(v2d_t a, v2d_t b) {
   a.x /= b.x;
   a.y /= b.y;
   return a;
 }
 
-MVLADEF v2d_t v2d_min(v2d_t a, v2d_t b) {
+MVLAIMPL v2d_t v2d_min(v2d_t a, v2d_t b) {
   a.x = fmin(a.x, b.x);
   a.y = fmin(a.y, b.y);
   return a;
 }
 
-MVLADEF v2d_t v2d_max(v2d_t a, v2d_t b) {
+MVLAIMPL v2d_t v2d_max(v2d_t a, v2d_t b) {
   a.x = fmax(a.x, b.x);
   a.y = fmax(a.y, b.y);
   return a;
 }
 
-MVLADEF v2d_t v2d_sqrt(v2d_t a) {
+MVLAIMPL v2d_t v2d_sqrt(v2d_t a) {
   a.x = sqrt(a.x);
   a.y = sqrt(a.y);
   return a;
 }
 
-MVLADEF v2d_t v2d_poww(v2d_t a, double exp) {
+MVLAIMPL v2d_t v2d_poww(v2d_t a, double exp) {
   a.x = pow(a.x, exp);
   a.y = pow(a.y, exp);
   return a;
 }
 
-MVLADEF v2d_t v2d_pow(v2d_t a, v2d_t exp) {
+MVLAIMPL v2d_t v2d_pow(v2d_t a, v2d_t exp) {
   a.x = pow(a.x, exp.x);
   a.y = pow(a.y, exp.y);
   return a;
 }
 
-MVLADEF v2d_t v2d_exp(v2d_t a) {
+MVLAIMPL v2d_t v2d_exp(v2d_t a) {
   a.x = pow(MVLA_E, a.x);
   a.y = pow(MVLA_E, a.y);
   return a;
 }
 
-MVLADEF v2d_t v2d_sin(v2d_t a) {
+MVLAIMPL v2d_t v2d_sin(v2d_t a) {
   a.x = sin(a.x);
   a.y = sin(a.y);
   return a;
 }
 
-MVLADEF v2d_t v2d_cos(v2d_t a) {
+MVLAIMPL v2d_t v2d_cos(v2d_t a) {
   a.x = cos(a.x);
   a.y = cos(a.y);
   return a;
 }
 
-MVLADEF v2d_t v2d_tan(v2d_t a) {
+MVLAIMPL v2d_t v2d_tan(v2d_t a) {
   a.x = tan(a.x);
   a.y = tan(a.y);
   return a;
 }
 
-MVLADEF double v2d_len(v2d_t a) {
+MVLAIMPL double v2d_len(v2d_t a) {
   double sqr = a.x * a.x + a.y * a.y;
   return sqrt(sqr);
 }
 
-MVLADEF void v2d_print(v2d_t a) {
-  printf("v2d_t(%lf, %lf)\n", V2Args(a));
+MVLAIMPL void v2d_print(v2d_t a) {
+  printf("v2d_t(%lf, %lf)\n", V2_ARGS(a));
 }
 
 // -----------------------------------------
 
-MVLADEF v3i_t v3i(signed int x, signed int y, signed int z) {
+MVLAIMPL v3i_t v3i(signed int x, signed int y, signed int z) {
   v3i_t vec;
   vec.x = x;
   vec.y = y;
@@ -1813,57 +1817,57 @@ MVLADEF v3i_t v3i(signed int x, signed int y, signed int z) {
   return vec;
 }
 
-MVLADEF v3i_t v3ii(signed int x) {
+MVLAIMPL v3i_t v3ii(signed int x) {
   return v3i(x, x, x);
 }
 
-MVLADEF v3i_t v3i_add(v3i_t a, v3i_t b) {
+MVLAIMPL v3i_t v3i_add(v3i_t a, v3i_t b) {
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
   return a;
 }
 
-MVLADEF v3i_t v3i_sub(v3i_t a, v3i_t b) {
+MVLAIMPL v3i_t v3i_sub(v3i_t a, v3i_t b) {
   a.x -= b.x;
   a.y -= b.y;
   a.z -= b.z;
   return a;
 }
 
-MVLADEF v3i_t v3i_mul(v3i_t a, v3i_t b) {
+MVLAIMPL v3i_t v3i_mul(v3i_t a, v3i_t b) {
   a.x *= b.x;
   a.y *= b.y;
   a.z *= b.z;
   return a;
 }
 
-MVLADEF v3i_t v3i_div(v3i_t a, v3i_t b) {
+MVLAIMPL v3i_t v3i_div(v3i_t a, v3i_t b) {
   a.x /= b.x;
   a.y /= b.y;
   a.z /= b.z;
   return a;
 }
 
-MVLADEF v3i_t v3i_min(v3i_t a, v3i_t b) {
+MVLAIMPL v3i_t v3i_min(v3i_t a, v3i_t b) {
   a.x = mini(a.x, b.x);
   a.y = mini(a.y, b.y);
   a.z = mini(a.z, b.z);
   return a;
 }
 
-MVLADEF v3i_t v3i_max(v3i_t a, v3i_t b) {
+MVLAIMPL v3i_t v3i_max(v3i_t a, v3i_t b) {
   a.x = maxi(a.x, b.x);
   a.y = maxi(a.y, b.y);
   a.z = maxi(a.z, b.z);
   return a;
 }
 
-MVLADEF void v3i_print(v3i_t a) {
-  printf("v3i_t(%d, %d, %d)\n", V3Args(a));
+MVLAIMPL void v3i_print(v3i_t a) {
+  printf("v3i_t(%d, %d, %d)\n", V3_ARGS(a));
 }
 
-MVLADEF v3u_t v3u(unsigned int x, unsigned int y, unsigned int z) {
+MVLAIMPL v3u_t v3u(unsigned int x, unsigned int y, unsigned int z) {
   v3u_t vec;
   vec.x = x;
   vec.y = y;
@@ -1871,57 +1875,57 @@ MVLADEF v3u_t v3u(unsigned int x, unsigned int y, unsigned int z) {
   return vec;
 }
 
-MVLADEF v3u_t v3uu(unsigned int x) {
+MVLAIMPL v3u_t v3uu(unsigned int x) {
   return v3u(x, x, x);
 }
 
-MVLADEF v3u_t v3u_add(v3u_t a, v3u_t b) {
+MVLAIMPL v3u_t v3u_add(v3u_t a, v3u_t b) {
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
   return a;
 }
 
-MVLADEF v3u_t v3u_sub(v3u_t a, v3u_t b) {
+MVLAIMPL v3u_t v3u_sub(v3u_t a, v3u_t b) {
   a.x -= b.x;
   a.y -= b.y;
   a.z -= b.z;
   return a;
 }
 
-MVLADEF v3u_t v3u_mul(v3u_t a, v3u_t b) {
+MVLAIMPL v3u_t v3u_mul(v3u_t a, v3u_t b) {
   a.x *= b.x;
   a.y *= b.y;
   a.z *= b.z;
   return a;
 }
 
-MVLADEF v3u_t v3u_div(v3u_t a, v3u_t b) {
+MVLAIMPL v3u_t v3u_div(v3u_t a, v3u_t b) {
   a.x /= b.x;
   a.y /= b.y;
   a.z /= b.z;
   return a;
 }
 
-MVLADEF v3u_t v3u_min(v3u_t a, v3u_t b) {
+MVLAIMPL v3u_t v3u_min(v3u_t a, v3u_t b) {
   a.x = minu(a.x, b.x);
   a.y = minu(a.y, b.y);
   a.z = minu(a.z, b.z);
   return a;
 }
 
-MVLADEF v3u_t v3u_max(v3u_t a, v3u_t b) {
+MVLAIMPL v3u_t v3u_max(v3u_t a, v3u_t b) {
   a.x = maxu(a.x, b.x);
   a.y = maxu(a.y, b.y);
   a.z = maxu(a.z, b.z);
   return a;
 }
 
-MVLADEF void v3u_print(v3u_t a) {
-  printf("v3u_t(%u, %u, %u)\n", V3Args(a));
+MVLAIMPL void v3u_print(v3u_t a) {
+  printf("v3u_t(%u, %u, %u)\n", V3_ARGS(a));
 }
 
-MVLADEF v3f_t v3f(float x, float y, float z) {
+MVLAIMPL v3f_t v3f(float x, float y, float z) {
   v3f_t vec;
   vec.x = x;
   vec.y = y;
@@ -1929,111 +1933,111 @@ MVLADEF v3f_t v3f(float x, float y, float z) {
   return vec;
 }
 
-MVLADEF v3f_t v3ff(float x) {
+MVLAIMPL v3f_t v3ff(float x) {
   return v3f(x, x, x);
 }
 
-MVLADEF v3f_t v3f_add(v3f_t a, v3f_t b) {
+MVLAIMPL v3f_t v3f_add(v3f_t a, v3f_t b) {
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
   return a;
 }
 
-MVLADEF v3f_t v3f_sub(v3f_t a, v3f_t b) {
+MVLAIMPL v3f_t v3f_sub(v3f_t a, v3f_t b) {
   a.x -= b.x;
   a.y -= b.y;
   a.z -= b.z;
   return a;
 }
 
-MVLADEF v3f_t v3f_mul(v3f_t a, v3f_t b) {
+MVLAIMPL v3f_t v3f_mul(v3f_t a, v3f_t b) {
   a.x *= b.x;
   a.y *= b.y;
   a.z *= b.z;
   return a;
 }
 
-MVLADEF v3f_t v3f_div(v3f_t a, v3f_t b) {
+MVLAIMPL v3f_t v3f_div(v3f_t a, v3f_t b) {
   a.x /= b.x;
   a.y /= b.y;
   a.z /= b.z;
   return a;
 }
 
-MVLADEF v3f_t v3f_min(v3f_t a, v3f_t b) {
+MVLAIMPL v3f_t v3f_min(v3f_t a, v3f_t b) {
   a.x = fminf(a.x, b.x);
   a.y = fminf(a.y, b.y);
   a.z = fminf(a.z, b.z);
   return a;
 }
 
-MVLADEF v3f_t v3fMax(v3f_t a, v3f_t b) {
+MVLAIMPL v3f_t v3fMax(v3f_t a, v3f_t b) {
   a.x = fmaxf(a.x, b.x);
   a.y = fmaxf(a.y, b.y);
   a.z = fmaxf(a.z, b.z);
   return a;
 }
 
-MVLADEF v3f_t v3f_sqrt(v3f_t a) {
+MVLAIMPL v3f_t v3f_sqrt(v3f_t a) {
   a.x = sqrtf(a.x);
   a.y = sqrtf(a.y);
   a.z = sqrtf(a.z);
   return a;
 }
 
-MVLADEF v3f_t v3f_poww(v3f_t a, float exp) {
+MVLAIMPL v3f_t v3f_poww(v3f_t a, float exp) {
   a.x = powf(a.x, exp);
   a.y = powf(a.y, exp);
   a.z = powf(a.z, exp);
   return a;
 }
 
-MVLADEF v3f_t v3f_pow(v3f_t a, v3f_t exp) {
+MVLAIMPL v3f_t v3f_pow(v3f_t a, v3f_t exp) {
   a.x = powf(a.x, exp.x);
   a.y = powf(a.y, exp.y);
   a.z = powf(a.z, exp.z);
   return a;
 }
 
-MVLADEF v3f_t v3f_exp(v3f_t a) {
+MVLAIMPL v3f_t v3f_exp(v3f_t a) {
   a.x = powf(MVLA_E, a.x);
   a.y = powf(MVLA_E, a.y);
   a.z = powf(MVLA_E, a.z);
   return a;
 }
 
-MVLADEF v3f_t v3f_sin(v3f_t a) {
+MVLAIMPL v3f_t v3f_sin(v3f_t a) {
   a.x = sinf(a.x);
   a.y = sinf(a.y);
   a.z = sinf(a.z);
   return a;
 }
 
-MVLADEF v3f_t v3f_cos(v3f_t a) {
+MVLAIMPL v3f_t v3f_cos(v3f_t a) {
   a.x = cosf(a.x);
   a.y = cosf(a.y);
   a.z = cosf(a.z);
   return a;
 }
 
-MVLADEF v3f_t v3f_tan(v3f_t a) {
+MVLAIMPL v3f_t v3f_tan(v3f_t a) {
   a.x = tanf(a.x);
   a.y = tanf(a.y);
   a.z = tanf(a.z);
   return a;
 }
 
-MVLADEF float v3f_len(v3f_t a) {
+MVLAIMPL float v3f_len(v3f_t a) {
   float sqr = a.x * a.x + a.y * a.y + a.z * a.z;
   return sqrtf(sqr);
 }
 
-MVLADEF void v3f_print(v3f_t a) {
-  printf("v3f_t(%f, %f, %f)\n", V3Args(a));
+MVLAIMPL void v3f_print(v3f_t a) {
+  printf("v3f_t(%f, %f, %f)\n", V3_ARGS(a));
 }
 
-MVLADEF v3d_t v3d(double x, double y, double z) {
+MVLAIMPL v3d_t v3d(double x, double y, double z) {
   v3d_t vec;
   vec.x = x;
   vec.y = y;
@@ -2041,113 +2045,113 @@ MVLADEF v3d_t v3d(double x, double y, double z) {
   return vec;
 }
 
-MVLADEF v3d_t v3dd(double x) {
+MVLAIMPL v3d_t v3dd(double x) {
   return v3d(x, x, x);
 }
 
-MVLADEF v3d_t v3d_add(v3d_t a, v3d_t b) {
+MVLAIMPL v3d_t v3d_add(v3d_t a, v3d_t b) {
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
   return a;
 }
 
-MVLADEF v3d_t v3d_sub(v3d_t a, v3d_t b) {
+MVLAIMPL v3d_t v3d_sub(v3d_t a, v3d_t b) {
   a.x -= b.x;
   a.y -= b.y;
   a.z -= b.z;
   return a;
 }
 
-MVLADEF v3d_t v3d_mul(v3d_t a, v3d_t b) {
+MVLAIMPL v3d_t v3d_mul(v3d_t a, v3d_t b) {
   a.x *= b.x;
   a.y *= b.y;
   a.z *= b.z;
   return a;
 }
 
-MVLADEF v3d_t v3d_div(v3d_t a, v3d_t b) {
+MVLAIMPL v3d_t v3d_div(v3d_t a, v3d_t b) {
   a.x /= b.x;
   a.y /= b.y;
   a.z /= b.z;
   return a;
 }
 
-MVLADEF v3d_t v3d_min(v3d_t a, v3d_t b) {
+MVLAIMPL v3d_t v3d_min(v3d_t a, v3d_t b) {
   a.x = fmin(a.x, b.x);
   a.y = fmin(a.y, b.y);
   a.z = fmin(a.z, b.z);
   return a;
 }
 
-MVLADEF v3d_t v3d_max(v3d_t a, v3d_t b) {
+MVLAIMPL v3d_t v3d_max(v3d_t a, v3d_t b) {
   a.x = fmax(a.x, b.x);
   a.y = fmax(a.y, b.y);
   a.z = fmax(a.z, b.z);
   return a;
 }
 
-MVLADEF v3d_t v3d_sqrt(v3d_t a) {
+MVLAIMPL v3d_t v3d_sqrt(v3d_t a) {
   a.x = sqrt(a.x);
   a.y = sqrt(a.y);
   a.z = sqrt(a.z);
   return a;
 }
 
-MVLADEF v3d_t v3d_poww(v3d_t a, double exp) {
+MVLAIMPL v3d_t v3d_poww(v3d_t a, double exp) {
   a.x = pow(a.x, exp);
   a.y = pow(a.y, exp);
   a.z = pow(a.z, exp);
   return a;
 }
 
-MVLADEF v3d_t v3d_pow(v3d_t a, v3d_t exp) {
+MVLAIMPL v3d_t v3d_pow(v3d_t a, v3d_t exp) {
   a.x = pow(a.x, exp.x);
   a.y = pow(a.y, exp.y);
   a.z = pow(a.z, exp.z);
   return a;
 }
 
-MVLADEF v3d_t v3d_exp(v3d_t a) {
+MVLAIMPL v3d_t v3d_exp(v3d_t a) {
   a.x = pow(MVLA_E, a.x);
   a.y = pow(MVLA_E, a.y);
   a.z = pow(MVLA_E, a.z);
   return a;
 }
 
-MVLADEF v3d_t v3d_sin(v3d_t a) {
+MVLAIMPL v3d_t v3d_sin(v3d_t a) {
   a.x = sin(a.x);
   a.y = sin(a.y);
   a.z = sin(a.z);
   return a;
 }
 
-MVLADEF v3d_t v3d_cos(v3d_t a) {
+MVLAIMPL v3d_t v3d_cos(v3d_t a) {
   a.x = cos(a.x);
   a.y = cos(a.y);
   a.z = cos(a.z);
   return a;
 }
 
-MVLADEF v3d_t v3d_tan(v3d_t a) {
+MVLAIMPL v3d_t v3d_tan(v3d_t a) {
   a.x = tan(a.x);
   a.y = tan(a.y);
   a.z = tan(a.z);
   return a;
 }
 
-MVLADEF double v3d_len(v3d_t a) {
+MVLAIMPL double v3d_len(v3d_t a) {
   double sqr = a.x * a.x + a.y * a.y + a.z * a.z;
   return sqrt(sqr);
 }
 
-MVLADEF void v3d_print(v3d_t a) {
-  printf("v3d_t(%lf, %lf, %lf)\n", V3Args(a));
+MVLAIMPL void v3d_print(v3d_t a) {
+  printf("v3d_t(%lf, %lf, %lf)\n", V3_ARGS(a));
 }
 
 // -----------------------------------------
 
-MVLADEF v4i_t v4i(signed int x, signed int y, signed int z, signed int w) {
+MVLAIMPL v4i_t v4i(signed int x, signed int y, signed int z, signed int w) {
   v4i_t vec;
   vec.x = x;
   vec.y = y;
@@ -2156,11 +2160,11 @@ MVLADEF v4i_t v4i(signed int x, signed int y, signed int z, signed int w) {
   return vec;
 }
 
-MVLADEF v4i_t v4ii(signed int x) {
+MVLAIMPL v4i_t v4ii(signed int x) {
   return v4i(x, x, x, x);
 }
 
-MVLADEF v4i_t v4i_add(v4i_t a, v4i_t b) {
+MVLAIMPL v4i_t v4i_add(v4i_t a, v4i_t b) {
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
@@ -2168,7 +2172,7 @@ MVLADEF v4i_t v4i_add(v4i_t a, v4i_t b) {
   return a;
 }
 
-MVLADEF v4i_t v4i_sub(v4i_t a, v4i_t b) {
+MVLAIMPL v4i_t v4i_sub(v4i_t a, v4i_t b) {
   a.x -= b.x;
   a.y -= b.y;
   a.z -= b.z;
@@ -2176,7 +2180,7 @@ MVLADEF v4i_t v4i_sub(v4i_t a, v4i_t b) {
   return a;
 }
 
-MVLADEF v4i_t v4i_mul(v4i_t a, v4i_t b) {
+MVLAIMPL v4i_t v4i_mul(v4i_t a, v4i_t b) {
   a.x *= b.x;
   a.y *= b.y;
   a.z *= b.z;
@@ -2184,7 +2188,7 @@ MVLADEF v4i_t v4i_mul(v4i_t a, v4i_t b) {
   return a;
 }
 
-MVLADEF v4i_t v4i_div(v4i_t a, v4i_t b) {
+MVLAIMPL v4i_t v4i_div(v4i_t a, v4i_t b) {
   a.x /= b.x;
   a.y /= b.y;
   a.z /= b.z;
@@ -2192,7 +2196,7 @@ MVLADEF v4i_t v4i_div(v4i_t a, v4i_t b) {
   return a;
 }
 
-MVLADEF v4i_t v4i_min(v4i_t a, v4i_t b) {
+MVLAIMPL v4i_t v4i_min(v4i_t a, v4i_t b) {
   a.x = mini(a.x, b.x);
   a.y = mini(a.y, b.y);
   a.z = mini(a.z, b.z);
@@ -2200,7 +2204,7 @@ MVLADEF v4i_t v4i_min(v4i_t a, v4i_t b) {
   return a;
 }
 
-MVLADEF v4i_t v4i_max(v4i_t a, v4i_t b) {
+MVLAIMPL v4i_t v4i_max(v4i_t a, v4i_t b) {
   a.x = maxi(a.x, b.x);
   a.y = maxi(a.y, b.y);
   a.z = maxi(a.z, b.z);
@@ -2208,11 +2212,11 @@ MVLADEF v4i_t v4i_max(v4i_t a, v4i_t b) {
   return a;
 }
 
-MVLADEF void v4i_print(v4i_t a) {
-  printf("v4i_t(%d, %d, %d, %d)\n", V4Args(a));
+MVLAIMPL void v4i_print(v4i_t a) {
+  printf("v4i_t(%d, %d, %d, %d)\n", V4_ARGS(a));
 }
 
-MVLADEF v4u_t v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w) {
+MVLAIMPL v4u_t v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w) {
   v4u_t vec;
   vec.x = x;
   vec.y = y;
@@ -2221,11 +2225,11 @@ MVLADEF v4u_t v4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w
   return vec;
 }
 
-MVLADEF v4u_t v4uu(unsigned int x) {
+MVLAIMPL v4u_t v4uu(unsigned int x) {
   return v4u(x, x, x, x);
 }
 
-MVLADEF v4u_t v4u_add(v4u_t a, v4u_t b) {
+MVLAIMPL v4u_t v4u_add(v4u_t a, v4u_t b) {
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
@@ -2233,7 +2237,7 @@ MVLADEF v4u_t v4u_add(v4u_t a, v4u_t b) {
   return a;
 }
 
-MVLADEF v4u_t v4u_sub(v4u_t a, v4u_t b) {
+MVLAIMPL v4u_t v4u_sub(v4u_t a, v4u_t b) {
   a.x -= b.x;
   a.y -= b.y;
   a.z -= b.z;
@@ -2241,7 +2245,7 @@ MVLADEF v4u_t v4u_sub(v4u_t a, v4u_t b) {
   return a;
 }
 
-MVLADEF v4u_t v4u_mul(v4u_t a, v4u_t b) {
+MVLAIMPL v4u_t v4u_mul(v4u_t a, v4u_t b) {
   a.x *= b.x;
   a.y *= b.y;
   a.z *= b.z;
@@ -2249,7 +2253,7 @@ MVLADEF v4u_t v4u_mul(v4u_t a, v4u_t b) {
   return a;
 }
 
-MVLADEF v4u_t v4u_div(v4u_t a, v4u_t b) {
+MVLAIMPL v4u_t v4u_div(v4u_t a, v4u_t b) {
   a.x /= b.x;
   a.y /= b.y;
   a.z /= b.z;
@@ -2257,7 +2261,7 @@ MVLADEF v4u_t v4u_div(v4u_t a, v4u_t b) {
   return a;
 }
 
-MVLADEF v4u_t v4u_min(v4u_t a, v4u_t b) {
+MVLAIMPL v4u_t v4u_min(v4u_t a, v4u_t b) {
   a.x = minu(a.x, b.x);
   a.y = minu(a.y, b.y);
   a.z = minu(a.z, b.z);
@@ -2265,7 +2269,7 @@ MVLADEF v4u_t v4u_min(v4u_t a, v4u_t b) {
   return a;
 }
 
-MVLADEF v4u_t v4u_max(v4u_t a, v4u_t b) {
+MVLAIMPL v4u_t v4u_max(v4u_t a, v4u_t b) {
   a.x = maxu(a.x, b.x);
   a.y = maxu(a.y, b.y);
   a.z = maxu(a.z, b.z);
@@ -2273,11 +2277,11 @@ MVLADEF v4u_t v4u_max(v4u_t a, v4u_t b) {
   return a;
 }
 
-MVLADEF void v4u_print(v4u_t a) {
-  printf("v4u_t(%u, %u, %u, %u)\n", V4Args(a));
+MVLAIMPL void v4u_print(v4u_t a) {
+  printf("v4u_t(%u, %u, %u, %u)\n", V4_ARGS(a));
 }
 
-MVLADEF v4f_t v4f(float x, float y, float z, float w) {
+MVLAIMPL v4f_t v4f(float x, float y, float z, float w) {
   v4f_t vec;
   vec.x = x;
   vec.y = y;
@@ -2286,9 +2290,9 @@ MVLADEF v4f_t v4f(float x, float y, float z, float w) {
   return vec;
 }
 
-MVLADEF v4f_t v4ff(float x) { return v4f(x, x, x, x); }
+MVLAIMPL v4f_t v4ff(float x) { return v4f(x, x, x, x); }
 
-MVLADEF v4f_t v4f_add(v4f_t a, v4f_t b) {
+MVLAIMPL v4f_t v4f_add(v4f_t a, v4f_t b) {
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
@@ -2296,7 +2300,7 @@ MVLADEF v4f_t v4f_add(v4f_t a, v4f_t b) {
   return a;
 }
 
-MVLADEF v4f_t v4f_sub(v4f_t a, v4f_t b) {
+MVLAIMPL v4f_t v4f_sub(v4f_t a, v4f_t b) {
   a.x -= b.x;
   a.y -= b.y;
   a.z -= b.z;
@@ -2304,7 +2308,7 @@ MVLADEF v4f_t v4f_sub(v4f_t a, v4f_t b) {
   return a;
 }
 
-MVLADEF v4f_t v4f_mul(v4f_t a, v4f_t b) {
+MVLAIMPL v4f_t v4f_mul(v4f_t a, v4f_t b) {
   a.x *= b.x;
   a.y *= b.y;
   a.z *= b.z;
@@ -2312,7 +2316,7 @@ MVLADEF v4f_t v4f_mul(v4f_t a, v4f_t b) {
   return a;
 }
 
-MVLADEF v4f_t v4f_div(v4f_t a, v4f_t b) {
+MVLAIMPL v4f_t v4f_div(v4f_t a, v4f_t b) {
   a.x /= b.x;
   a.y /= b.y;
   a.z /= b.z;
@@ -2320,7 +2324,7 @@ MVLADEF v4f_t v4f_div(v4f_t a, v4f_t b) {
   return a;
 }
 
-MVLADEF v4f_t v4f_min(v4f_t a, v4f_t b) {
+MVLAIMPL v4f_t v4f_min(v4f_t a, v4f_t b) {
   a.x = fmin(a.x, b.x);
   a.y = fmin(a.y, b.y);
   a.z = fmin(a.z, b.z);
@@ -2328,7 +2332,7 @@ MVLADEF v4f_t v4f_min(v4f_t a, v4f_t b) {
   return a;
 }
 
-MVLADEF v4f_t v4f_max(v4f_t a, v4f_t b) {
+MVLAIMPL v4f_t v4f_max(v4f_t a, v4f_t b) {
   a.x = fmax(a.x, b.x);
   a.y = fmax(a.y, b.y);
   a.z = fmax(a.z, b.z);
@@ -2336,7 +2340,7 @@ MVLADEF v4f_t v4f_max(v4f_t a, v4f_t b) {
   return a;
 }
 
-MVLADEF v4f_t v4f_sqrt(v4f_t a) {
+MVLAIMPL v4f_t v4f_sqrt(v4f_t a) {
   a.x = sqrtf(a.x);
   a.y = sqrtf(a.y);
   a.z = sqrtf(a.z);
@@ -2344,7 +2348,7 @@ MVLADEF v4f_t v4f_sqrt(v4f_t a) {
   return a;
 }
 
-MVLADEF v4f_t v4f_poww(v4f_t a, float exp) {
+MVLAIMPL v4f_t v4f_poww(v4f_t a, float exp) {
   a.x = powf(a.x, exp);
   a.y = powf(a.y, exp);
   a.z = powf(a.z, exp);
@@ -2352,7 +2356,7 @@ MVLADEF v4f_t v4f_poww(v4f_t a, float exp) {
   return a;
 }
 
-MVLADEF v4f_t v4f_pow(v4f_t a, v4f_t exp) {
+MVLAIMPL v4f_t v4f_pow(v4f_t a, v4f_t exp) {
   a.x = powf(a.x, exp.x);
   a.y = powf(a.y, exp.y);
   a.z = powf(a.z, exp.z);
@@ -2360,7 +2364,7 @@ MVLADEF v4f_t v4f_pow(v4f_t a, v4f_t exp) {
   return a;
 }
 
-MVLADEF v4f_t v4f_exp(v4f_t a) {
+MVLAIMPL v4f_t v4f_exp(v4f_t a) {
   a.x = powf(MVLA_E, a.x);
   a.y = powf(MVLA_E, a.y);
   a.z = powf(MVLA_E, a.z);
@@ -2368,7 +2372,7 @@ MVLADEF v4f_t v4f_exp(v4f_t a) {
   return a;
 }
 
-MVLADEF v4f_t v4f_sin(v4f_t a) {
+MVLAIMPL v4f_t v4f_sin(v4f_t a) {
   a.x = sinf(a.x);
   a.y = sinf(a.y);
   a.z = sinf(a.z);
@@ -2376,7 +2380,7 @@ MVLADEF v4f_t v4f_sin(v4f_t a) {
   return a;
 }
 
-MVLADEF v4f_t v4f_cos(v4f_t a) {
+MVLAIMPL v4f_t v4f_cos(v4f_t a) {
   a.x = cosf(a.x);
   a.y = cosf(a.y);
   a.z = cosf(a.z);
@@ -2384,7 +2388,7 @@ MVLADEF v4f_t v4f_cos(v4f_t a) {
   return a;
 }
 
-MVLADEF v4f_t v4f_tan(v4f_t a) {
+MVLAIMPL v4f_t v4f_tan(v4f_t a) {
   a.x = tanf(a.x);
   a.y = tanf(a.y);
   a.z = tanf(a.z);
@@ -2392,16 +2396,16 @@ MVLADEF v4f_t v4f_tan(v4f_t a) {
   return a;
 }
 
-MVLADEF float v4f_len(v4f_t a) {
+MVLAIMPL float v4f_len(v4f_t a) {
   float sqr = a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
   return sqrtf(sqr);
 }
 
-MVLADEF void v4f_print(v4f_t a) {
-  printf("v4f_t(%f, %f, %f, %f)\n", V4Args(a));
+MVLAIMPL void v4f_print(v4f_t a) {
+  printf("v4f_t(%f, %f, %f, %f)\n", V4_ARGS(a));
 }
 
-MVLADEF v4d_t v4d(double x, double y, double z, double w) {
+MVLAIMPL v4d_t v4d(double x, double y, double z, double w) {
   v4d_t vec;
   vec.x = x;
   vec.y = y;
@@ -2410,11 +2414,11 @@ MVLADEF v4d_t v4d(double x, double y, double z, double w) {
   return vec;
 }
 
-MVLADEF v4d_t v4dd(double x) {
+MVLAIMPL v4d_t v4dd(double x) {
   return v4d(x, x, x, x);
 }
 
-MVLADEF v4d_t v4d_add(v4d_t a, v4d_t b) {
+MVLAIMPL v4d_t v4d_add(v4d_t a, v4d_t b) {
   a.x += b.x;
   a.y += b.y;
   a.z += b.z;
@@ -2422,7 +2426,7 @@ MVLADEF v4d_t v4d_add(v4d_t a, v4d_t b) {
   return a;
 }
 
-MVLADEF v4d_t v4d_sub(v4d_t a, v4d_t b) {
+MVLAIMPL v4d_t v4d_sub(v4d_t a, v4d_t b) {
   a.x -= b.x;
   a.y -= b.y;
   a.z -= b.z;
@@ -2430,7 +2434,7 @@ MVLADEF v4d_t v4d_sub(v4d_t a, v4d_t b) {
   return a;
 }
 
-MVLADEF v4d_t v4d_mul(v4d_t a, v4d_t b) {
+MVLAIMPL v4d_t v4d_mul(v4d_t a, v4d_t b) {
   a.x *= b.x;
   a.y *= b.y;
   a.z *= b.z;
@@ -2438,7 +2442,7 @@ MVLADEF v4d_t v4d_mul(v4d_t a, v4d_t b) {
   return a;
 }
 
-MVLADEF v4d_t v4d_div(v4d_t a, v4d_t b) {
+MVLAIMPL v4d_t v4d_div(v4d_t a, v4d_t b) {
   a.x /= b.x;
   a.y /= b.y;
   a.z /= b.z;
@@ -2446,7 +2450,7 @@ MVLADEF v4d_t v4d_div(v4d_t a, v4d_t b) {
   return a;
 }
 
-MVLADEF v4d_t v4d_min(v4d_t a, v4d_t b) {
+MVLAIMPL v4d_t v4d_min(v4d_t a, v4d_t b) {
   a.x = fmin(a.x, b.x);
   a.y = fmin(a.y, b.y);
   a.z = fmin(a.z, b.z);
@@ -2454,7 +2458,7 @@ MVLADEF v4d_t v4d_min(v4d_t a, v4d_t b) {
   return a;
 }
 
-MVLADEF v4d_t v4d_max(v4d_t a, v4d_t b) {
+MVLAIMPL v4d_t v4d_max(v4d_t a, v4d_t b) {
   a.x = fmax(a.x, b.x);
   a.y = fmax(a.y, b.y);
   a.z = fmax(a.z, b.z);
@@ -2462,7 +2466,7 @@ MVLADEF v4d_t v4d_max(v4d_t a, v4d_t b) {
   return a;
 }
 
-MVLADEF v4d_t v4d_sqrt(v4d_t a) {
+MVLAIMPL v4d_t v4d_sqrt(v4d_t a) {
   a.x = sqrt(a.x);
   a.y = sqrt(a.y);
   a.z = sqrt(a.z);
@@ -2470,7 +2474,7 @@ MVLADEF v4d_t v4d_sqrt(v4d_t a) {
   return a;
 }
 
-MVLADEF v4d_t v4d_poww(v4d_t a, double exp) {
+MVLAIMPL v4d_t v4d_poww(v4d_t a, double exp) {
   a.x = pow(a.x, exp);
   a.y = pow(a.y, exp);
   a.z = pow(a.z, exp);
@@ -2478,7 +2482,7 @@ MVLADEF v4d_t v4d_poww(v4d_t a, double exp) {
   return a;
 }
 
-MVLADEF v4d_t v4d_pow(v4d_t a, v4d_t exp) {
+MVLAIMPL v4d_t v4d_pow(v4d_t a, v4d_t exp) {
   a.x = pow(a.x, exp.x);
   a.y = pow(a.y, exp.y);
   a.z = pow(a.z, exp.z);
@@ -2486,7 +2490,7 @@ MVLADEF v4d_t v4d_pow(v4d_t a, v4d_t exp) {
   return a;
 }
 
-MVLADEF v4d_t v4d_exp(v4d_t a) {
+MVLAIMPL v4d_t v4d_exp(v4d_t a) {
   a.x = pow(MVLA_E, a.x);
   a.y = pow(MVLA_E, a.y);
   a.z = pow(MVLA_E, a.z);
@@ -2494,7 +2498,7 @@ MVLADEF v4d_t v4d_exp(v4d_t a) {
   return a;
 }
 
-MVLADEF v4d_t v4d_sin(v4d_t a) {
+MVLAIMPL v4d_t v4d_sin(v4d_t a) {
   a.x = sin(a.x);
   a.y = sin(a.y);
   a.z = sin(a.z);
@@ -2502,7 +2506,7 @@ MVLADEF v4d_t v4d_sin(v4d_t a) {
   return a;
 }
 
-MVLADEF v4d_t v4d_cos(v4d_t a) {
+MVLAIMPL v4d_t v4d_cos(v4d_t a) {
   a.x = cos(a.x);
   a.y = cos(a.y);
   a.z = cos(a.z);
@@ -2510,7 +2514,7 @@ MVLADEF v4d_t v4d_cos(v4d_t a) {
   return a;
 }
 
-MVLADEF v4d_t v4d_tan(v4d_t a) {
+MVLAIMPL v4d_t v4d_tan(v4d_t a) {
   a.x = tan(a.x);
   a.y = tan(a.y);
   a.z = tan(a.z);
@@ -2518,13 +2522,13 @@ MVLADEF v4d_t v4d_tan(v4d_t a) {
   return a;
 }
 
-MVLADEF double v4d_len(v4d_t a) {
+MVLAIMPL double v4d_len(v4d_t a) {
   double sqr = a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
   return sqrt(sqr);
 }
 
-MVLADEF void v4d_print(v4d_t a) {
-  printf("v4d_t(%lf, %lf, %lf, %lf)\n", V4Args(a));
+MVLAIMPL void v4d_print(v4d_t a) {
+  printf("v4d_t(%lf, %lf, %lf, %lf)\n", V4_ARGS(a));
 }
 
 // -----------------------------------------
