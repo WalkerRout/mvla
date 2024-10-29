@@ -21,7 +21,7 @@ bool approxd(double x, double y) {
   return fabs(x - y) < EPSILOND;
 }
 
-void test_v2i() {
+void test_v2i(void) {
   // v2i
   v2i_t veca = v2i(3, 4);
   ALWAYS_ASSERT(veca.x == 3);
@@ -63,7 +63,7 @@ void test_v2i() {
   ALWAYS_ASSERT(vec_max.y == 5);
 }
 
-void test_v2u() {
+void test_v2u(void) {
   // v2u
   v2u_t veca = v2u(3, 4);
   ALWAYS_ASSERT(veca.x == 3);
@@ -105,7 +105,7 @@ void test_v2u() {
   ALWAYS_ASSERT(vec_max.y == 5);
 }
 
-void test_v2f() {
+void test_v2f(void) {
   // v2f
   v2f_t veca = v2f(3.5f, 4.5f);
   ALWAYS_ASSERT(approxf(veca.x, 3.5f));
@@ -186,7 +186,7 @@ void test_v2f() {
   ALWAYS_ASSERT(approxf(vec_len, 5.0f));
 }
 
-void test_v2d() {
+void test_v2d(void) {
   // v2d
   v2d_t veca = v2d(3.5, 4.5);
   ALWAYS_ASSERT(approxd(veca.x, 3.5));
@@ -267,14 +267,14 @@ void test_v2d() {
   ALWAYS_ASSERT(approxd(vec_len, 5.0));
 }
 
-void test_v2() {
+void test_v2(void) {
   test_v2i();
   test_v2u();
   test_v2f();
   test_v2d();
 }
 
-void test_v3i() {
+void test_v3i(void) {
   // v3i
   v3i_t veca = v3i(3, 4, 5);
   ALWAYS_ASSERT(veca.x == 3);
@@ -324,7 +324,7 @@ void test_v3i() {
   ALWAYS_ASSERT(vec_max.z == 7);
 }
 
-void test_v3u() {
+void test_v3u(void) {
   // v3u
   v3u_t veca = v3u(3, 4, 5);
   ALWAYS_ASSERT(veca.x == 3);
@@ -374,7 +374,7 @@ void test_v3u() {
   ALWAYS_ASSERT(vec_max.z == 7);
 }
 
-void test_v3f() {
+void test_v3f(void) {
   // v3f
   v3f_t veca = v3f(3.5f, 4.5f, 5.5f);
   ALWAYS_ASSERT(approxf(veca.x, 3.5f));
@@ -470,7 +470,7 @@ void test_v3f() {
   ALWAYS_ASSERT(approxf(length, 13.0f));
 }
 
-void test_v3d() {
+void test_v3d(void) {
   // v3d
   v3d_t veca = v3d(3.5, 4.5, 5.5);
   ALWAYS_ASSERT(approxd(veca.x, 3.5));
@@ -566,14 +566,14 @@ void test_v3d() {
   ALWAYS_ASSERT(approxd(length, 13.0));
 }
 
-void test_v3() {
+void test_v3(void) {
   test_v3i();
   test_v3u();
   test_v3f();
   test_v3d();
 }
 
-void test_v4i() {
+void test_v4i(void) {
   // v4i
   v4i_t veca = v4i(3, 4, 5, 6);
   ALWAYS_ASSERT(veca.x == 3);
@@ -631,7 +631,7 @@ void test_v4i() {
   ALWAYS_ASSERT(vec_max.w == 7);
 }
 
-void test_v4u() {
+void test_v4u(void) {
   // v4u
   v4u_t veca = v4u(3, 4, 5, 6);
   ALWAYS_ASSERT(veca.x == 3);
@@ -689,7 +689,7 @@ void test_v4u() {
   ALWAYS_ASSERT(vec_max.w == 7);
 }
 
-void test_v4f() {
+void test_v4f(void) {
   // v4f
   v4f_t veca = v4f(1.0f, 2.0f, 3.0f, 4.0f);
   ALWAYS_ASSERT(approxf(veca.x, 1.0f));
@@ -800,7 +800,7 @@ void test_v4f() {
   ALWAYS_ASSERT(approxf(vec_len, 2.0f));
 }
 
-void test_v4d() {
+void test_v4d(void) {
   // v4d
   v4d_t veca = v4d(1.0, 2.0, 3.0, 4.0);
   ALWAYS_ASSERT(approxd(veca.x, 1.0));
@@ -911,7 +911,7 @@ void test_v4d() {
   ALWAYS_ASSERT(approxd(vec_len, 2.0));
 }
 
-void test_v4() {
+void test_v4(void) {
   test_v4i();
   test_v4u();
   test_v4f();
