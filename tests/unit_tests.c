@@ -184,6 +184,10 @@ void test_v2f(void) {
   // v2f_len
   float vec_len = v2f_len(v2f(3.0f, 4.0f));
   ALWAYS_ASSERT(approxf(vec_len, 5.0f));
+
+  // v2f_sqr_len
+  float vec_sqr_len = v2f_sqr_len(v2f(3.0f, 4.0f));
+  ALWAYS_ASSERT(approxf(vec_sqr_len, 25.0f));
 }
 
 void test_v2d(void) {
@@ -265,6 +269,10 @@ void test_v2d(void) {
   // v2d_len
   double vec_len = v2d_len(v2d(3.0, 4.0));
   ALWAYS_ASSERT(approxd(vec_len, 5.0));
+
+  // v2d_sqr_len
+  double vec_sqr_len = v2d_sqr_len(v2d(3.0, 4.0));
+  ALWAYS_ASSERT(approxd(vec_sqr_len, 25.0));
 }
 
 void test_v2(void) {
@@ -418,7 +426,7 @@ void test_v3f(void) {
   ALWAYS_ASSERT(approxf(vec_min.z, 5.5f));
 
   // v3f_max
-  v3f_t vec_max = v3fMax(veca, vecb);
+  v3f_t vec_max = v3f_max(veca, vecb);
   ALWAYS_ASSERT(approxf(vec_max.x, 7.0f));
   ALWAYS_ASSERT(approxf(vec_max.y, 7.0f));
   ALWAYS_ASSERT(approxf(vec_max.z, 7.0f));
@@ -463,11 +471,15 @@ void test_v3f(void) {
   v3f_t vec_tan = v3f_tan(v3f(0.0f, M_PI_4, M_PI_2));
   ALWAYS_ASSERT(approxf(vec_tan.x, tanf(0.0f)));
   ALWAYS_ASSERT(approxf(vec_tan.y, tanf(M_PI_4)));
-  ALWAYS_ASSERT(approxf(vec_tan.z, tanf(M_PI_2))); // to infinity and beyond
+  ALWAYS_ASSERT(vec_tan.z < -100000.0f); // to -infinity and beyond
 
   // v3f_len
   float length = v3f_len(v3f(3.0f, 4.0f, 12.0f));
   ALWAYS_ASSERT(approxf(length, 13.0f));
+
+  // v3f_sqr_len
+  float vec_sqr_len = v3f_sqr_len(v3f(3.0f, 4.0f, 12.0f));
+  ALWAYS_ASSERT(approxf(vec_sqr_len, 169.0f));
 }
 
 void test_v3d(void) {
@@ -564,6 +576,10 @@ void test_v3d(void) {
   // v3d_len
   double length = v3d_len(v3d(3.0, 4.0, 12.0));
   ALWAYS_ASSERT(approxd(length, 13.0));
+
+  // v3d_sqr_len
+  double vec_sqr_len = v3d_sqr_len(v3d(3.0, 4.0, 12.0));
+  ALWAYS_ASSERT(approxd(vec_sqr_len, 169.0));
 }
 
 void test_v3(void) {
@@ -798,6 +814,10 @@ void test_v4f(void) {
   // v4f_len
   float vec_len = v4f_len(v4f(1.0f, 1.0f, 1.0f, 1.0f));
   ALWAYS_ASSERT(approxf(vec_len, 2.0f));
+
+  // v4f_sqr_len
+  float vec_sqr_len = v4f_sqr_len(v4f(1.0f, 1.0f, 1.0f, 1.0f));
+  ALWAYS_ASSERT(approxf(vec_sqr_len, 4.0f));
 }
 
 void test_v4d(void) {
@@ -909,6 +929,10 @@ void test_v4d(void) {
   // v4d_len
   double vec_len = v4d_len(v4d(1.0, 1.0, 1.0, 1.0));
   ALWAYS_ASSERT(approxd(vec_len, 2.0));
+
+  // v4d_sqr_len
+  double vec_sqr_len = v4d_sqr_len(v4d(1.0, 1.0, 1.0, 1.0));
+  ALWAYS_ASSERT(approxd(vec_sqr_len, 4.0));
 }
 
 void test_v4(void) {

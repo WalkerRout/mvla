@@ -67,18 +67,19 @@ extern "C" {
 ** USEFUL CONSTANT DEFINTIONS
 */
 
-#define MVLA_E      2.71828182845
-#define MVLA_PI     3.14159265359
-#define MVLA_2PI    6.28318530718
-#define MVLA_4PI    12.5663706144
-#define MVLA_HALFPI 1.57079632679
-#define MVLA_SQRTPI 1.77245385091
-#define MVLA_SQRT2  1.41421356237
-#define MVLA_SQRT3  1.73205080757
-#define MVLA_LN2    0.69314718056
-#define MVLA_LN10   2.30258509299
-#define MVLA_LNPI   1.14472988585
-#define MVLA_LOGE   0.43429448190
+// 20 decimal precision
+#define MVLA_E      2.71828182845904523536
+#define MVLA_PI     3.14159265358979323846
+#define MVLA_2PI    6.28318530717958623200
+#define MVLA_4PI    12.56637061435917246399
+#define MVLA_HALFPI 1.57079632679489655800
+#define MVLA_SQRTPI 1.77245385090551588192
+#define MVLA_SQRT2  1.41421356237309514547
+#define MVLA_SQRT3  1.73205080756887719318
+#define MVLA_LN2    0.69314718055994528623
+#define MVLA_LN10   2.30258509299404590109
+#define MVLA_LNPI   1.14472988584940016388
+#define MVLA_LOGE   0.43429448190325181667
 
 // -----------------------------------------
 
@@ -488,6 +489,13 @@ MVLADEF v2f_t v2f_tan(v2f_t a);
 MVLADEF float v2f_len(v2f_t a);
 
 /*
+** Calculates the squared magnitude of a 2D float vector
+** @param a: The vector to find the squared length of
+** @returns: The squared magnitude of the vector a
+*/
+MVLADEF float v2f_sqr_len(v2f_t a);
+
+/*
 ** Prints the components of a 2D float vector
 ** @param a: The vector to print
 ** @returns: N/A
@@ -616,6 +624,13 @@ MVLADEF v2d_t v2d_tan(v2d_t a);
 ** @returns: The magnitude of the vector a
 */
 MVLADEF double v2d_len(v2d_t a);
+
+/*
+** Calculates the squared magnitude of a 2D double vector
+** @param a: The vector to find the squared length of
+** @returns: The squared magnitude of the vector a
+*/
+MVLADEF double v2d_sqr_len(v2d_t a);
 
 /*
 ** Prints the components of a 2D double vector
@@ -841,7 +856,7 @@ MVLADEF v3f_t v3f_min(v3f_t a, v3f_t b);
 ** @param b: The second vector
 ** @returns: A vector containing the maximum components of a and b
 */
-MVLADEF v3f_t v3fMax(v3f_t a, v3f_t b);
+MVLADEF v3f_t v3f_max(v3f_t a, v3f_t b);
 
 /*
 ** Calculates the component-wise square root of a 3D float vector
@@ -900,6 +915,13 @@ MVLADEF v3f_t v3f_tan(v3f_t a);
 ** @returns: The magnitude of the vector a
 */
 MVLADEF float v3f_len(v3f_t a);
+
+/*
+** Calculates the squared magnitude of a 3D float vector
+** @param a: The vector to find the squared length of
+** @returns: The squared magnitude of the vector a
+*/
+MVLADEF float v3f_sqr_len(v3f_t a);
 
 /*
 ** Prints the components of a 3D float vector
@@ -1031,6 +1053,13 @@ MVLADEF v3d_t v3d_tan(v3d_t a);
 ** @returns: The magnitude of the vector a
 */
 MVLADEF double v3d_len(v3d_t a);
+
+/*
+** Calculates the squared magnitude of a 3D double vector
+** @param a: The vector to find the squared length of
+** @returns: The squared magnitude of the vector a
+*/
+MVLADEF double v3d_sqr_len(v3d_t a);
 
 /*
 ** Prints the components of a 3D double vector
@@ -1319,6 +1348,13 @@ MVLADEF v4f_t v4f_tan(v4f_t a);
 MVLADEF float v4f_len(v4f_t a);
 
 /*
+** Calculates the squared magnitude of a 4D float vector
+** @param a: The vector to find the squared length of
+** @returns: The squared magnitude of the vector a
+*/
+MVLADEF float v4f_sqr_len(v4f_t a);
+
+/*
 ** Prints the components of a 4D float vector
 ** @param a: The vector to print
 ** @returns: N/A
@@ -1449,6 +1485,13 @@ MVLADEF v4d_t v4d_tan(v4d_t a);
 ** @returns: The magnitude of the vector a
 */
 MVLADEF double v4d_len(v4d_t a);
+
+/*
+** Calculates the squared magnitude of a 4D double vector
+** @param a: The vector to find the squared length of
+** @returns: The squared magnitude of the vector a
+*/
+MVLADEF double v4d_sqr_len(v4d_t a);
 
 /*
 ** Prints the components of a 4D double vector
@@ -1698,8 +1741,11 @@ MVLAIMPL v2f_t v2f_tan(v2f_t a) {
 }
 
 MVLAIMPL float v2f_len(v2f_t a) {
-  float sqr = a.x * a.x + a.y * a.y;
-  return sqrtf(sqr);
+  return sqrtf(v2f_sqr_len(a));
+}
+
+MVLAIMPL float v2f_sqr_len(v2f_t a) {
+  return a.x * a.x + a.y * a.y;
 }
 
 MVLAIMPL void v2f_print(v2f_t a) {
@@ -1796,8 +1842,11 @@ MVLAIMPL v2d_t v2d_tan(v2d_t a) {
 }
 
 MVLAIMPL double v2d_len(v2d_t a) {
-  double sqr = a.x * a.x + a.y * a.y;
-  return sqrt(sqr);
+  return sqrt(v2d_sqr_len(a));
+}
+
+MVLAIMPL double v2d_sqr_len(v2d_t a) {
+  return a.x * a.x + a.y * a.y;
 }
 
 MVLAIMPL void v2d_print(v2d_t a) {
@@ -1969,7 +2018,7 @@ MVLAIMPL v3f_t v3f_min(v3f_t a, v3f_t b) {
   return a;
 }
 
-MVLAIMPL v3f_t v3fMax(v3f_t a, v3f_t b) {
+MVLAIMPL v3f_t v3f_max(v3f_t a, v3f_t b) {
   a.x = fmaxf(a.x, b.x);
   a.y = fmaxf(a.y, b.y);
   a.z = fmaxf(a.z, b.z);
@@ -2026,8 +2075,11 @@ MVLAIMPL v3f_t v3f_tan(v3f_t a) {
 }
 
 MVLAIMPL float v3f_len(v3f_t a) {
-  float sqr = a.x * a.x + a.y * a.y + a.z * a.z;
-  return sqrtf(sqr);
+  return sqrtf(v3f_sqr_len(a));
+}
+
+MVLAIMPL float v3f_sqr_len(v3f_t a) {
+  return a.x * a.x + a.y * a.y + a.z * a.z;
 }
 
 MVLAIMPL void v3f_print(v3f_t a) {
@@ -2138,8 +2190,11 @@ MVLAIMPL v3d_t v3d_tan(v3d_t a) {
 }
 
 MVLAIMPL double v3d_len(v3d_t a) {
-  double sqr = a.x * a.x + a.y * a.y + a.z * a.z;
-  return sqrt(sqr);
+  return sqrt(v3d_sqr_len(a));
+}
+
+MVLAIMPL double v3d_sqr_len(v3d_t a) {
+  return a.x * a.x + a.y * a.y + a.z * a.z;
 }
 
 MVLAIMPL void v3d_print(v3d_t a) {
@@ -2394,8 +2449,11 @@ MVLAIMPL v4f_t v4f_tan(v4f_t a) {
 }
 
 MVLAIMPL float v4f_len(v4f_t a) {
-  float sqr = a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
-  return sqrtf(sqr);
+  return sqrtf(v4f_sqr_len(a));
+}
+
+MVLAIMPL float v4f_sqr_len(v4f_t a) {
+  return a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
 }
 
 MVLAIMPL void v4f_print(v4f_t a) {
@@ -2520,8 +2578,11 @@ MVLAIMPL v4d_t v4d_tan(v4d_t a) {
 }
 
 MVLAIMPL double v4d_len(v4d_t a) {
-  double sqr = a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
-  return sqrt(sqr);
+  return sqrt(v4d_sqr_len(a));
+}
+
+MVLAIMPL double v4d_sqr_len(v4d_t a) {
+  return a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
 }
 
 MVLAIMPL void v4d_print(v4d_t a) {
