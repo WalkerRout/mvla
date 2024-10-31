@@ -3,6 +3,7 @@
 *.swp
 .vscode
 .DS_Store
+.ccls-cache
 
 # Object files
 *.o
