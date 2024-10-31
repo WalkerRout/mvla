@@ -1,7 +1,7 @@
 CC = gcc
 OBJ = bin/mvla
 OBJS = tests/*.c
-CFLAGS = -O1 -g -Wall -Wextra -Wpedantic -Werror
+CFLAGS = -O1 -fsanitize=address -g -Wall -Wextra -Wpedantic -Werror
 LIBS = -lm
 
 all: test
