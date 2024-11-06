@@ -157,13 +157,13 @@ typedef struct v4d {
 ** Generates a random float between 0 and 1
 ** @returns: A random float between 0 and 1
 */
-MVLADEF float randf();
+MVLADEF float randf(void);
 
 /*
 ** Generates a random double between 0 and 1
 ** @returns: A random double between 0 and 1
 */
-MVLADEF double randd();
+MVLADEF double randd(void);
 
 /*
 ** Linearly interpolates between two floats
@@ -1512,13 +1512,13 @@ MVLADEF void v4d_print(v4d_t a);
 
 // -----------------------------------------
 
-MVLAIMPL float randf() {
+MVLAIMPL float randf(void) {
   // assume we have seeded srand first to use rand
   return ((float) rand()) /
          ((float) RAND_MAX);
 }
 
-MVLAIMPL double randd() {
+MVLAIMPL double randd(void) {
   return ((double) rand()) /
          ((double) RAND_MAX);
 }
